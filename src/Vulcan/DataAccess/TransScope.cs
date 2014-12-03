@@ -8,11 +8,20 @@ namespace Vulcan.DataAccess
     /// </summary>
     public class TransScope : IDisposable
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransScope"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
         public TransScope(string connectionString)
             : this(connectionString, TransScopeOption.Required)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransScope"/> class.
+        /// </summary>
+        /// <param name="connectionString">The connection string.</param>
+        /// <param name="option">The option.</param>
         public TransScope(string connectionString, TransScopeOption option)
         {
             _connectionManager = ConnectionManager.GetManager(connectionString);
@@ -38,7 +47,7 @@ namespace Vulcan.DataAccess
         private bool _completed = false;
 
         /// <summary>
-        /// 提交事务
+        /// Commit Transaction
         /// </summary>
         public void Commit()
         {
@@ -50,7 +59,7 @@ namespace Vulcan.DataAccess
         }
 
         /// <summary>
-        /// 回滚事务
+        /// rollback  transaction
         /// </summary>
         public void Rollback()
         {
@@ -61,7 +70,7 @@ namespace Vulcan.DataAccess
         }
 
         /// <summary>
-        /// 关闭连接
+        /// close connection and rollback transaction
         /// </summary>
         public void Close()
         {
