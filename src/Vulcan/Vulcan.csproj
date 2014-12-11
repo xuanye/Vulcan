@@ -29,7 +29,8 @@
     <DefineConstants>TRACE;CSHARP30</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\dist\Vulcan.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="MySql.Data">
@@ -42,6 +43,7 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\CryptographyManager.cs" />
     <Compile Include="Context\ApplicationContext.cs" />
     <Compile Include="DataAccess\ConnectionManager.cs" />
     <Compile Include="DataAccess\ConnectionFactory.cs" />

@@ -42,7 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Centext\TetApplicationContext.cs" />
+    <Compile Include="MockObject\TestRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TranScopeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

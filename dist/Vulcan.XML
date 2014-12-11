@@ -32,6 +32,12 @@
             <param name="list"></param>
             <returns></returns>
         </member>
+        <member name="M:Vulcan.DataAccess.ORMapping.MSSql.MSSqlRepository.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Vulcan.DataAccess.ORMapping.MSSql.MSSqlRepository"/> class.
+            </summary>
+            <param name="constr">The constr.</param>
+        </member>
         <member name="M:Vulcan.DataAccess.ORMapping.ISQLBuilder.BuildInsertSql(Vulcan.DataAccess.ORMapping.EntityMeta)">
              <summary>
             根据实体的源信息获取insert sql 语句
@@ -67,6 +73,19 @@
             事务管理
             </summary>
         </member>
+        <member name="M:Vulcan.DataAccess.TransScope.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Vulcan.DataAccess.TransScope"/> class.
+            </summary>
+            <param name="connectionString">The connection string.</param>
+        </member>
+        <member name="M:Vulcan.DataAccess.TransScope.#ctor(System.String,Vulcan.DataAccess.TransScopeOption)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Vulcan.DataAccess.TransScope"/> class.
+            </summary>
+            <param name="connectionString">The connection string.</param>
+            <param name="option">The option.</param>
+        </member>
         <member name="F:Vulcan.DataAccess.TransScope._beginTransactionIsInCurrentTransScope">
             <summary>
             是否是该对象开启的事务(哪个对象负责开启则哪个对象负责提交)
@@ -74,17 +93,17 @@
         </member>
         <member name="M:Vulcan.DataAccess.TransScope.Commit">
             <summary>
-            提交事务
+            Commit Transaction
             </summary>
         </member>
         <member name="M:Vulcan.DataAccess.TransScope.Rollback">
             <summary>
-            回滚事务
+            rollback  transaction
             </summary>
         </member>
         <member name="M:Vulcan.DataAccess.TransScope.Close">
             <summary>
-            关闭连接
+            close connection and rollback transaction
             </summary>
         </member>
         <member name="T:Vulcan.DataAccess.TransScopeOption">

@@ -19,7 +19,7 @@
         /// <param name="sqlPk">该条查询的唯一键.</param>
         /// <param name="sqlOrder">排序字段 包含Order by.</param>
         /// <returns>返回分页信息，当查询为第一页时 返回总记录数</returns>
-        protected PagedList<T> PagedQuery<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition, object param, string sqlPk, string sqlOrder)
+        public PagedList<T> PagedQuery<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition, object param, string sqlPk, string sqlOrder)
         {
             PagedList<T> pList = new PagedList<T>();
             long totalCount = -1;
