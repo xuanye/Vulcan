@@ -120,6 +120,8 @@
     <Compile Include="Bootstraper.cs" />
     <Compile Include="Core\HelloService.cs" />
     <Compile Include="Core\IHelloService.cs" />
+    <Compile Include="Core\Impl\DefaultResource.cs" />
+    <Compile Include="Core\Impl\ResourceService.cs" />
     <Compile Include="Core\ServiceRegistry.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

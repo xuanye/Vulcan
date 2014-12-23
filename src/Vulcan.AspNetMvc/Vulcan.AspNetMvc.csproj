@@ -99,8 +99,8 @@
     <Compile Include="CacheManager\SessionManager.cs" />
     <Compile Include="Common\ServiceFactory.cs" />
     <Compile Include="Config\AppConfig.cs" />
-    <Compile Include="Common\AppContext.cs" />
     <Compile Include="Config\JsConfig.cs" />
+    <Compile Include="Context\VulcanAuthorizeAttribute.cs" />
     <Compile Include="DependencyInjection\ConfigureDependencies.cs" />
     <Compile Include="DependencyInjection\StructureMapDependencyScope.cs" />
     <Compile Include="DependencyInjection\StructureMapResolver.cs" />
@@ -109,6 +109,7 @@
     <Compile Include="Exceptions\NoAuthorizeExecption.cs" />
     <Compile Include="Exceptions\NoPermissionExecption.cs" />
     <Compile Include="Exceptions\WebApiException.cs" />
+    <Compile Include="Extensions\AppContext.cs" />
     <Compile Include="Extensions\HtmlHelperExtension.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\ResourceCheckBoxListExtensions.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Interfaces\IAppContextService.cs" />
     <Compile Include="Interfaces\IResource.cs" />
     <Compile Include="Interfaces\IResourceService.cs" />
+    <Compile Include="Interfaces\IUser.cs" />
     <Compile Include="JsonEntities\CodeValue.cs" />
     <Compile Include="JsonEntities\JsonQTable.cs" />
     <Compile Include="JsonEntities\JsonSMsg.cs" />
