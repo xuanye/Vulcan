@@ -82,11 +82,11 @@ namespace Vulcan.DataAccess.ORMapping.MySql
 
             if (meta.Columns.Exists(x => x.Identity))
             {
-                sqlbuilder.Append("SELECT LAST_INSERT_ID();");
+                sqlbuilder.Append("SELECT CAST(LAST_INSERT_ID() AS bigint);");
             }
             else
             {
-                sqlbuilder.Append(" SELECT 0;");
+                sqlbuilder.Append(" SELECT CAST(0 AS bigint);");
             }
 
             return sqlbuilder.ToString();
