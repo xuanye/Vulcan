@@ -40,14 +40,15 @@ namespace Vulcan.DataAccess.ORMapping.MSSql
                 j++;
             }
             sqlbuilder.Append(");");
-
             if (meta.Columns.Exists(x => x.Identity))
             {
-                sqlbuilder.Append(" SELECT CAST(SCOPE_IDENTITY() as SIGNED) as Id;"); //sqlbuilder.Append("SELECT SCOPE_IDENTITY();");
+                sqlbuilder.Append(" SELECT CAST(SCOPE_IDENTITY() as bigint) as Id;"); //sqlbuilder.Append("SELECT SCOPE_IDENTITY();");
+               
             }
             else
             {
-                sqlbuilder.Append(" SELECT  CAST(0 as SIGNED) as Id;");
+                sqlbuilder.Append(" SELECT  CAST(0 as bigint) as Id;");
+               
             }
 
             return sqlbuilder.ToString();
@@ -126,11 +127,13 @@ namespace Vulcan.DataAccess.ORMapping.MSSql
 
             if (meta.Columns.Exists(x => x.Identity))
             {
-                sqlbuilder.Append(" SELECT CAST(SCOPE_IDENTITY() as SIGNED) as Id;"); //sqlbuilder.Append("SELECT SCOPE_IDENTITY();");
+                sqlbuilder.Append(" SELECT CAST(SCOPE_IDENTITY() as bigint) as Id;"); //sqlbuilder.Append("SELECT SCOPE_IDENTITY();");
+
             }
             else
             {
-                sqlbuilder.Append(" SELECT  CAST(0 as SIGNED) as Id;");
+                sqlbuilder.Append(" SELECT  CAST(0 as bigint) as Id;");
+
             }
 
             return sqlbuilder.ToString();
