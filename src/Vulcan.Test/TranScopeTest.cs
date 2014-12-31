@@ -16,7 +16,7 @@ namespace Vulcan.Test
         [Test]
         public void TestTranScopeRollback()
         {
-            string constr = "server=192.168.57.186;port=3306;database=vipsystemv2;uid=vipsystem;pwd=vipsystem;charset=utf8;Connection Timeout=18000;";
+            string constr = "server=localhost;port=3306;database=testdb;uid=sa;pwd=123456;charset=utf8;Connection Timeout=18000;";
             ConnectionFactory.Default = new MySqlConnectionFactory();
          
             try

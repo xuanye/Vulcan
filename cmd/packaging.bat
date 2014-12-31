@@ -1,0 +1,1 @@
+..\tools\nuget\NuGet.exe pack ..\packaging\nuget\Vulcan.nuspec

@@ -1,0 +1,17 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ include file="Base.ttinclude" #>
+<#@ include file="MSSql.ttinclude"  #>
+
+<#
+ 
+
+	ConnectionString = "Data Source=(local);Initial Catalog=testdb;Persist Security Info=True;User ID=sa;Password=123456";
+    Namespace       = "VulcanSample.Entity";
+    DataContextName = "DataContext";
+	BaseEntityClass = "BaseEntity";
+	RenderForeignKeys = false;
+	RenderBackReferences = false;
+    GenerateModel();
+
+#>

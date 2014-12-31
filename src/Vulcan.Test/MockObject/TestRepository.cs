@@ -18,7 +18,7 @@ namespace Vulcan.Test.MockObject
             string sql = "select count(1) from " + tableName;
             return base.Get<long>(sql, null);
         }
-        public int Excute(string sql,object obj)
+        public new int Excute(string sql,object obj)
         {
             return base.Excute(sql, obj);
         }
