@@ -2,7 +2,7 @@
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <id>Vulcan</id>
-    <version>1.0.1</version>
+    <version>1.0.3</version>
     <title>Vulcan</title>
     <authors>Xuanye Wang</authors>
     <owners>Xuanye Wang</owners>
@@ -15,6 +15,6 @@
     <language>zh-CN</language>
   </metadata>
   <files>
-	<file src="..\..\dist\Vulcan.dll" target="lib\net35" />	
+	<file src="..\..\dist\Vulcan.dll" target="lib\net40" />	
   </files> 
 </package>

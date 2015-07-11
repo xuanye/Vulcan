@@ -76,11 +76,19 @@ namespace Vulcan.DataAccess.ORMapping
             int ret = -1;
             using (ConnectionManager mgr = GetConnection())
             {
-                ret = mgr.Connection.Execute(sql, paras, mgr.Transaction, CommandType.Text);
+                ret = mgr.Connection.Execute(sql, paras, mgr.Transaction,null, CommandType.Text);
             }
             return ret;
         }
-
+        protected int Excute(string sql,int timeOut, object paras)
+        {
+            int ret = -1;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                ret = mgr.Connection.Execute(sql, paras, mgr.Transaction,timeOut, CommandType.Text);
+            }
+            return ret;
+        }
         protected T Get<T>(string sql, object paras)
         {
             return Query<T>(sql, paras).FirstOrDefault();
@@ -95,7 +103,15 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return list;
         }
-
+        protected List<T> Query<T>(string sql, int timeOut, object paras)
+        {
+            List<T> list = null;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                list = mgr.Connection.Query<T>(sql, paras, mgr.Transaction, false, timeOut, CommandType.Text).ToList();
+            }
+            return list;
+        }
         /*
    public static IEnumerable<TReturn> Query<TFirst, TSecond, TReturn>(this IDbConnection cnn, string sql, Func<TFirst, TSecond, TReturn> map, object param, IDbTransaction transaction, bool buffered, string splitOn, int? commandTimeout, CommandType? commandType);
    public static IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TReturn>(this IDbConnection cnn, string sql, Func<TFirst, TSecond, TThird, TFourth, TReturn> map, object param, IDbTransaction transaction, bool buffered, string splitOn, int? commandTimeout, CommandType? commandType);
@@ -137,7 +153,7 @@ namespace Vulcan.DataAccess.ORMapping
             int ret = -1;
             using (ConnectionManager mgr = GetConnection())
             {
-                ret = mgr.Connection.Execute(spName, paras, mgr.Transaction, CommandType.StoredProcedure);
+                ret = mgr.Connection.Execute(spName, paras, mgr.Transaction,null, CommandType.StoredProcedure);
             }
             return ret;
         }
