@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using MySql.Data.MySqlClient;
 
 namespace Vulcan.DataAccess
 {
@@ -24,13 +23,7 @@ namespace Vulcan.DataAccess
         protected abstract IDbConnection CreateDefaultDbConnection(string connectionString);
     }
 
-    public class MySqlConnectionFactory : ConnectionFactory
-    {
-        protected override IDbConnection CreateDefaultDbConnection(string connectionString)
-        {
-            return new MySqlConnection(connectionString);
-        }
-    }
+
 
     public class SqlConnectionFactory : ConnectionFactory
     {
