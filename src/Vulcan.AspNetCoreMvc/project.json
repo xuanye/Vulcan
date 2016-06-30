@@ -1,0 +1,19 @@
+{
+  "title": "Vulcan For AspNetCoreMvc1.0 公共类库",
+  "copyright": "Xuanye  2016",
+  "description": "Vulcan For AspNetCoreMvc1.0 公共类库",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+   "Vulcan.Core": {
+      "1.0.0-*": null,
+      "target": "project"
+    }   
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "dnxcore50"
+    }
+  }
+}

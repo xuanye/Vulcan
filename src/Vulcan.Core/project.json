@@ -1,0 +1,19 @@
+﻿{
+  "title": "Vulcan公共类库",
+  "copyright": "Xuanye  2016",
+  "description": "Vulcan公共类库",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Microsoft.NETCore.App": {
+      "version": "1.0.0",
+      "type": "platform"
+    }
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "dnxcore50"
+    }
+  }
+}

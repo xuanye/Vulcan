@@ -1,0 +1,21 @@
+{
+  "title": "Vulcan数据库访问类库",
+  "copyright": "Xuanye  2016",
+  "description": "Vulcan数据库访问类库 基于Dapper 默认支持Mysql和MsSql",
+  "version": "1.0.0-*",
+
+  "dependencies": {
+    "Dapper": "1.50.0-rc3",
+    "Microsoft.AspNetCore.Mvc": "1.0.0",
+    "Vulcan.Core": {
+      "1.0.0-*": null,
+      "target": "project"
+    }
+  },
+
+  "frameworks": {
+    "netcoreapp1.0": {
+      "imports": "dnxcore50"
+    }
+  }
+}
