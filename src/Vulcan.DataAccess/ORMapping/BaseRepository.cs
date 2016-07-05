@@ -12,7 +12,12 @@ namespace Vulcan.DataAccess.ORMapping
         {
             this._conStr = constr;
         }
-
+        protected BaseRepository(IConnectionFactory factory,string constr)
+        {
+            this._conStr = constr;
+            this._dbFactory = factory;
+        }
+        private readonly IConnectionFactory _dbFactory;
         private readonly string _conStr;
 
         /// <summary>
@@ -173,7 +178,7 @@ namespace Vulcan.DataAccess.ORMapping
 
         protected ConnectionManager GetConnection()
         {
-            return ConnectionManager.GetManager(this._conStr);
+            return _dbFactory != null ? ConnectionManager.GetManager(_dbFactory, this._conStr) : ConnectionManager.GetManager(this._conStr);
         }
     }
 }

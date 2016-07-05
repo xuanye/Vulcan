@@ -14,7 +14,7 @@ namespace Vulcan.DataAccess.Context
         ///  public void Configure(IApplicationBuilder app)
         /// {
 #pragma warning disable 1570
-        ///    HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
+        ///    AppRuntimeContext.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
 #pragma warning restore 1570
         ///  }
         /// </summary>
@@ -41,7 +41,7 @@ namespace Vulcan.DataAccess.Context
         public static object GetItem(string key)
         {
             object item = null;
-            if (!Contains(key))
+            if (Contains(key))
             {
                 item = HttpContextAccessor.HttpContext.Items[key];
             }

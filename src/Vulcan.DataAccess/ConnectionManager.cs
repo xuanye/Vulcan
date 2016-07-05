@@ -15,7 +15,7 @@ namespace Vulcan.DataAccess
         private string _dbConnectionString;
         private IDbConnection _connection;
         private IDbTransaction _transaction;
-
+        private string _uuid;
         public IDbConnection Connection
         {
             get
@@ -38,6 +38,10 @@ namespace Vulcan.DataAccess
 
         public static ConnectionManager GetManager(string connectionString)
         {
+            return GetManager(null, connectionString);
+        }
+        public static ConnectionManager GetManager(IConnectionFactory factory,string connectionString)
+        {
             ConnectionManager mgr;
             if (!AppRuntimeContext.Contains(connectionString))
             {
@@ -45,7 +49,7 @@ namespace Vulcan.DataAccess
                 {
                     if (!AppRuntimeContext.Contains(connectionString))
                     {
-                        mgr = new ConnectionManager(connectionString);
+                        mgr = new ConnectionManager(factory, connectionString);
                         AppRuntimeContext.SetItem(connectionString, mgr);
                     }
                 }
@@ -55,21 +59,25 @@ namespace Vulcan.DataAccess
             mgr.AddRef();
             return mgr;
         }
-
         #endregion 静态方法
 
         #region 构造
 
-        private ConnectionManager(string connectionString)
+        private ConnectionManager(IConnectionFactory factory, string connectionString)
         {
             _dbConnectionString = connectionString;
-            _connection = ConnectionFactory.CreateDbConnection(connectionString);
+
+            _connection = factory == null ? 
+                ConnectionFactoryHelper.CreateDefaultDbConnection(connectionString) 
+                : factory.CreateDbConnection(connectionString);
+           
             if (_connection.State != ConnectionState.Open)
             {
                 _connection.Open();
             }
-        }
 
+            _uuid = new Guid().ToString("D");
+        }
         #endregion 构造
 
         #region public

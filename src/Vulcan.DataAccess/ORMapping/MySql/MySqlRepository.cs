@@ -8,7 +8,11 @@ namespace Vulcan.DataAccess.ORMapping.MySql
             : base(constr)
         {
         }
+        protected MySqlRepository(IConnectionFactory factory, string constr)
+            :base(factory,constr)
+        {
 
+        }
         /// <summary>
         /// 分页查询列表
         /// </summary>

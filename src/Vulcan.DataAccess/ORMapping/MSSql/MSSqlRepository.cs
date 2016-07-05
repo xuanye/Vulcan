@@ -13,6 +13,11 @@ namespace Vulcan.DataAccess.ORMapping.MSSql
         {
         }
 
+        protected MSSqlRepository(IConnectionFactory factory, string constr)
+            :base(factory,constr)
+        {
+            
+        }
         public PagedList<T> PagedQuery<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition, object param, string sqlPk, string sqlOrder)
         {
             PagedList<T> pList = new PagedList<T>();

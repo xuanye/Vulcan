@@ -2,7 +2,7 @@
 {
     public class MSSqlEntity : BaseEntity
     {
-        private static MSSqlSQLBuilder _builder = new MSSqlSQLBuilder();
+        private static readonly MSSqlSQLBuilder _builder = new MSSqlSQLBuilder();
 
         protected override ISQLBuilder SQLBuilder
         {

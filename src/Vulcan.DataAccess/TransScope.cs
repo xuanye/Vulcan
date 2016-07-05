@@ -14,8 +14,16 @@ namespace Vulcan.DataAccess
         /// <param name="connectionString">The connection string.</param>
         /// <param name="option">The option.</param>
         public TransScope(string connectionString, TransScopeOption option = TransScopeOption.Required)
+            :this(null, connectionString, option)
         {
-            _connectionManager = ConnectionManager.GetManager(connectionString);
+          
+        }
+        public TransScope(IConnectionFactory factory,string connectionString, TransScopeOption option = TransScopeOption.Required)
+        {
+            _connectionManager = factory == null ? 
+                ConnectionManager.GetManager(connectionString) 
+                : ConnectionManager.GetManager(factory, connectionString);
+
             if (!_connectionManager.IsExistDbTransaction() || option == TransScopeOption.RequiresNew)
             {
                 _tran = _connectionManager.BeginTransaction();
