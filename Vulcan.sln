@@ -22,17 +22,19 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Vulcan.DataAccess.Test", "t
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sample", "sample", "{93226521-46DE-47E0-9B58-2DE743C6D541}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiAuthenticate.WebApp", "sample\ApiAuthenticate.WebApp\ApiAuthenticate.WebApp.xproj", "{9C9D33B3-3108-4BE9-AA77-6C0F9B67D1A5}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UUAC.WebApp", "sample\UUAC.WebApp\UUAC.WebApp.xproj", "{9C9D33B3-3108-4BE9-AA77-6C0F9B67D1A5}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiAuthenticate.Business", "sample\ApiAuthenticate.Business\ApiAuthenticate.Business.xproj", "{44E838C0-CE8D-49F4-9BFE-0CF719A1EE3F}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UUAC.Business", "sample\UUAC.Business\UUAC.Business.xproj", "{44E838C0-CE8D-49F4-9BFE-0CF719A1EE3F}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiAuthenticate.Interface", "sample\ApiAuthenticate.Interface\ApiAuthenticate.Interface.xproj", "{A6E10C46-0E57-4BCE-87BF-CAA91979F882}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UUAC.Interface", "sample\UUAC.Interface\UUAC.Interface.xproj", "{A6E10C46-0E57-4BCE-87BF-CAA91979F882}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiAuthenticate.DataAccess.Mysql", "sample\ApiAuthenticate.DataAccess.Mysql\ApiAuthenticate.DataAccess.Mysql.xproj", "{1145E84E-79B7-487E-942B-F0869CC5BF91}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UUAC.DataAccess.Mysql", "sample\UUAC.DataAccess.Mysql\UUAC.DataAccess.Mysql.xproj", "{1145E84E-79B7-487E-942B-F0869CC5BF91}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiAuthenticate.Common", "sample\ApiAuthenticate.Common\ApiAuthenticate.Common.xproj", "{48834E1F-7F74-424B-A7B5-6A5BB70D7682}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UUAC.Common", "sample\UUAC.Common\UUAC.Common.xproj", "{48834E1F-7F74-424B-A7B5-6A5BB70D7682}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ApiAuthenticate.Core", "sample\ApiAuthenticate.Core\ApiAuthenticate.Core.xproj", "{E69A9289-0DFB-461B-B67C-B3D1E436F1DF}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UUAC.Core", "sample\UUAC.Core\UUAC.Core.xproj", "{E69A9289-0DFB-461B-B67C-B3D1E436F1DF}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "WebApplication1", "sample\WebApplication1\WebApplication1.xproj", "{9B63D13B-5A65-49E9-9BF7-E272A3681F6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -80,6 +82,10 @@ Global
 		{E69A9289-0DFB-461B-B67C-B3D1E436F1DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E69A9289-0DFB-461B-B67C-B3D1E436F1DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E69A9289-0DFB-461B-B67C-B3D1E436F1DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B63D13B-5A65-49E9-9BF7-E272A3681F6E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B63D13B-5A65-49E9-9BF7-E272A3681F6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B63D13B-5A65-49E9-9BF7-E272A3681F6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B63D13B-5A65-49E9-9BF7-E272A3681F6E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -95,5 +101,6 @@ Global
 		{1145E84E-79B7-487E-942B-F0869CC5BF91} = {93226521-46DE-47E0-9B58-2DE743C6D541}
 		{48834E1F-7F74-424B-A7B5-6A5BB70D7682} = {93226521-46DE-47E0-9B58-2DE743C6D541}
 		{E69A9289-0DFB-461B-B67C-B3D1E436F1DF} = {93226521-46DE-47E0-9B58-2DE743C6D541}
+		{9B63D13B-5A65-49E9-9BF7-E272A3681F6E} = {93226521-46DE-47E0-9B58-2DE743C6D541}
 	EndGlobalSection
 EndGlobal
