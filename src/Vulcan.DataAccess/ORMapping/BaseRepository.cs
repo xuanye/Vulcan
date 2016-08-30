@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using Dapper;
 
 namespace Vulcan.DataAccess.ORMapping
@@ -25,7 +26,7 @@ namespace Vulcan.DataAccess.ORMapping
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public long Insert(BaseEntity entity)
+        public long Insert(AbstractBaseEntity entity)
         {
             long ret;
             using (ConnectionManager mgr = GetConnection())
@@ -36,12 +37,27 @@ namespace Vulcan.DataAccess.ORMapping
         }
 
         /// <summary>
+        /// 异步执行插入操作
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public Task<long> InsertAsync(AbstractBaseEntity entity)
+        {
+            Task<long> ret;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                ret = mgr.Connection.QueryFirstAsync<long>(entity.GetInsertSQL(), entity, mgr.Transaction, null, CommandType.Text);
+            }
+            return ret;
+           
+        }
+        /// <summary>
         /// 批量新增 （新增相同的列）
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public int BatchInsert<T>(List<T> list) where T : BaseEntity
+        public int BatchInsert<T>(List<T> list) where T : AbstractBaseEntity
         {
             int ret = -1;
             if (list != null && list.Count > 0)
@@ -52,18 +68,21 @@ namespace Vulcan.DataAccess.ORMapping
             return ret;
         }
 
-        public int Update(BaseEntity model)
+        public int Update(AbstractBaseEntity model)
         {
             return Excute(model.GetUpdateSQL(), model);
         }
-
+        public Task<int> UpdateAsync(AbstractBaseEntity model)
+        {
+            return ExcuteAsync(model.GetUpdateSQL(), model);
+        }
         /// <summary>
         /// 批量修改
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public int BatchUpdate<T>(List<T> list) where T : BaseEntity
+        public int BatchUpdate<T>(List<T> list) where T : AbstractBaseEntity
         {
             int ret = -1;
             if (list != null && list.Count > 0)
@@ -92,10 +111,41 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return ret;
         }
+
+        protected Task<int> ExcuteAsync(string sql, object paras)
+        {
+            Task<int> ret;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                ret = mgr.Connection.ExecuteAsync(sql, paras, mgr.Transaction, null, CommandType.Text);
+            }
+            return ret;
+        }
+        protected Task<int> ExcuteAsync(string sql, int timeOut, object paras)
+        {
+            Task<int> ret;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                ret = mgr.Connection.ExecuteAsync(sql, paras, mgr.Transaction, timeOut, CommandType.Text);
+            }
+            return ret;
+        }
+
+       
+
         protected T Get<T>(string sql, object paras)
         {
             return Query<T>(sql, paras).FirstOrDefault();
         }
+
+        protected Task<T> GetAsync<T>(string sql, object paras)
+        {
+            using (ConnectionManager mgr = GetConnection())
+            {
+                return mgr.Connection.QueryFirstOrDefaultAsync<T>(sql, paras, mgr.Transaction, null, CommandType.Text);
+            }
+        }
+
 
         protected List<T> Query<T>(string sql, object paras)
         {
@@ -106,6 +156,20 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return list;
         }
+
+
+        protected Task<List<T>> QueryAsync<T>(string sql, object paras)
+        {
+            Task<List<T>> task;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                task = mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, null, CommandType.Text)
+                   .ContinueWith<List<T>>(x => x.Result.ToList());
+            }
+            return task;
+        }
+
+
         protected List<T> Query<T>(string sql, int timeOut, object paras)
         {
             List<T> list;
@@ -115,11 +179,18 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return list;
         }
-        /*
-   public static IEnumerable<TReturn> Query<TFirst, TSecond, TReturn>(this IDbConnection cnn, string sql, Func<TFirst, TSecond, TReturn> map, object param, IDbTransaction transaction, bool buffered, string splitOn, int? commandTimeout, CommandType? commandType);
-   public static IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TFourth, TReturn>(this IDbConnection cnn, string sql, Func<TFirst, TSecond, TThird, TFourth, TReturn> map, object param, IDbTransaction transaction, bool buffered, string splitOn, int? commandTimeout, CommandType? commandType);
-   public static IEnumerable<TReturn> Query<TFirst, TSecond, TThird, TReturn>(this IDbConnection cnn, string sql, Func<TFirst, TSecond, TThird, TReturn> map, object param, IDbTransaction transaction, bool buffered, string splitOn, int? commandTimeout, CommandType? commandType);
-    */
+
+        protected Task<List<T>> QueryAsync<T>(string sql, int timeOut, object paras)
+        {
+            Task<List<T>> task;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                task = mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, timeOut, CommandType.Text)
+                   .ContinueWith<List<T>>(x => x.Result.ToList());
+            }
+            return task;
+        }
+
 
         protected List<T> Query<T, T1>(string sql, object paras, Func<T, T1, T> parse, string splitOn)
         {
@@ -151,6 +222,45 @@ namespace Vulcan.DataAccess.ORMapping
             return list;
         }
 
+
+
+
+        protected Task<List<T>> QueryAsync<T, T1>(string sql, object paras, Func<T, T1, T> parse, string splitOn)
+        {
+            Task<List<T>> task;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                task = mgr.Connection.QueryAsync<T, T1, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text)
+                    .ContinueWith<List<T>>(x => x.Result.ToList());
+            }
+            return task;
+
+        }
+
+        protected Task<List<T>> QueryAsync<T, T1, T2>(string sql, object paras, Func<T, T1, T2, T> parse, string splitOn)
+        {
+            Task<List<T>> task;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                task = mgr.Connection.QueryAsync<T, T1, T2, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text)
+                    .ContinueWith<List<T>>(x => x.Result.ToList());
+            }
+            return task;
+        }
+
+        protected Task<List<T>> QueryAsync<T, T1, T2, T3>(string sql, object paras, Func<T, T1, T2, T3, T> parse, string splitOn)
+        {
+            Task<List<T>> task;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                task = mgr.Connection.QueryAsync<T, T1, T2, T3, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text)
+                    .ContinueWith<List<T>>(x => x.Result.ToList());
+            }
+            return task;
+        }
+
+
+
         protected int SPExcute(string spName, object paras)
         {
             int ret;
@@ -161,9 +271,28 @@ namespace Vulcan.DataAccess.ORMapping
             return ret;
         }
 
+        protected Task<int> SPExcuteAsync(string spName, object paras)
+        {
+            Task<int> ret;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                ret = mgr.Connection.ExecuteAsync(spName, paras, mgr.Transaction, null, CommandType.StoredProcedure);
+            }
+            return ret;
+        }
+
         protected T SPGet<T>(string spName, object paras)
         {
             return SPQuery<T>(spName, paras).FirstOrDefault();
+        }
+        protected Task<T> SPGetAsync<T>(string spName, object paras)
+        {
+            Task<T> task;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                task = mgr.Connection.QueryFirstOrDefaultAsync<T>(spName, paras, mgr.Transaction, null, CommandType.StoredProcedure);
+            }
+            return task;
         }
 
         protected List<T> SPQuery<T>(string spName, object paras)
@@ -175,6 +304,18 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return list;
         }
+
+        protected Task<List<T>> SPQueryAsync<T>(string spName, object paras)
+        {
+            Task<List<T>> task;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                task = mgr.Connection.QueryAsync<T>(spName, paras, mgr.Transaction, null, CommandType.StoredProcedure)
+                    .ContinueWith<List<T>>(x => x.Result.ToList());
+            }
+            return task;
+        }
+
 
         protected ConnectionManager GetConnection()
         {

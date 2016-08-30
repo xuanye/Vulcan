@@ -49,7 +49,7 @@ namespace Vulcan.DataAccess.Context
         }
         public static void RemoveItem(string key)
         {
-            if (!Contains(key))
+            if (Contains(key))
             {
                 HttpContextAccessor.HttpContext.Items.Remove(key);
             }

@@ -1,0 +1,28 @@
+﻿
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3" >
+            <div class="margin-10"><a id="btnAdd" class="btn btn-block btn-no-border btn-success"><i class="fa fa-plus-circle fa-fw"></i> 新   增</a></div>
+            <div id="orgTree" style="padding-top:10px;margin-top:2px; background-color:#fbfbfb;min-height:500px"></div>
+        </div>
+        <div class="col-xs-9">
+            <div id="orgList"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+<script type="text/javascript">
+    window.options = {
+            editUrl: "@Url.Action("Edit")",
+            removeUrl:"@Url.Action("Remove")",
+            listUrl: "@Url.Action("QueryOrgList")",
+            loadTreeUrl:"@Url.Action("QueryOrgTree")"
+        }
+        window.setTimeout(function(){
+            $(document).trigger('ajaxscriptsloaded');
+        }, 10);
+</script>
+<script src="~/js/app/org/list.js"></script>
+}

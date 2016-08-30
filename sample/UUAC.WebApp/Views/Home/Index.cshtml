@@ -1,6 +1,7 @@
 ﻿@{
     Layout = null;
 }
+@model UUAC.WebApp.ViewModels.HomeModel
 
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +25,8 @@
     <![endif]-->
     <!--common plugin css-->
     <link rel="stylesheet" href="/css/plugin/jquery.gritter.css" />
-    <link rel="stylesheet" href="/css/plugin/xjgrid.css" />
+    <link rel="stylesheet" href="/css/plugin/xjgrid.css"/>
+    <link rel="stylesheet" href="/css/plugin/xjtree.css" />
     <link rel="stylesheet" href="/css/plugin/bdatetimepicker.css" />
 
     <link rel="stylesheet" href="/css/app.css" />
@@ -56,8 +58,8 @@
                 <!-- #section:basics/navbar.layout.brand -->
                 <a href="#" class="navbar-brand">
                     <small>
-                        <i class="fa fa-wechat light-green"></i>
-                        &nbsp;微信公众号管理平台
+                        <i class="fa fa-leaf light-green"></i>
+                        &nbsp;统一用户和授权管理系统
                     </small>
                 </a>
                 <!-- /section:basics/navbar.layout.brand -->
@@ -73,7 +75,7 @@
                             <img class="nav-user-photo" src="/avatars/avatar.png" alt="管理员's Photo" />
                             <span class="user-info">
                                 <small>Welcome,</small>
-                                {user.fullname}
+                                @ViewBag.FullName
                             </span>
                             <i class="ace-icon fa fa-caret-down"></i>
                         </a>
@@ -141,6 +143,42 @@
             </div><!-- /.sidebar-shortcuts -->
             <ul class="nav nav-list">
                 <!--这里是菜单-->
+                @{
+                    var topmenus = Model.Menus.FindAll(x => x.ParentCode == "UUAC_SystemManage");
+
+                    foreach (var tmenu in topmenus)
+                    {
+                        
+                        string href = tmenu.Resource;
+                        if (href == "#")
+                        {
+                            href = "/!ajax#";
+                        }
+                        else
+                        {
+                            href = "/!ajax#!" + href;
+                        }
+
+                        <li>
+                            <a data-url="!@(tmenu.Resource)" href="@href">
+                                @if (!string.IsNullOrEmpty(tmenu.Mark))
+                                {
+                                    <i class="menu-icon @(tmenu.Mark)"></i>
+                                }
+                                else
+                                {
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                }
+                                <span class="menu-text"> @tmenu.PrivilegeName </span>
+
+                            </a>
+                            <b class="arrow"></b>
+                        </li>
+
+                     }
+                }
+
+
             </ul>
             <!-- /.nav-list -->
             <!-- #section:basics/sidebar.layout.minimize -->
@@ -183,7 +221,7 @@
                 <div class="footer-content">
                     <span class="bigger-120">
                         <span class="blue bolder">CRM</span>
-                        &nbsp;统一用户和授权管理系统 &copy; 2015
+                        &nbsp;统一用户和授权管理系统 &copy; 2016
                     </span>
                 </div>
                 <!-- /section:basics/footer -->
@@ -194,16 +232,18 @@
         </a>
     </div><!-- /.main-container -->
     <!-- basic scripts -->
-    <!--[if !IE]>
+    <!--[if !IE]> -->
     <script type="text/javascript">
             window.jQuery || document.write("<script src='/js/lib/jquery.min.js'>"+"<"+"/script>");
     </script>
-    <![endif]-->
+    <!-- <![endif]-->
     <!--[if IE]>
     <script type="text/javascript">
      window.jQuery || document.write("<script src='/js/lib/jquery1x.min.js'>"+"<"+"/script>");
     </script>
     <![endif]-->
+
+
     <script type="text/javascript">
         if ('ontouchstart' in document.documentElement) document.write("<script src='/js/lib/jquery.mobile.custom.min.js'>" + "<" + "/script>");
     </script>
@@ -214,10 +254,32 @@
     <!-- plugin scripts -->
     <script src="/js/plugin/jquery.gritter.min.js"></script>
     <script src="/js/plugin/xjgrid.js"></script>
+    <script src="/js/plugin/xjtree.js"></script>
     <script src="/js/plugin/bdatetimepicker.js"></script>
-
+    <script src="/js/plugin/choose.js"></script>
     <!-- app scripts -->
     <script src="/js/app/app.js?v=20150211"></script>
-
+    <script type="text/javascript">
+    jQuery(function($) {
+      if('enable_ajax_content' in ace) {
+        var options = {
+            content_url: function(url) {
+                if(!url.match(/^!/))
+                {
+                    return false;
+                }
+                var path = document.location.pathname;
+                if(path.match(/!/))
+                {
+                    path = path.replace(/\/!ajax/, url.replace(/^!/, ''));
+                }
+                return path ;
+            },
+            'default_url': '!Home/Dashboard'
+        };
+        ace.enable_ajax_content($, options);
+      }
+    });
+    </script>
 </body>
 </html>

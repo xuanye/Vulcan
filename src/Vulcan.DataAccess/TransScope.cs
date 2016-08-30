@@ -8,6 +8,8 @@ namespace Vulcan.DataAccess
     /// </summary>
     public class TransScope : IDisposable
     {
+        private readonly TransScopeOption _option;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="TransScope"/> class.
         /// </summary>
@@ -16,8 +18,9 @@ namespace Vulcan.DataAccess
         public TransScope(string connectionString, TransScopeOption option = TransScopeOption.Required)
             :this(null, connectionString, option)
         {
-          
+            _option = option;
         }
+
         public TransScope(IConnectionFactory factory,string connectionString, TransScopeOption option = TransScopeOption.Required)
         {
             _connectionManager = factory == null ? 
@@ -48,7 +51,7 @@ namespace Vulcan.DataAccess
         /// <summary>
         /// Commit Transaction
         /// </summary>
-        public void Commit()
+        public void Complete()
         {
             if (_beginTransactionIsInCurrentTransScope && _tran != null)
             {
@@ -62,9 +65,9 @@ namespace Vulcan.DataAccess
         /// </summary>
         public void Rollback()
         {
-            if (_beginTransactionIsInCurrentTransScope && _tran != null)
+            if (_beginTransactionIsInCurrentTransScope)
             {
-                _tran.Rollback();
+                _tran?.Rollback();
             }
         }
 

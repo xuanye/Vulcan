@@ -206,4 +206,14 @@ date_help.diff = function(interval,date1,date2){
         case "l": return parseInt(long);
     }
     return NaN;
-} 
+}
+
+function OpenDailog(url,options) {
+    window.Choose.Open(url, options || {});
+}
+
+function CloseDailog(callback,success,userstate) {
+    if(parent && parent._CloseDailog) {
+        parent._CloseDailog(callback, success, userstate);
+    }
+}

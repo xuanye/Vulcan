@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vulcan.DataAccess.ORMapping
 {
-    public abstract class BaseEntity
+    public abstract class AbstractBaseEntity
     {
         private static Dictionary<Type, string> _InsertSqlCache = new Dictionary<Type, string>();
         private static Dictionary<Type, string> _UpdateSqlCache = new Dictionary<Type, string>();

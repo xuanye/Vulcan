@@ -44,6 +44,8 @@ namespace Vulcan.DataAccess.ORMapping
 
                 EntityColumnMeta ecmeta = new EntityColumnMeta {ColumnName = p.Name};
 
+                ecmeta.PropertyName = p.Name;
+
                 foreach (Attribute cusattr in attrs)
                 {
                     if (cusattr is IgnoreAttribute)
@@ -99,6 +101,8 @@ namespace Vulcan.DataAccess.ORMapping
     public class EntityColumnMeta
     {
         public string ColumnName { get; set; }
+
+        public string PropertyName { get; set;}
 
         public bool PrimaryKey { get; set; }
 

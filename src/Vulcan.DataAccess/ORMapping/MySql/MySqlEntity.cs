@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Vulcan.DataAccess.ORMapping.MySql
 {
-    public class MySqlEntity : BaseEntity
+    public class MySqlEntity : AbstractBaseEntity
     {
         private static Dictionary<Type, string> _ReplaceSqlCache = new Dictionary<Type, string>();
         private static object lockobject = new object();

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace UUAC.WebApp
 {
@@ -11,7 +12,14 @@ namespace UUAC.WebApp
     {
         public static void Main(string[] args)
         {
+            var config = new ConfigurationBuilder()
+                        .AddJsonFile("hosting.json", optional: true)
+                        .AddCommandLine(args)
+                        .AddEnvironmentVariables(prefix: "ASPNETCORE_")
+                        .Build();
+
             var host = new WebHostBuilder()
+                .UseConfiguration(config)
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()

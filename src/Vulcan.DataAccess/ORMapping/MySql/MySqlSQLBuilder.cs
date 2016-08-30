@@ -36,7 +36,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                 {
                     sqlbuilder.Append(",");
                 }
-                sqlbuilder.Append("@" + meta.Columns[i].ColumnName + "");
+                sqlbuilder.Append("@" + meta.Columns[i].PropertyName + "");
                 j++;
             }
             sqlbuilder.Append(");");
@@ -75,7 +75,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                 {
                     sqlbuilder.Append(",");
                 }
-                sqlbuilder.Append("@" + meta.Columns[i].ColumnName + "");
+                sqlbuilder.Append("@" + meta.Columns[i].PropertyName + "");
                 j++;
             }
             sqlbuilder.Append(");");
@@ -111,7 +111,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                         sqlbuilder.Append(",");
                     }
                     j++;
-                    sqlbuilder.Append("`" + meta.Columns[i].ColumnName + "`=@" + meta.Columns[i].ColumnName + "");
+                    sqlbuilder.Append("`" + meta.Columns[i].ColumnName + "`=@" + meta.Columns[i].PropertyName + "");
                 }
             }
             sqlbuilder.Append(" WHERE ");
@@ -121,7 +121,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                 {
                     sqlbuilder.Append(" AND ");
                 }
-                sqlbuilder.Append("`" + keys[i].ColumnName + "`=@" + keys[i].ColumnName);
+                sqlbuilder.Append("`" + keys[i].ColumnName + "`=@" + keys[i].PropertyName);
             }
 
             return sqlbuilder.ToString();
@@ -158,7 +158,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                 {
                     sqlbuilder.Append(",");
                 }
-                sqlbuilder.Append("@" + meta.Columns[i].ColumnName + "");
+                sqlbuilder.Append("@" + meta.Columns[i].PropertyName + "");
                 j++;
             }
             sqlbuilder.Append(");");
@@ -194,7 +194,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                         sqlbuilder.Append(",");
                     }
                     j++;
-                    sqlbuilder.Append("`" + meta.Columns[i].ColumnName + "`=@" + meta.Columns[i].ColumnName + "");
+                    sqlbuilder.Append("`" + meta.Columns[i].ColumnName + "`=@" + meta.Columns[i].PropertyName + "");
                 }
             }
             sqlbuilder.Append(" WHERE ");
@@ -204,7 +204,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                 {
                     sqlbuilder.Append(" AND ");
                 }
-                sqlbuilder.Append("`" + keys[i].ColumnName + "`=@" + keys[i].ColumnName);
+                sqlbuilder.Append("`" + keys[i].ColumnName + "`=@" + keys[i].PropertyName);
             }
 
             return sqlbuilder.ToString();

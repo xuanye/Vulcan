@@ -5,10 +5,13 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-   "Vulcan.Core": {
+    "NETStandard.Library": "1.6.0",
+    "Microsoft.AspNetCore.Mvc": "1.0.0",
+
+    "Vulcan.Core": {
       "1.0.0-*": null,
       "target": "project"
-    }   
+    }
   },
 
   "frameworks": {

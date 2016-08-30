@@ -32,7 +32,7 @@
 	function __Init__(options){
 	    options.el.addClass(options.gridClass);
 	    var style_width ="width:"+ options.width+";";
-	    if (options.width != "") {
+	    if (options.width !== "") {
 	        options.el.width("width", options.width);
 	    }
 		if( options.colModel == null || options.colModel.length==0 ){
@@ -81,16 +81,16 @@
 	}
 	function __InitEvent__(options){
 		if(options.showcheckbox){
-			$("#"+options.elid+"_checkall").click(function(){
-				var check = this.checked;
-				options.checkall = check;
-				$("#" + options.elid + "_detail td.checktd_cl input[type='checkbox']").each(function (i) {
-					this.checked = check;
-				});
-				for (var i = 0, l = options.data.length; i < l ; i++) {
-				    options.data[i].check_state = check ? 1 : 0;
-				}
-			})
+		    $("#" + options.elid + "_checkall").click(function () {
+		        var check = this.checked;
+		        options.checkall = check;
+		        $("#" + options.elid + "_detail td.checktd_cl input[type='checkbox']").each(function (i) {
+		            this.checked = check;
+		        });
+		        for (var i = 0, l = options.data.length; i < l ; i++) {
+		            options.data[i].check_state = check ? 1 : 0;
+		        }
+		    });
 		}
 		var obj = $("#" + options.elid + "_detail thead tr td:not(.checktd)");
 		$(obj).each(function (i) {
@@ -103,7 +103,7 @@
 		        }
 		        else {
 		            options.sortorder = "ASC";
-		        }	
+		        }
 		        var obj = options.colModel[i];
 		        options.sortname = obj.name;
 		        __LoadData__(options);
@@ -124,7 +124,7 @@
 		        //objec = options;
 		        //__LoadData__(options);
 		        //return false;
-		    })
+		    });
 		});
 	}
 
@@ -219,7 +219,7 @@
                         }
                         else {
                         	alert(JSON.stringify(data));
-                            alert("获取数据发生异常;")
+                        	alert("获取数据发生异常;");
                         }
                     }
                     catch (e) {
@@ -251,7 +251,7 @@
 	            html.push("<tr>");
 	        }	      
 	        if (options.showcheckbox) {
-	            html.push("<td class='checktd checktd_cl'><div style='width:25px;text-align:center'><input type='checkbox' id='", options.elid, "_cb_" + rowid + "' value='", data[i].id, "' ", data[i].check_state == 1 ? "checked='checked'" : "", "/></div></td>");
+	            html.push("<td class='checktd checktd_cl'><div style='width:25px;text-align:center'><input type='checkbox' id='", options.elid, "_cb_" + rowid + "' value='", data[i].id, "' ", data[i].check_state === 1 ? "checked='checked'" : "", "/></div></td>");
 	        }
 	        for (var j = 0 ; j < k ; j++) {
 	            var col = options.colModel[j];
@@ -272,9 +272,9 @@
 	                style.push("\"");
 	            }
 	            var text = col.process ? col.process(data[i].cell[j], data[i].cell, rowid) : data[i].cell[j];
-	            html.push("<td style='width:", col.width ? col.width : "auto", "'><div", style.join(""), ">", text, "</div></td>");
+	            html.push("<td style='width:", col.width ? col.width : "auto", "'><div class='",col.dvCss,"' ", style.join(""), ">", text, "</div></td>");
 	        }
-	        html.push("</tr>")
+	        html.push("</tr>");
 	    };	   
 	    $("#" + options.elid + "_detail tbody").html(html.join(""));
 	    if (options.mhoverclass || options.rowhanlder) { //行事件

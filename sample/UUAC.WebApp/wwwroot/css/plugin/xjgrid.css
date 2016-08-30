@@ -10,7 +10,7 @@
 {
 	padding: 0; 
     margin: 0; 
-   /* border-left: 1px solid #ddd;  */
+   border-left: 1px solid #ddd; 
 }
 .xjgrid .grid-body table thead td {   
     border-color: #ddd;
@@ -26,6 +26,7 @@
 .xjgrid .grid-body table tbody td { 
     border:none;
     border-bottom: 1px solid #ddd; 
+    border-right: 1px solid #ddd; 
     background: #fff; 
     padding: 0; 
     font-weight: normal;   
@@ -49,7 +50,7 @@
     width:40px;
 }
 .xjgrid .grid-body table tr td div {
-    padding: 6px 8px;
+    padding: 6px 4px;
     color: #707070;
     line-height: 20px;
     /*height: 20px;*/
