@@ -44,7 +44,9 @@ namespace UUAC.Entity.DTOEntities
         public sbyte AccountType { get; set; }
         public string OrgCode { get; set; }
         public string OrgName { get; set; }
-        public sbyte IsAdmin { get; set; }
+
+        public string ViewRootCode{get;set;}
+        public string ViewRootName{get;set;}
         public int Sequence { get; set; }
         public sbyte Status { get; set; }
         public string UserNum { get; set; }

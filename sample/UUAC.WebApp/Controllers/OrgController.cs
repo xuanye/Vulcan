@@ -55,7 +55,7 @@ namespace UUAC.WebApp.Controllers
                     model.ParentName = "根组织";
                 }
             }
-           
+
             return View(model);
         }
 
@@ -74,12 +74,12 @@ namespace UUAC.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> QueryOrgTree([FromForm]string id)
         {
-           
+
             List<IOrganization> list = await this._service.QueryOrgTreeByParentCode(id==rootId?"":id);
             List<JsonTreeNode> rlist = new List<JsonTreeNode>();
             if (string.IsNullOrEmpty(id))
             {
-             
+
                 JsonTreeNode root = new JsonTreeNode
                 {
                     text = "根组织",
@@ -96,7 +96,7 @@ namespace UUAC.WebApp.Controllers
             {
                 ConvertListToTree(list, rlist);
             }
-            
+
             return Json(rlist);
         }
         [HttpPost]
@@ -191,6 +191,17 @@ namespace UUAC.WebApp.Controllers
             }
             return Json(msg);
         }
+
+        /// <summary>
+        /// 选择组织的页面，只能选择当前用户可以选择的组织
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ChooseOrg()
+        {
+
+            // 1. 获取当前用户的根组织
+            return View();
+        }
         private bool ValidateOrg(DtoOrganization entity, out string errMsg)
         {
             errMsg = "";
@@ -214,9 +225,9 @@ namespace UUAC.WebApp.Controllers
 
         private static void BuildChildNodes(JsonTreeNode pNode , List<IOrganization> list)
         {
-            List<IOrganization> clist = pNode.id == rootId ? 
-                list.FindAll(x => string.IsNullOrEmpty(x.ParentCode)) 
-                : 
+            List<IOrganization> clist = pNode.id == rootId ?
+                list.FindAll(x => string.IsNullOrEmpty(x.ParentCode))
+                :
                 list.FindAll(x => x.ParentCode == pNode.id);
 
             if (clist.Count > 0)
@@ -245,5 +256,7 @@ namespace UUAC.WebApp.Controllers
                 rlist.Add(node);
             }
         }
+
+
     }
 }

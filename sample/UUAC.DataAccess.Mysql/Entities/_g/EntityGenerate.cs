@@ -18,10 +18,10 @@ namespace UUAC.DataAccess.Mysql.Entitis
 	{
 		private int _Idx;
 		/// <summary>
-		/// 
+		///
 		///  int(10)
 		/// </summary>
-		[MapField("idx"), Identity, PrimaryKey(1)] 
+		[MapField("idx"), Identity, PrimaryKey(1)]
 		public int Idx
 		{ get{ return _Idx; } 	set{ _Idx = value ; } }
 		private string _AppCode;
@@ -29,7 +29,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*系统标识*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("app_code")    ] 
+		[MapField("app_code")    ]
 		public string AppCode
 		{ get{ return _AppCode; } 	set{ _AppCode = value ;  OnPropertyChanged("app_code"); } }
 		private string _ApiCode;
@@ -37,7 +37,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*客户端访问ID*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("api_code")    ] 
+		[MapField("api_code")    ]
 		public string ApiCode
 		{ get{ return _ApiCode; } 	set{ _ApiCode = value ;  OnPropertyChanged("api_code"); } }
 		private string _SecretKey;
@@ -45,7 +45,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*密钥*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("secret_key")    ] 
+		[MapField("secret_key")    ]
 		public string SecretKey
 		{ get{ return _SecretKey; } 	set{ _SecretKey = value ;  OnPropertyChanged("secret_key"); } }
 		private string _ClientName;
@@ -53,7 +53,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*客户端名称--调用方系统名*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("client_name")    ] 
+		[MapField("client_name")    ]
 		public string ClientName
 		{ get{ return _ClientName; } 	set{ _ClientName = value ;  OnPropertyChanged("client_name"); } }
 		private string _LinkUser;
@@ -61,7 +61,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*对方联系人*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("link_user")    ] 
+		[MapField("link_user")    ]
 		public string LinkUser
 		{ get{ return _LinkUser; } 	set{ _LinkUser = value ;  OnPropertyChanged("link_user"); } }
 		private string _AllowIps;
@@ -69,7 +69,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*允许访问的IP列表，用逗号分隔*/
 		///  varchar(2000)
 		/// </summary>
-		[MapField("allow_ips"), Nullable  ] 
+		[MapField("allow_ips"), Nullable  ]
 		public string AllowIps
 		{ get{ return _AllowIps; } 	set{ _AllowIps = value ;  OnPropertyChanged("allow_ips"); } }
 		private sbyte? _Status;
@@ -77,7 +77,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*状态  0  = 无效  1= 有效*/
 		///  tinyint(3)
 		/// </summary>
-		[MapField("status"), Nullable  ] 
+		[MapField("status"), Nullable  ]
 		public sbyte? Status
 		{ get{ return _Status; } 	set{ _Status = value ;  OnPropertyChanged("status"); } }
 		private sbyte _Channel;
@@ -85,7 +85,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*渠道-扩展字段 */
 		///  tinyint(3)
 		/// </summary>
-		[MapField("channel")    ] 
+		[MapField("channel")    ]
 		public sbyte Channel
 		{ get{ return _Channel; } 	set{ _Channel = value ;  OnPropertyChanged("channel"); } }
 		private string _LastModifyUserId;
@@ -93,7 +93,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人账号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("last_modify_user_id")    ] 
+		[MapField("last_modify_user_id")    ]
 		public string LastModifyUserId
 		{ get{ return _LastModifyUserId; } 	set{ _LastModifyUserId = value ;  OnPropertyChanged("last_modify_user_id"); } }
 		private string _LastModifyUserName;
@@ -101,7 +101,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("last_modify_user_name")    ] 
+		[MapField("last_modify_user_name")    ]
 		public string LastModifyUserName
 		{ get{ return _LastModifyUserName; } 	set{ _LastModifyUserName = value ;  OnPropertyChanged("last_modify_user_name"); } }
 		private DateTime _LastModifyTime;
@@ -109,7 +109,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新时间*/
 		///  datetime
 		/// </summary>
-		[MapField("last_modify_time")    ] 
+		[MapField("last_modify_time")    ]
 		public DateTime LastModifyTime
 		{ get{ return _LastModifyTime; } 	set{ _LastModifyTime = value ;  OnPropertyChanged("last_modify_time"); } }
 	}
@@ -119,26 +119,26 @@ namespace UUAC.DataAccess.Mysql.Entitis
 	{
 		private string _AppCode;
 		/// <summary>
-		/// 
+		///
 		///  varchar(50)
 		/// </summary>
-		[MapField("app_code"),   PrimaryKey(1)] 
+		[MapField("app_code"),   PrimaryKey(1)]
 		public string AppCode
 		{ get{ return _AppCode; } 	set{ _AppCode = value ;  OnPropertyChanged("app_code"); } }
 		private string _AppName;
 		/// <summary>
-		/// 
+		///
 		///  varchar(200)
 		/// </summary>
-		[MapField("app_name")    ] 
+		[MapField("app_name")    ]
 		public string AppName
 		{ get{ return _AppName; } 	set{ _AppName = value ;  OnPropertyChanged("app_name"); } }
 		private string _Description;
 		/// <summary>
-		/// 
+		///
 		///  varchar(2000)
 		/// </summary>
-		[MapField("description"), Nullable  ] 
+		[MapField("description"), Nullable  ]
 		public string Description
 		{ get{ return _Description; } 	set{ _Description = value ;  OnPropertyChanged("description"); } }
 		private string _LastModifyUserId;
@@ -146,7 +146,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人账号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("last_modify_user_id")    ] 
+		[MapField("last_modify_user_id")    ]
 		public string LastModifyUserId
 		{ get{ return _LastModifyUserId; } 	set{ _LastModifyUserId = value ;  OnPropertyChanged("last_modify_user_id"); } }
 		private string _LastModifyUserName;
@@ -154,7 +154,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("last_modify_user_name")    ] 
+		[MapField("last_modify_user_name")    ]
 		public string LastModifyUserName
 		{ get{ return _LastModifyUserName; } 	set{ _LastModifyUserName = value ;  OnPropertyChanged("last_modify_user_name"); } }
 		private DateTime _LastModifyTime;
@@ -162,7 +162,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新事件*/
 		///  datetime
 		/// </summary>
-		[MapField("last_modify_time")    ] 
+		[MapField("last_modify_time")    ]
 		public DateTime LastModifyTime
 		{ get{ return _LastModifyTime; } 	set{ _LastModifyTime = value ;  OnPropertyChanged("last_modify_time"); } }
 	}
@@ -172,42 +172,42 @@ namespace UUAC.DataAccess.Mysql.Entitis
 	{
 		private string _OrgCode;
 		/// <summary>
-		/// 
+		///
 		///  varchar(50)
 		/// </summary>
-		[MapField("org_code"),   PrimaryKey(1)] 
+		[MapField("org_code"),   PrimaryKey(1)]
 		public string OrgCode
 		{ get{ return _OrgCode; } 	set{ _OrgCode = value ;  OnPropertyChanged("org_code"); } }
 		private string _OrgName;
 		/// <summary>
-		/// 
+		///
 		///  varchar(200)
 		/// </summary>
-		[MapField("org_name")    ] 
+		[MapField("org_name")    ]
 		public string OrgName
 		{ get{ return _OrgName; } 	set{ _OrgName = value ;  OnPropertyChanged("org_name"); } }
 		private string _ParentCode;
 		/// <summary>
-		/// 
+		///
 		///  varchar(50)
 		/// </summary>
-		[MapField("parent_code"), Nullable  ] 
+		[MapField("parent_code"), Nullable  ]
 		public string ParentCode
 		{ get{ return _ParentCode; } 	set{ _ParentCode = value ;  OnPropertyChanged("parent_code"); } }
 		private string _Remark;
 		/// <summary>
-		/// 
+		///
 		///  varchar(500)
 		/// </summary>
-		[MapField("remark"), Nullable  ] 
+		[MapField("remark"), Nullable  ]
 		public string Remark
 		{ get{ return _Remark; } 	set{ _Remark = value ;  OnPropertyChanged("remark"); } }
 		private int _Sequence;
 		/// <summary>
-		/// 
+		///
 		///  int(10)
 		/// </summary>
-		[MapField("sequence")    ] 
+		[MapField("sequence")    ]
 		public int Sequence
 		{ get{ return _Sequence; } 	set{ _Sequence = value ;  OnPropertyChanged("sequence"); } }
 		private sbyte _OrgType;
@@ -215,7 +215,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*组织类型 ： 0 组  1 部门  2 中心  3 公司*/
 		///  tinyint(3)
 		/// </summary>
-		[MapField("org_type")    ] 
+		[MapField("org_type")    ]
 		public sbyte OrgType
 		{ get{ return _OrgType; } 	set{ _OrgType = value ;  OnPropertyChanged("org_type"); } }
 		private string _UnitCode;
@@ -223,7 +223,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*所属中心*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("unit_code"), Nullable  ] 
+		[MapField("unit_code"), Nullable  ]
 		public string UnitCode
 		{ get{ return _UnitCode; } 	set{ _UnitCode = value ;  OnPropertyChanged("unit_code"); } }
 		private string _UnitName;
@@ -231,7 +231,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*所属中心名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("unit_name"), Nullable  ] 
+		[MapField("unit_name"), Nullable  ]
 		public string UnitName
 		{ get{ return _UnitName; } 	set{ _UnitName = value ;  OnPropertyChanged("unit_name"); } }
 		private string _LastModifyUserId;
@@ -239,7 +239,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人账号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("last_modify_user_id")    ] 
+		[MapField("last_modify_user_id")    ]
 		public string LastModifyUserId
 		{ get{ return _LastModifyUserId; } 	set{ _LastModifyUserId = value ;  OnPropertyChanged("last_modify_user_id"); } }
 		private string _LastModifyUserName;
@@ -247,7 +247,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("last_modify_user_name")    ] 
+		[MapField("last_modify_user_name")    ]
 		public string LastModifyUserName
 		{ get{ return _LastModifyUserName; } 	set{ _LastModifyUserName = value ;  OnPropertyChanged("last_modify_user_name"); } }
 		private DateTime _LastModifyTime;
@@ -255,7 +255,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新事件*/
 		///  datetime
 		/// </summary>
-		[MapField("last_modify_time")    ] 
+		[MapField("last_modify_time")    ]
 		public DateTime LastModifyTime
 		{ get{ return _LastModifyTime; } 	set{ _LastModifyTime = value ;  OnPropertyChanged("last_modify_time"); } }
 	}
@@ -268,7 +268,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*权限标识*/
 		///  varchar(100)
 		/// </summary>
-		[MapField("privilege_code"),   PrimaryKey(1)] 
+		[MapField("privilege_code"),   PrimaryKey(1)]
 		public string PrivilegeCode
 		{ get{ return _PrivilegeCode; } 	set{ _PrivilegeCode = value ;  OnPropertyChanged("privilege_code"); } }
 		private string _PrivilegeName;
@@ -276,7 +276,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*权限名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("privilege_name")    ] 
+		[MapField("privilege_name")    ]
 		public string PrivilegeName
 		{ get{ return _PrivilegeName; } 	set{ _PrivilegeName = value ;  OnPropertyChanged("privilege_name"); } }
 		private sbyte _PrivilegeType;
@@ -284,7 +284,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*权限类型： 0 菜单权限  1 一般权限*/
 		///  tinyint(3)
 		/// </summary>
-		[MapField("privilege_type")    ] 
+		[MapField("privilege_type")    ]
 		public sbyte PrivilegeType
 		{ get{ return _PrivilegeType; } 	set{ _PrivilegeType = value ;  OnPropertyChanged("privilege_type"); } }
 		private string _Remark;
@@ -292,7 +292,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*备注*/
 		///  varchar(500)
 		/// </summary>
-		[MapField("remark"), Nullable  ] 
+		[MapField("remark"), Nullable  ]
 		public string Remark
 		{ get{ return _Remark; } 	set{ _Remark = value ;  OnPropertyChanged("remark"); } }
 		private string _ParentCode;
@@ -300,7 +300,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*父权限标识*/
 		///  varchar(100)
 		/// </summary>
-		[MapField("parent_code"), Nullable  ] 
+		[MapField("parent_code"), Nullable  ]
 		public string ParentCode
 		{ get{ return _ParentCode; } 	set{ _ParentCode = value ;  OnPropertyChanged("parent_code"); } }
 		private string _Resource;
@@ -308,7 +308,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*资源  一般为URL*/
 		///  varchar(2000)
 		/// </summary>
-		[MapField("resource"), Nullable  ] 
+		[MapField("resource"), Nullable  ]
 		public string Resource
 		{ get{ return _Resource; } 	set{ _Resource = value ;  OnPropertyChanged("resource"); } }
 		private int _Sequence;
@@ -316,15 +316,15 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*排序*/
 		///  int(10)
 		/// </summary>
-		[MapField("sequence")    ] 
+		[MapField("sequence")    ]
 		public int Sequence
 		{ get{ return _Sequence; } 	set{ _Sequence = value ;  OnPropertyChanged("sequence"); } }
 		private string _AppCode;
 		/// <summary>
-		/// 
+		///
 		///  varchar(50)
 		/// </summary>
-		[MapField("app_code")    ] 
+		[MapField("app_code")    ]
 		public string AppCode
 		{ get{ return _AppCode; } 	set{ _AppCode = value ;  OnPropertyChanged("app_code"); } }
 		private string _LastModifyUserId;
@@ -332,7 +332,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人账号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("last_modify_user_id")    ] 
+		[MapField("last_modify_user_id")    ]
 		public string LastModifyUserId
 		{ get{ return _LastModifyUserId; } 	set{ _LastModifyUserId = value ;  OnPropertyChanged("last_modify_user_id"); } }
 		private string _LastModifyUserName;
@@ -340,7 +340,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("last_modify_user_name")    ] 
+		[MapField("last_modify_user_name")    ]
 		public string LastModifyUserName
 		{ get{ return _LastModifyUserName; } 	set{ _LastModifyUserName = value ;  OnPropertyChanged("last_modify_user_name"); } }
 		private DateTime _LastModifyTime;
@@ -348,7 +348,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新事件*/
 		///  datetime
 		/// </summary>
-		[MapField("last_modify_time")    ] 
+		[MapField("last_modify_time")    ]
 		public DateTime LastModifyTime
 		{ get{ return _LastModifyTime; } 	set{ _LastModifyTime = value ;  OnPropertyChanged("last_modify_time"); } }
 		private string _Mark;
@@ -356,7 +356,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*标识-一般用于菜单图标什么*/
 		///  varchar(100)
 		/// </summary>
-		[MapField("mark"), Nullable  ] 
+		[MapField("mark"), Nullable  ]
 		public string Mark
 		{ get{ return _Mark; } 	set{ _Mark = value ;  OnPropertyChanged("mark"); } }
 	}
@@ -369,7 +369,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*角色代码*/
 		///  varchar(100)
 		/// </summary>
-		[MapField("role_code"),   PrimaryKey(1)] 
+		[MapField("role_code"),   PrimaryKey(1)]
 		public string RoleCode
 		{ get{ return _RoleCode; } 	set{ _RoleCode = value ;  OnPropertyChanged("role_code"); } }
 		private string _RoleName;
@@ -377,7 +377,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*角色名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("role_name")    ] 
+		[MapField("role_name")    ]
 		public string RoleName
 		{ get{ return _RoleName; } 	set{ _RoleName = value ;  OnPropertyChanged("role_name"); } }
 		private string _ParentCode;
@@ -385,7 +385,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*父角色代码*/
 		///  varchar(100)
 		/// </summary>
-		[MapField("parent_code"), Nullable  ] 
+		[MapField("parent_code"), Nullable  ]
 		public string ParentCode
 		{ get{ return _ParentCode; } 	set{ _ParentCode = value ;  OnPropertyChanged("parent_code"); } }
 		private sbyte _IsSystemRole;
@@ -393,7 +393,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*是否系统角色*/
 		///  tinyint(3)
 		/// </summary>
-		[MapField("is_system_role")    ] 
+		[MapField("is_system_role")    ]
 		public sbyte IsSystemRole
 		{ get{ return _IsSystemRole; } 	set{ _IsSystemRole = value ;  OnPropertyChanged("is_system_role"); } }
 		private string _Remark;
@@ -401,7 +401,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*备注*/
 		///  varchar(500)
 		/// </summary>
-		[MapField("remark"), Nullable  ] 
+		[MapField("remark"), Nullable  ]
 		public string Remark
 		{ get{ return _Remark; } 	set{ _Remark = value ;  OnPropertyChanged("remark"); } }
 		private string _RolePath;
@@ -409,15 +409,15 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*角色层级路径*/
 		///  varchar(3000)
 		/// </summary>
-		[MapField("role_path"), Nullable  ] 
+		[MapField("role_path"), Nullable  ]
 		public string RolePath
 		{ get{ return _RolePath; } 	set{ _RolePath = value ;  OnPropertyChanged("role_path"); } }
 		private string _AppCode;
 		/// <summary>
-		/// 
+		///
 		///  varchar(50)
 		/// </summary>
-		[MapField("app_code"),   PrimaryKey(2)] 
+		[MapField("app_code"),   PrimaryKey(2)]
 		public string AppCode
 		{ get{ return _AppCode; } 	set{ _AppCode = value ;  OnPropertyChanged("app_code"); } }
 		private string _LastModifyUserId;
@@ -425,7 +425,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人账号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("last_modify_user_id")    ] 
+		[MapField("last_modify_user_id")    ]
 		public string LastModifyUserId
 		{ get{ return _LastModifyUserId; } 	set{ _LastModifyUserId = value ;  OnPropertyChanged("last_modify_user_id"); } }
 		private string _LastModifyUserName;
@@ -433,7 +433,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("last_modify_user_name")    ] 
+		[MapField("last_modify_user_name")    ]
 		public string LastModifyUserName
 		{ get{ return _LastModifyUserName; } 	set{ _LastModifyUserName = value ;  OnPropertyChanged("last_modify_user_name"); } }
 		private DateTime _LastModifyTime;
@@ -441,7 +441,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新事件*/
 		///  datetime
 		/// </summary>
-		[MapField("last_modify_time")    ] 
+		[MapField("last_modify_time")    ]
 		public DateTime LastModifyTime
 		{ get{ return _LastModifyTime; } 	set{ _LastModifyTime = value ;  OnPropertyChanged("last_modify_time"); } }
 	}
@@ -451,18 +451,18 @@ namespace UUAC.DataAccess.Mysql.Entitis
 	{
 		private string _PrivilegeCode;
 		/// <summary>
-		/// 
+		///
 		///  varchar(100)
 		/// </summary>
-		[MapField("privilege_code"), PrimaryKey(1)] 
+		[MapField("privilege_code"), PrimaryKey(1)]
 		public string PrivilegeCode
 		{ get{ return _PrivilegeCode; } 	set{ _PrivilegeCode = value ;  OnPropertyChanged("privilege_code"); } }
 		private string _RoleCode;
 		/// <summary>
-		/// 
+		///
 		///  varchar(100)
 		/// </summary>
-		[MapField("role_code"), PrimaryKey(2)] 
+		[MapField("role_code"), PrimaryKey(2)]
 		public string RoleCode
 		{ get{ return _RoleCode; } 	set{ _RoleCode = value ;  OnPropertyChanged("role_code"); } }
 	}
@@ -475,7 +475,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*角色账号*/
 		///  varchar(100)
 		/// </summary>
-		[MapField("role_code"), PrimaryKey(1)] 
+		[MapField("role_code"), PrimaryKey(1)]
 		public string RoleCode
 		{ get{ return _RoleCode; } 	set{ _RoleCode = value ;  OnPropertyChanged("role_code"); } }
 		private string _UserUid;
@@ -483,7 +483,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*用户账号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("user_uid"), PrimaryKey(2)] 
+		[MapField("user_uid"), PrimaryKey(2)]
 		public string UserUid
 		{ get{ return _UserUid; } 	set{ _UserUid = value ;  OnPropertyChanged("user_uid"); } }
 	}
@@ -496,7 +496,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*用户账号唯一标识*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("user_uid"),   PrimaryKey(1)] 
+		[MapField("user_uid"),   PrimaryKey(1)]
 		public string UserUid
 		{ get{ return _UserUid; } 	set{ _UserUid = value ;  OnPropertyChanged("user_uid"); } }
 		private string _FullName;
@@ -504,7 +504,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*用户姓名*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("full_name")    ] 
+		[MapField("full_name")    ]
 		public string FullName
 		{ get{ return _FullName; } 	set{ _FullName = value ;  OnPropertyChanged("full_name"); } }
 		private string _Password;
@@ -512,7 +512,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*密码*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("password"), Nullable  ] 
+		[MapField("password"), Nullable  ]
 		public string Password
 		{ get{ return _Password; } 	set{ _Password = value ;  OnPropertyChanged("password"); } }
 		private sbyte _AccountType;
@@ -520,7 +520,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*账号类型 ：0 自建OR外部  1 内部员工  9 系统*/
 		///  tinyint(3)
 		/// </summary>
-		[MapField("account_type")    ] 
+		[MapField("account_type")    ]
 		public sbyte AccountType
 		{ get{ return _AccountType; } 	set{ _AccountType = value ;  OnPropertyChanged("account_type"); } }
 		private string _OrgCode;
@@ -528,7 +528,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*所属结构代码*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("org_code")    ] 
+		[MapField("org_code")    ]
 		public string OrgCode
 		{ get{ return _OrgCode; } 	set{ _OrgCode = value ;  OnPropertyChanged("org_code"); } }
 		private string _OrgName;
@@ -536,23 +536,36 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*所属机构名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("org_name")    ] 
+		[MapField("org_name")    ]
 		public string OrgName
 		{ get{ return _OrgName; } 	set{ _OrgName = value ;  OnPropertyChanged("org_name"); } }
-		private sbyte _IsAdmin;
+
+
+		private string _ViewRootCode;
 		/// <summary>
-		///  /* COMMENT TRUNCATED */ /*是否当前机构管理员*/
-		///  tinyint(3)
+		///  /* COMMENT TRUNCATED */ /*可视范围组织根代码*/
+		///  varchar(200)
 		/// </summary>
-		[MapField("is_admin")    ] 
-		public sbyte IsAdmin
-		{ get{ return _IsAdmin; } 	set{ _IsAdmin = value ;  OnPropertyChanged("is_admin"); } }
+		[MapField("view_root_code")    ]
+		public string ViewRootCode
+		{ get{ return _ViewRootCode; } 	set{ _ViewRootCode = value ;  OnPropertyChanged("view_root_code"); } }
+
+		private string _ViewRootName;
+		/// <summary>
+		///  /* COMMENT TRUNCATED */ /*可视范围组织根代码*/
+		///  varchar(200)
+		/// </summary>
+		[MapField("view_root_name")    ]
+		public string ViewRootName
+		{ get{ return _ViewRootName; } 	set{ _ViewRootName = value ;  OnPropertyChanged("view_root_name"); } }
+
+
 		private int _Sequence;
 		/// <summary>
 		///  /* COMMENT TRUNCATED */ /*排序号*/
 		///  int(10)
 		/// </summary>
-		[MapField("sequence")    ] 
+		[MapField("sequence")    ]
 		public int Sequence
 		{ get{ return _Sequence; } 	set{ _Sequence = value ;  OnPropertyChanged("sequence"); } }
 		private sbyte _Status;
@@ -560,7 +573,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*账号状态： 0 正常 1 停用*/
 		///  tinyint(3)
 		/// </summary>
-		[MapField("status")    ] 
+		[MapField("status")    ]
 		public sbyte Status
 		{ get{ return _Status; } 	set{ _Status = value ;  OnPropertyChanged("status"); } }
 		private string _LastModifyUserId;
@@ -568,7 +581,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人账号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("last_modify_user_id")    ] 
+		[MapField("last_modify_user_id")    ]
 		public string LastModifyUserId
 		{ get{ return _LastModifyUserId; } 	set{ _LastModifyUserId = value ;  OnPropertyChanged("last_modify_user_id"); } }
 		private string _LastModifyUserName;
@@ -576,7 +589,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新人名称*/
 		///  varchar(200)
 		/// </summary>
-		[MapField("last_modify_user_name")    ] 
+		[MapField("last_modify_user_name")    ]
 		public string LastModifyUserName
 		{ get{ return _LastModifyUserName; } 	set{ _LastModifyUserName = value ;  OnPropertyChanged("last_modify_user_name"); } }
 		private DateTime _LastModifyTime;
@@ -584,7 +597,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*最后一次更新事件*/
 		///  datetime
 		/// </summary>
-		[MapField("last_modify_time")    ] 
+		[MapField("last_modify_time")    ]
 		public DateTime LastModifyTime
 		{ get{ return _LastModifyTime; } 	set{ _LastModifyTime = value ;  OnPropertyChanged("last_modify_time"); } }
 		private string _UserNum;
@@ -592,7 +605,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*工号*/
 		///  varchar(50)
 		/// </summary>
-		[MapField("user_num"), Nullable  ] 
+		[MapField("user_num"), Nullable  ]
 		public string UserNum
 		{ get{ return _UserNum; } 	set{ _UserNum = value ;  OnPropertyChanged("user_num"); } }
 		private sbyte? _Gender;
@@ -600,7 +613,7 @@ namespace UUAC.DataAccess.Mysql.Entitis
 		///  /* COMMENT TRUNCATED */ /*1：男，0：女*/
 		///  tinyint(3)
 		/// </summary>
-		[MapField("gender"), Nullable  ] 
+		[MapField("gender"), Nullable  ]
 		public sbyte? Gender
 		{ get{ return _Gender; } 	set{ _Gender = value ;  OnPropertyChanged("gender"); } }
 	}

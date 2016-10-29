@@ -66,7 +66,22 @@ namespace UUAC.Business.ServiceImpl
                     }
 
                     entity.OrgName = pOrg.OrgName;
-                 
+
+                    if(string.IsNullOrEmpty(entity.ViewRootCode))
+                    {
+                        entity.ViewRootCode = entity.OrgCode;
+                        entity.ViewRootName = entity.ViewRootName;
+                    }
+                    else
+                    {
+                        IOrganization rOrg = await _orgRepo.GetOrgInfoAsync(entity.ViewRootCode);
+                        if(rOrg == null)
+                        {
+                            throw new BizException("组织范围顶组织代码不存在，请检查后重试");
+                        }
+                    }
+
+
                     if(entity.AccountType == 0) //外部用户
                     {
                         if (string.IsNullOrEmpty(entity.Password))
@@ -80,7 +95,7 @@ namespace UUAC.Business.ServiceImpl
                     {
                         entity.Password = "";
                     }
-                  
+
                     await this._repo.AddUser(entity);
                     return 1;
 
@@ -99,12 +114,12 @@ namespace UUAC.Business.ServiceImpl
             {
                 userId = Utility.ClearSafeStringParma(userId);
 
-                //清除用户和角色的关系 
+                //清除用户和角色的关系
                 await this._repo.RemoveUserRolesAsync(userId);
 
                 ret = await this._repo.RemoveUserInfoAsync(userId);
                 scope.Complete();
-                
+
             }
             return ret;
         }
