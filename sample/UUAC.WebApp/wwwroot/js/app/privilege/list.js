@@ -12,7 +12,7 @@
 
 
     var opt = window.options;
- 
+
     var tree = null, xjgrid =null;
     post(opt.getAppsUrl, {}, function (ret) {
         if(!ret ) {
@@ -23,7 +23,7 @@
             showError("错误提示", "获取数据错误:"+ret.message);
             return false;
         }
-        
+
         if(ret.data) {
             var treeData = parseTreeData(ret.data);
             tree = new xjTree("privilegeTree",
@@ -48,8 +48,8 @@
             colModel: [
                 { display: "权限标识", name: "PrivilegeCode", width:130, sortable: false, align: "left", iskey: true },
                 { display: "权限名称", name: "PrivilegeName", sortable: false, align: "center" },
-                { display: "权限类型", name: "PrivilegeType", sortable: false, align: "center" },
                 { display: "资源", name: "Resource", sortable: false, align: "left" },
+                { display: "权限类型", name: "PrivilegeType", sortable: false, align: "center",process: formatType },
                 { display: "排序号", name: "Sequence", sortable: false, align: "center" },
                 { display: "操作", name: "PrivilegeCode", width: 120, sortable: false, align: "center", dvCss: "hidden-sm hidden-xs action-buttons", process: formatOp, toggle: false }
             ],
@@ -63,6 +63,14 @@
             extparams: []
         };
         xjgrid = new xjGrid("privilegeList", listOption);
+    }
+    function formatType(value){
+        if(value =="1"){
+            return "菜单权限";
+        } else {
+            return "标识权限";
+        }
+
     }
     function navi(item) {
         if(!xjgrid) {
@@ -82,7 +90,7 @@
             ]);
         }
 
-      
+
     }
     function parseTreeData(data) {
         var root = [];
@@ -129,9 +137,9 @@
         else { //根节点
             showError("错误信息","请先选中一个父组织");
         }
-       
+
     });
-   
+
     function formatOp(value) {
         var ret = [];
         ret.push('<a class="green" href="javascript:window.options.Edit(\'', value, '\')"><i class="ace-icon fa fa-pencil bigger-130"></i></a>');
@@ -140,7 +148,7 @@
 
     }
     opt.Edit = function (Id) {
-        
+
         var url = opt.editUrl + "/" + Id;
         window.Choose.Open(url, {
             width: 580,
@@ -166,5 +174,5 @@
             }
         });
     };
-  
+
 });
