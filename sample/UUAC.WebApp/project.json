@@ -20,9 +20,12 @@
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
-    "Microsoft.Extensions.Caching.Memory": "1.0.0",
+    "Microsoft.Extensions.Caching.Memory": "1.0.0",  
+    "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
     "SapientGuardian.MySql.Data": "6.9.813",
-    "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",    
+    "Microsoft.Extensions.Caching.Redis":"1.1.0-preview1-final",
+    "NLog.Extensions.Logging":"1.0.0-rtm-alpha4",
+
     "Vulcan.DataAccess": {
       "1.0.0-*": null,
       "target": "project"
@@ -90,7 +93,7 @@
     "centos.7-x64": {}
   },
   "scripts": {
-   
+
   },
   "userSecretsId": "aspnet-UUAC.WebApp-20160701024255"
 }

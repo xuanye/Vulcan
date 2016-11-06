@@ -56,6 +56,8 @@ namespace UUAC.WebApp.Controllers
                 {
                     model.OrgCode = pcode;
                     model.OrgName = pname;
+                    model.ViewRootCode  =pcode;
+                    model.ViewRootName = pname;
                 }
             }
             else
@@ -64,6 +66,11 @@ namespace UUAC.WebApp.Controllers
                 if (model == null)
                 {
                     throw new ArgumentOutOfRangeException("userId", "不存在对应的用户");
+                }
+                if(string.IsNullOrEmpty(model.ViewRootCode))
+                {
+                    model.ViewRootCode  =pcode;
+                    model.ViewRootName = pname;
                 }
             }
 
@@ -111,7 +118,7 @@ namespace UUAC.WebApp.Controllers
                 entity.LastModifyTime = DateTime.Now;
                 entity.LastModifyUserId = base.UserId;
                 entity.LastModifyUserName = base.UserId;
-               
+
                 int ret = await this._service.SaveUserInfo(entity, type);
                 if (ret > 0)
                 {

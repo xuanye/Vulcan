@@ -33,11 +33,13 @@ namespace UUAC.Entity
         sbyte AccountType { get; set; }
         string OrgCode { get; set; }
         string OrgName { get; set; }
-        sbyte IsAdmin { get; set; }
         int Sequence { get; set; }
         sbyte Status { get; set; }
         string UserNum { get; set; }
         sbyte? Gender { get; set; }
+
+        string ViewRootCode{get;set;}
+        string ViewRootName{get;set;}
     }
     public interface IRoleInfo : IEntity
     {

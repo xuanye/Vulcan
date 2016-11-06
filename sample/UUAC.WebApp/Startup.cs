@@ -48,14 +48,14 @@ namespace UUAC.WebApp
             // Add memory cache services
             services.AddMemoryCache();
             services.AddDistributedMemoryCache();
-          
+
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.CookieName = ".UUACAPP";
             });
 
 
-           
+
             ConnectionStringManager.Configure(Configuration.GetSection("ConnectionStrings"));
 
 
@@ -72,8 +72,6 @@ namespace UUAC.WebApp
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
 
-
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
@@ -88,10 +86,7 @@ namespace UUAC.WebApp
 
             if (env.IsDevelopment())
             {
-              
-              
                 app.UseDeveloperExceptionPage();
-              
                 //app.UseBrowserLink();
             }
             else
@@ -99,7 +94,7 @@ namespace UUAC.WebApp
                 app.UseExceptionHandler("/Home/Error");
             }
 
-        
+
             app.UseSession();
 
             app.UseStaticFiles();
@@ -114,7 +109,7 @@ namespace UUAC.WebApp
             });
 
             if (env.IsDevelopment())
-            {  
+            {
                 //开发模式下使用模拟用户
                 app.UseMockAppUser(
                 new MockAppUserOption()
