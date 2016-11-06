@@ -24,6 +24,7 @@ namespace UUAC.WebApp.Controllers
         // GET: /<controller>/
         public IActionResult List()
         {
+            
             return View();
         }
         public IActionResult Edit(string orgCode,string pcode,string pname)

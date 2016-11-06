@@ -35,9 +35,6 @@ EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "UUAC.Entity", "sample\UUAC.Entity\UUAC.Entity.xproj", "{F6EE9F03-9EE5-4D93-94F5-D0D221B9F19C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libs", "Libs", "{A09E970E-825B-45F9-AC1E-F5C5EA062FE1}"
-	ProjectSection(SolutionItems) = preProject
-		sample\Libs\mysql.data.dll = sample\Libs\mysql.data.dll
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
