@@ -1,13 +1,12 @@
 {
-  "title": "Vulcan For AspNetCoreMvc1.0 ¹«¹²Àà¿â",
+  "title": "Vulcanæ•°æ®åº“è®¿é—®ç±»åº“",
   "copyright": "Xuanye  2016",
-  "description": "Vulcan For AspNetCoreMvc1.0 ¹«¹²Àà¿â",
+  "description": "Vulcanæ•°æ®åº“è®¿é—®ç±»åº“ åŸºäºDapper é»˜è®¤æ”¯æŒMysqlå’ŒMsSql",
   "version": "1.0.0-*",
 
   "dependencies": {
-    "NETStandard.Library": "1.6.0",
-    "Microsoft.AspNetCore.Mvc": "1.0.0",
-
+    "NETStandard.Library": "1.6.1",
+    "Microsoft.AspNetCore.Mvc": "1.1.0",
     "Vulcan.Core": {
       "1.0.0-*": null,
       "target": "project"
@@ -15,7 +14,7 @@
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
+    "netcoreapp1.1": {
       "imports": "dnxcore50"
     }
   }
