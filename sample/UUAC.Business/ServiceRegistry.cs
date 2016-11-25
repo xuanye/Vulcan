@@ -21,6 +21,7 @@ namespace UUAC.Business
             services.AddSingleton<IUserManageService, UserManageService>();
 
             services.AddSingleton<IRoleService, RoleService>();
+            services.AddSingleton<ISystemService, SystemService>();
         }
     }
 }

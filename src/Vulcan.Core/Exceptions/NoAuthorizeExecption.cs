@@ -15,5 +15,11 @@ namespace Vulcan.Core.Exceptions
         {
 
         }
+
+        public NoAuthorizeExecption(string message)
+        : base(message)
+        {
+
+        }
     }
 }

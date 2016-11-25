@@ -29,7 +29,7 @@ namespace Vulcan.AspNetCoreMvc.Interfaces
         /// </summary>
         /// <param name="identity">The identity.</param>
         /// <returns></returns>
-        IAppUser GetUserInfo(string identity);
+        Task<IAppUser> GetUserInfo(string identity);
     }
 
     public interface IAppUser
@@ -38,13 +38,17 @@ namespace Vulcan.AspNetCoreMvc.Interfaces
         string FullName { get; }
         string EmployID { get; }
 
-        string GroupCode { get; set; }
-        string GroupName { get; set; }
+        string GroupCode { get;  }
+        string GroupName { get;  }
 
-        string DeptCode { get; set; }
-        string DeptName { get; set; }
+        string DeptCode { get;  }
+        string DeptName { get;  }
 
-        string OrgCode { get; set; }
-        string OrgName { get; set; }
+        string OrgCode { get;  }
+        string OrgName { get;  }
+
+        string ViewRootCode { get;  }
+
+        string ViewRootName { get;  }
     }
 }

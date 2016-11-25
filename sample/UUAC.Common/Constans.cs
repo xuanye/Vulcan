@@ -10,6 +10,8 @@ namespace UUAC.Common
         public const string EVERYONE_ROLE_POSTFIX = "everyone";
         public const string ADMIN_ROLE_POSTFIX = "admin";
 
+        public const string SUPPER_ADMIN_ROLE = "UUAC_admin";
+
         public const string APP_CODE = "UUAC";
 
         public const string MAIN_DB_KEY = "master";
@@ -23,5 +25,8 @@ namespace UUAC.Common
     public class MyClaimTypes
     {
         public const string FullName = "UUAC.AppUser.FullName";
+        public const string OrgCode = "UUAC.AppUser.OrgCode";
+        public const string GroupCode = "UUAC.AppUser.GroupCode";
+        public const string ViewRootCode = "UUAC.AppUser.ViewRootCode";
     }
 }

@@ -34,7 +34,7 @@ namespace UUAC.WebApp.Libs
             if (!context.User.Identity.IsAuthenticated)
             {
                 string userId = _option.MockUserId;
-                var user = _service.GetUserInfo(userId);
+                var user = await _service.GetUserInfo(userId);
                 if(user == null)
                 {
                     throw new Exception("无法加载配置默认用户的基本信息");
@@ -43,7 +43,10 @@ namespace UUAC.WebApp.Libs
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,user.UserId, ClaimValueTypes.String, Issuer),
-                    new Claim(MyClaimTypes.FullName,user.FullName, ClaimValueTypes.String, Issuer)
+                    new Claim(MyClaimTypes.FullName,user.FullName, ClaimValueTypes.String, Issuer),
+                    new Claim(MyClaimTypes.GroupCode,user.GroupCode, ClaimValueTypes.String, Issuer),
+                    new Claim(MyClaimTypes.OrgCode,user.OrgCode, ClaimValueTypes.String, Issuer),
+                    new Claim(MyClaimTypes.ViewRootCode,user.ViewRootCode, ClaimValueTypes.String, Issuer)                    
                 };
 
 

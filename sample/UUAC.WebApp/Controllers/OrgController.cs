@@ -9,7 +9,8 @@ using UUAC.Interface.Service;
 using UUAC.WebApp.Libs;
 using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
-
+using Vulcan.AspNetCoreMvc.Interfaces;
+using UUAC.Common;
 
 namespace UUAC.WebApp.Controllers
 {
@@ -17,9 +18,12 @@ namespace UUAC.WebApp.Controllers
     {
         const string rootId = "000000";
         private readonly IOrgManageService _service;
-        public OrgController(IOrgManageService service)
+        private readonly IAppContextService _contextService;
+
+        public OrgController(IOrgManageService service, IAppContextService contextService)
         {
             this._service = service;
+            this._contextService = contextService;
         }
         // GET: /<controller>/
         public IActionResult List()
@@ -67,6 +71,19 @@ namespace UUAC.WebApp.Controllers
             {
                 search.pcode = "";
             }
+            if(string.IsNullOrEmpty(search.pcode)) // 根组织
+            {
+                //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
+                bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+
+                if (!admin)
+                {                 
+                    if (!string.IsNullOrEmpty(base.ViewRootCode))
+                        search.pcode = base.ViewRootCode;
+                }
+
+            }
+
             List<IOrganization> list = await this._service.QueryOrgListByParentCode(search.pcode);
             var ret= JsonQTable.ConvertFromList(list, search.colkey, search.colsArray);
             return Json(ret);
@@ -75,10 +92,21 @@ namespace UUAC.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> QueryOrgTree([FromForm]string id)
         {
+            if (string.IsNullOrEmpty(id)) // 根组织
+            {
+                //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
+                bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                if (!admin)
+                {
+                    if (!string.IsNullOrEmpty(base.ViewRootCode))
+                        id = base.ViewRootCode;
+                }
 
+            }         
+              
             List<IOrganization> list = await this._service.QueryOrgTreeByParentCode(id==rootId?"":id);
             List<JsonTreeNode> rlist = new List<JsonTreeNode>();
-            if (string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id) || id == rootId)
             {
 
                 JsonTreeNode root = new JsonTreeNode

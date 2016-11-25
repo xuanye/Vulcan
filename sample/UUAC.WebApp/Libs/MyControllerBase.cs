@@ -25,5 +25,38 @@ namespace UUAC.WebApp.Libs
                 return null;
             }
         }
+        protected string GroupCode
+        {
+            get
+            {
+                if (this.User.HasClaim(x => x.Type == MyClaimTypes.GroupCode))
+                {
+                    return this.User.FindFirst(MyClaimTypes.GroupCode).Value;
+                }
+                return null;
+            }
+        }
+        protected string OrgCode
+        {
+            get
+            {
+                if (this.User.HasClaim(x => x.Type == MyClaimTypes.OrgCode))
+                {
+                    return this.User.FindFirst(MyClaimTypes.OrgCode).Value;
+                }
+                return null;
+            }
+        }
+        protected string ViewRootCode
+        {
+            get
+            {
+                if (this.User.HasClaim(x => x.Type == MyClaimTypes.ViewRootCode))
+                {
+                    return this.User.FindFirst(MyClaimTypes.ViewRootCode).Value;
+                }
+                return null;
+            }
+        }
     }
 }
