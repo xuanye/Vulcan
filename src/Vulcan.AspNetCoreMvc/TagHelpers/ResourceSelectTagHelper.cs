@@ -8,24 +8,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Vulcan.AspNetCoreMvc.Interfaces;
 
-namespace Vulcan.AspNetCoreMvc.TagHelper
+namespace Vulcan.AspNetCoreMvc.TagHelpers
 {
     [HtmlTargetElement("select")]
     public class ResourceSelectTagHelper:SelectTagHelper
     {
         private readonly IResourceService _service;
         public ResourceSelectTagHelper(IHtmlGenerator generator,IResourceService service) : base(generator)
-        {
+        {         
             _service = service;
         }
 
         public string RsCode { get; set; }
         public string RsParentCode { get; set; }
         public bool HasAllOption { get; set; }
-        public string SelectedValue { get; set; }
+      
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            string selectedValue = For.Model?.ToString();
             //处理数据
             var rlist = this._service.GetResourceByCode(RsCode, RsParentCode, HasAllOption);
 
@@ -36,7 +37,7 @@ namespace Vulcan.AspNetCoreMvc.TagHelper
                 {
                     Value = resource.Value,
                     Text = resource.Name,
-                    Selected = resource.Value == SelectedValue
+                    Selected = resource.Value == selectedValue
                 };
                 selectList.Add(item);
             }

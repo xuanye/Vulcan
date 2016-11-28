@@ -38,6 +38,7 @@
                             height: 400,
                             caption: '无主题窗口',
                             enabledrag: true,
+                            blackBG:true,
                             theme:"simple",
                             onclose: null
             },options);         
@@ -62,7 +63,7 @@
                 width: Math.max(document.documentElement.clientWidth, document.body.scrollWidth),
                 height: Math.max(document.documentElement.clientHeight, document.body.scrollHeight + margins.t + margins.b),
                 zIndex: '998',
-                background: '#555',
+                background: options.blackBG ? '#555' : '#fff',
                 opacity: '0.5'
             }).bind('contextmenu', function() { return false; }).appendTo(document.body);
             this.overlayer = overlayer;

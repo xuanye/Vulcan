@@ -21,7 +21,8 @@
                 <div class="form-group">
                     <label class="col-xs-3 control-label">所属组织:</label>
                     <div class="col-xs-6">
-                        <span class="form_tip">@Model.OrgName</span>
+                        <span id="OrgName" class="form_tip">@Model.OrgName</span>
+                        <a href="javascript:;" id="btnPOrg" class="choose-btn"><i class="glyphicon glyphicon-globe"></i></a>
                         <input type="hidden" id="OrgCode" name="OrgCode" value="@Model.OrgCode" />
                     </div>
                 </div>
@@ -52,26 +53,32 @@
                 <div class="form-group">
                     <label class="col-xs-3 control-label">用户类型:</label>
                     <div class="col-xs-6">
-                        <select asp-for="@Model.AccountType" rs-code="ACCOUNT_TYPE" has-all-option="true" class="form-control"></select>
+                        <rs-radiobox asp-for="@Model.AccountType" rs-code="ACCOUNT_TYPE" item-class="ace" class="radio-box-group"></rs-radiobox>                        
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-xs-3 control-label">性别:</label>
                     <div class="col-xs-6">
-                        <select asp-for="@Model.Gender" rs-code="GENDER" has-all-option="false" class="form-control"></select>
+                        <rs-radiobox asp-for="@Model.Gender" rs-code="GENDER" item-class="ace" class="radio-box-group"></rs-radiobox>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-xs-3 control-label">可见范围:</label>
                     <div class="col-xs-6">
-                        <span class="form_tip">@Model.ViewRootName</span>
+                        <span id="ViewRootName" class="form_tip">@Model.ViewRootName</span>
+                        <a href="javascript:;" id="btnViewRootOrg" class="choose-btn"><i class="glyphicon glyphicon-globe"></i></a>
                         <input type="hidden" id="ViewRootCode" name="ViewRootCode" value="@Model.ViewRootCode" />
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-xs-3 control-label">是否有效:</label>
                     <div class="col-xs-6">
-                        <label><input type="checkbox" value="1" id="Status" name="Status" @(Model.Status == 1 ? " checked" : "") /> 是</label>
+                        <div class="checkbox">
+                            <label>
+                                <input name="Status" type="checkbox"  value="1"  class="ace" @(Model.Status == 1 ? " checked" : "")>
+                                <span class="lbl"> 是</span>
+                            </label>
+                        </div>                     
                     </div>
                 </div>
                 <div class="form-group">
@@ -93,9 +100,11 @@
     <script type="text/javascript">
         window.options = {
             saveUrl: "@Url.Action("SaveUser")",
+            chooseOrgUrl:"@Url.Action("Choose","Org")",
             checkCodeUrl:"@Url.Action("CheckUserUid" ,new {id = Model.UserUid})"
         }
     </script>
+    <script src="/js/plugin/choose.js"></script>
     <script src="~/js/app/user/edit.js"></script>
 
 }

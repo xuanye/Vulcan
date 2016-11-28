@@ -279,8 +279,20 @@ body.ie6.xj-body-masked select {
 }
 
 .purplex,a.purplex {
-color:#9889C1;
+    color:#9889C1;
 }
 
 
 
+.radio-box-group div.radio,.check-box-group div.checkbox{
+    float:left;
+    margin-right:20px;
+    width:auto;
+}
+div.radio label,div.checkbox label{
+    padding-left:0;    
+}
+a.choose-btn i{
+    font-size:14px;
+    color:#207394;
+}

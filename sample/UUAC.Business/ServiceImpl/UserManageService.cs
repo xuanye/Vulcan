@@ -50,6 +50,7 @@ namespace UUAC.Business.ServiceImpl
         {
             using (ConnectionScope scope = new ConnectionScope())
             {
+
                 if (type == 1) // 新增
                 {
                     // 校验
@@ -58,30 +59,36 @@ namespace UUAC.Business.ServiceImpl
                     {
                         return -1;
                     }
+                }
+                IOrganization pOrg = await _orgRepo.GetOrgInfoAsync(entity.OrgCode);
+                if (pOrg == null)
+                {
+                    throw new BizException("父组织不存在，请检查后重新保存");
+                }
 
-                    IOrganization pOrg = await _orgRepo.GetOrgInfoAsync(entity.OrgCode);
-                    if (pOrg == null)
+                entity.OrgName = pOrg.OrgName;
+
+                if (string.IsNullOrEmpty(entity.ViewRootCode))
+                {
+                    entity.ViewRootCode = entity.OrgCode;
+                    entity.ViewRootName = entity.OrgName;
+                }
+                else if (entity.ViewRootCode == "000000")
+                {
+                    entity.ViewRootName = "根组织";
+                }
+                else
+                {
+                    IOrganization rOrg = await _orgRepo.GetOrgInfoAsync(entity.ViewRootCode);
+                    if (rOrg == null)
                     {
-                        throw new BizException("父组织不存在，请检查后重新保存");
+                        throw new BizException("组织范围顶组织代码不存在，请检查后重试");
                     }
+                    entity.ViewRootName = rOrg.OrgName;
+                }
 
-                    entity.OrgName = pOrg.OrgName;
-
-                    if(string.IsNullOrEmpty(entity.ViewRootCode))
-                    {
-                        entity.ViewRootCode = entity.OrgCode;
-                        entity.ViewRootName = entity.ViewRootName;
-                    }
-                    else
-                    {
-                        IOrganization rOrg = await _orgRepo.GetOrgInfoAsync(entity.ViewRootCode);
-                        if(rOrg == null)
-                        {
-                            throw new BizException("组织范围顶组织代码不存在，请检查后重试");
-                        }
-                    }
-
-
+                if (type == 1) // 新增
+                {
                     if(entity.AccountType == 0) //外部用户
                     {
                         if (string.IsNullOrEmpty(entity.Password))

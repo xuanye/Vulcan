@@ -1,0 +1,38 @@
+﻿@{
+    Layout = "../Shared/_Layout_For_Dailog";
+}
+
+@section styles{
+<link rel="stylesheet" href="/css/plugin/xjtree.css" />
+    <style type="text/css">
+        .xj-tree-node .xj-tree-selected:after {
+            content:" √";
+            color:#ff6a00;
+            font-weight:700;
+        }
+    </style>
+
+}
+<div class="choose">
+    <div class="choose-top">
+        <h4>组织结构选择</h4>
+        <a href="javascript:;" id="btnClose" class="aclose">&times;</a>
+    </div>
+    <div class="row" style="background-color:#fefefe;height:350px;padding:5px 10px;overflow:auto;">
+        <div id="orgTree"></div>
+    </div>
+    <div class="choose-bottom">
+        <button id="btnOk" class="btn btn-success btn-sm no-border"> 确 定 </button>
+        <button id="btnCancel" class="btn btn-white btn-default no-border"> 取 消 </button>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        window.options = {
+            loadTreeUrl:"@Url.Action("QueryOrgTree","Org")"
+        }
+    </script>
+    <script src="/js/plugin/xjtree.js"></script>
+    <script src="~/js/app/org/choose.js"></script>
+}

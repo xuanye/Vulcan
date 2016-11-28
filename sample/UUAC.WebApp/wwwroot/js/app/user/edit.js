@@ -15,7 +15,36 @@
     $("#btnCancel,#btnClose").click(function () {
         window.CloseDailog();
     });
-   
+    $("#btnViewRootOrg").click(function () {
+
+        var url = options.chooseOrgUrl;
+        window.Choose.Open(url, {
+            width: 320,
+            height: 400,
+            blackBG: false,
+            caption: '选择组织',
+            onclose: function (item) {
+                $("#ViewRootCode").val(item.value);
+                $("#ViewRootName").html(item.text);
+            }
+        });
+
+    });
+    $("#btnPOrg").click(function () {
+
+        var url = options.chooseOrgUrl;
+        window.Choose.Open(url, {
+            width: 320,
+            height: 400,
+            blackBG:false,
+            caption: '选择组织',
+            onclose: function (item) {
+                $("#OrgCode").val(item.value);
+                $("#OrgName").html(item.text);
+            }
+        });
+
+    });
     $('#frmEdit').validator({
         rules: {
             code: [/^[_0-9a-zA-Z]{3,25}$/, "3-25位数字、字母和下划线的组合"]

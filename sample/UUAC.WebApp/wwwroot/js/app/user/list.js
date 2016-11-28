@@ -23,9 +23,9 @@
          	{ display: "用户标识", name: "UserUid", sortable: false, align: "center", iskey: true },
 	        { display: "用户名称", name: "FullName", sortable: false, align: "center" },
 	        { display: "工号", name: "UserNum", sortable: false, align: "center" },
-            { display: "账号类型", name: "AccountType", sortable: false, align: "center" },
+            { display: "账号类型", name: "AccountType", sortable: false, align: "center" ,process: formatAT},          
+            { display: "所在组织", name: "OrgName", sortable: false, align: "center"},
             { display: "排序号", name: "Sequence", sortable: false, align: "center" },
-            { display: "是否管理员", name: "IsAdmin", sortable: false, align: "center" },
 	        { display: "操作", name: "UserUid", width: 120, sortable: false, align: "center", dvCss: "hidden-sm hidden-xs action-buttons", process: formatOp, toggle: false }
         ],
         sortname: "sequence",
@@ -52,8 +52,7 @@
 
     //按钮事件
     $("#btnAdd").click(function (e) {
-        var node = tree.GetCurrentItem();
-        console.log(node);
+        var node = tree.GetCurrentItem();      
         if (!!node) {
             if(node.value==="000000") {
                 showError("错误信息", "不能在根组织下创建用户");
@@ -95,6 +94,24 @@
 
             xjgrid.QueryByFields(p);
         }
+    }
+    function formatAT(value) {
+        var v = "";
+        switch (value) {
+            case "0":
+                v = "自建账号";
+                break;
+            case "1":
+                v = "内部员工";
+                break;
+            case "9":
+                v = "系统账号";
+                break
+            default:
+                v = "未知";
+                break;
+        }
+        return v;
     }
     function formatOp(value) {
         if (value !== "UUAC") {

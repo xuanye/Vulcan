@@ -225,11 +225,10 @@ namespace UUAC.WebApp.Controllers
         /// 选择组织的页面，只能选择当前用户可以选择的组织
         /// </summary>
         /// <returns></returns>
-        public IActionResult ChooseOrg()
+        public IActionResult Choose()
         {
-
             // 1. 获取当前用户的根组织
-            return View();
+            return View("ChooseOrg");
         }
         private bool ValidateOrg(DtoOrganization entity, out string errMsg)
         {
