@@ -66,7 +66,7 @@ group by parent_code) b  on a.org_code = b.parent_code
         {
             string sql = @"SELECT a.org_code as OrgCode ,a.org_name as OrgName ,a.remark as Remark,
                         a.org_type as OrgType,a.sequence as Sequence,a.last_modify_user_id as LastModifyUserId ,
-                        a.last_modify_user_name as LastModifyUserName,a.last_modify_time as LastModifyTime,
+                        a.last_modify_user_name as LastModifyUserName,a.last_modify_time as LastModifyTime,a.left as Left,a.right as Right,
                         a.parent_code as ParentCode,a.unit_code as UnitCode,a.unit_name as UnitName,b.org_name as ParentName from organization a
                         LEFT JOIN organization b on a.parent_code = b.org_code
                         where a.org_code=@OrgCode ";
@@ -77,7 +77,7 @@ group by parent_code) b  on a.org_code = b.parent_code
         {
             string sql = @"SELECT a.org_code as OrgCode ,a.org_name as OrgName ,a.remark as Remark,
                         a.org_type as OrgType,a.sequence as Sequence,a.last_modify_user_id as LastModifyUserId ,
-                        a.last_modify_user_name as LastModifyUserName,a.last_modify_time as LastModifyTime,
+                        a.last_modify_user_name as LastModifyUserName,a.last_modify_time as LastModifyTime,a.left as Left,a.right as Right,
                         a.parent_code as ParentCode,a.unit_code as UnitCode,a.unit_name as UnitName,b.org_name as ParentName from organization a
                         LEFT JOIN organization b on a.parent_code = b.org_code
                         where a.org_code=@OrgCode ";
@@ -156,6 +156,25 @@ group by parent_code) b  on a.org_code = b.parent_code
 
             return org;
 
+        }
+
+        public async Task<bool> CheckOrgCodeInView(string orgCode, int point)
+        {
+            string sql = "select 1 from organization where left>@Point and right<@Point";
+            int ret = await base.GetAsync<int>(sql, new { Point = point });
+            return ret > 0;
+        }
+
+        public Task<int> GetMaxOrgPoint()
+        {
+            string sql = "select max(right) from organization";
+            return base.GetAsync<int>(sql, null);
+        }
+
+        public Task<int> UpdateOrgPoint(int point)
+        {         
+            string sql = "update organization set right = right+2 where right>=@Point; update organization set left = right+2 where left>@Point;";
+            return base.ExcuteAsync(sql, new { Point = point });
         }
     }
 }

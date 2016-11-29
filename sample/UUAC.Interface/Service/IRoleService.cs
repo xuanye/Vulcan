@@ -14,5 +14,6 @@ namespace UUAC.Interface.Service
         Task<IRoleInfo> GetRole(string id);
         Task<int> SaveRole(IRoleInfo entity, int type);
         Task<int> RemoveRole(string id);
+        Task<List<IRoleInfo>> QueryUserTopRole(string appCode, string userId);
     }
 }

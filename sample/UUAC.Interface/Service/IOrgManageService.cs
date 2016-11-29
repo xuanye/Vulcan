@@ -12,10 +12,11 @@ namespace UUAC.Interface.Service
         Task<List<IOrganization>> QueryAllOrgList();
 
         Task<List<IOrganization>> QueryOrgListByParentCode(string pcode);
-        IOrganization GetOrgInfo(string orgCode);
+        Task<IOrganization> GetOrgInfo(string orgCode);
         Task<bool> CheckOrgCode(string id, string orgCode);
-        Task<int> SaveOrgInfo(IOrganization entity, int type);
+        Task<int> SaveOrgInfo(IOrganization entity, int type,string viewRootCode);
         Task<int> RemoveOrgInfo(string orgCode);
         Task<List<IOrganization>> QueryOrgTreeByParentCode(string pcode);
+        Task<bool> CheckOrgCodeInView(string orgCode, string viewCode);
     }
 }

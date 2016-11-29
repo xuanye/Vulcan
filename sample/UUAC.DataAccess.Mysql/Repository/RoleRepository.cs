@@ -101,7 +101,8 @@ namespace UUAC.DataAccess.Mysql.Repository
                 Remark= source.Remark,
                 RoleCode = source.RoleCode,
                 RoleName = source.RoleName,
-                RolePath = source.RolePath
+                Left = source.Left,
+                Right = source.Right
             };
              
         }

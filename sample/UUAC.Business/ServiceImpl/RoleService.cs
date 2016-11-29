@@ -92,5 +92,10 @@ namespace UUAC.Business.ServiceImpl
             }
             return ret;
         }
+
+        public Task<List<IRoleInfo>> QueryUserTopRole(string appCode, string userId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

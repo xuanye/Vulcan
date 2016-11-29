@@ -28,5 +28,7 @@ namespace UUAC.Common
         public const string OrgCode = "UUAC.AppUser.OrgCode";
         public const string GroupCode = "UUAC.AppUser.GroupCode";
         public const string ViewRootCode = "UUAC.AppUser.ViewRootCode";
+        public const string ViewRootName = "UUAC.AppUser.ViewRootName";
+        
     }
 }

@@ -39,14 +39,15 @@ namespace UUAC.WebApp.Libs
                 {
                     throw new Exception("无法加载配置默认用户的基本信息");
                 }
-                const string Issuer = "https://contoso.com";
+                const string Issuer = "https://vulcan.com";
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,user.UserId, ClaimValueTypes.String, Issuer),
                     new Claim(MyClaimTypes.FullName,user.FullName, ClaimValueTypes.String, Issuer),
                     new Claim(MyClaimTypes.GroupCode,user.GroupCode, ClaimValueTypes.String, Issuer),
                     new Claim(MyClaimTypes.OrgCode,user.OrgCode, ClaimValueTypes.String, Issuer),
-                    new Claim(MyClaimTypes.ViewRootCode,user.ViewRootCode, ClaimValueTypes.String, Issuer)                    
+                    new Claim(MyClaimTypes.ViewRootCode,user.ViewRootCode, ClaimValueTypes.String, Issuer),
+                    new Claim(MyClaimTypes.ViewRootName,user.ViewRootName, ClaimValueTypes.String, Issuer)
                 };
 
 

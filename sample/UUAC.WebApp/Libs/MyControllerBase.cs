@@ -58,5 +58,16 @@ namespace UUAC.WebApp.Libs
                 return null;
             }
         }
+        protected string ViewRootName
+        {
+            get
+            {
+                if (this.User.HasClaim(x => x.Type == MyClaimTypes.ViewRootName))
+                {
+                    return this.User.FindFirst(MyClaimTypes.ViewRootName).Value;
+                }
+                return null;
+            }
+        }
     }
 }
