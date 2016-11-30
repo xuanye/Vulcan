@@ -106,5 +106,26 @@ namespace UUAC.DataAccess.Mysql.Repository
             };
              
         }
+
+        public Task<List<string>> GetUserRoleCodeList(string appCode, string identity)
+        {
+            string sql = @"select distinct a.role_code from role_info a 
+inner join role_user_relation b on a.role_code =b.role_code
+where a.app_code=@AppCode and b.user_uid =@UserId";
+
+            return base.QueryAsync<string>(sql, new { AppCode = appCode, UserId = identity });
+        }
+
+        public async Task<List<IRoleInfo>> QueryUserRoles(string appCode, string userId)
+        {
+            string sql = @"select b.role_code,b.role_name,IFNULL(c.childCount,0) as childCount,b.parent_code,b.is_system_role,b.`left` as `Left`,b.`right` as `Right` from role_user_relation a
+                            inner join role_info b on a.role_code= b.role_code
+                            left join (select count(1) as childCount,parent_code from role_info where app_code='UUAC' group by parent_code) c on b.role_code = c.parent_code
+                            where b.app_code=@AppCode and a.user_uid=@UserId";
+
+            var list = await base.QueryAsync<RoleInfo>(sql, new { AppCode = appCode, UserId = userId });
+
+            return list.ToList<IRoleInfo>();
+        }
     }
 }

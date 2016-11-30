@@ -172,5 +172,26 @@ namespace UUAC.WebApp.Controllers
             }
             return Json(msg);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> GetMyApps()
+        {
+            JsonMsg msg = new JsonMsg();
+
+            try
+            {
+                List<IAppInfo> list = await this._service.GetUserViewApp(base.UserId);
+
+                msg.status = 0;
+                msg.data = list;
+
+            }
+            catch (Exception ex)
+            {
+                msg.status = -1;
+                msg.message = "操作不成功：" + ex.Message;
+            }
+            return Json(msg);
+        }
     }
 }

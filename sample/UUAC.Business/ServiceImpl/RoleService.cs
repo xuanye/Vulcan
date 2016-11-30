@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using UUAC.Entity;
 using UUAC.Interface.Repository;
 using UUAC.Interface.Service;
 using Vulcan.Core;
+using Vulcan.AspNetCoreMvc.Extensions;
 
 namespace UUAC.Business.ServiceImpl
 {
@@ -14,10 +16,11 @@ namespace UUAC.Business.ServiceImpl
     {
 
         private readonly IRoleRepository _repo;
-
-        public RoleService(IRoleRepository repo)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public RoleService(IRoleRepository repo, IHttpContextAccessor httpContextAccessor)
         {
             this._repo = repo;
+            this._contextAccessor = httpContextAccessor;
         }
         public Task<List<IRoleInfo>> QueryRoleByParentCode(string appCode, string pCode)
         {
@@ -93,9 +96,38 @@ namespace UUAC.Business.ServiceImpl
             return ret;
         }
 
-        public Task<List<IRoleInfo>> QueryUserTopRole(string appCode, string userId)
+        public async Task<List<IRoleInfo>> QueryUserTopRole(string appCode, string userId)
         {
-            throw new NotImplementedException();
+            var rlist = await _repo.QueryUserRoles(appCode, userId);
+
+            var rl = new List<IRoleInfo>();
+            foreach( var role in rlist)
+            {
+                bool hasParent = rlist.Exists(x => x.Left > role.Left && x.Left < role.Right);
+                if (!hasParent)
+                {
+                    rl.Add(role);
+                }
+            }
+            return rl;
+
+        }
+
+        public Task<List<string>> GetUserRoleCodeList(string appCode, string userId)
+        {
+            return _repo.GetUserRoleCodeList(appCode, userId);
+        }
+        private readonly string rCacheKey = Constans.APP_CODE + "_USER_R";
+        public async Task<bool> IsInRole(string identity, string roleCode)
+        {
+            var list = this._contextAccessor.HttpContext.Session.GetObjectFromJson<List<string>>(rCacheKey);
+            if (list == null)
+            {
+                // 获取用户的所有权限
+                list = await this.GetUserRoleCodeList(Constans.APP_CODE, identity);
+                this._contextAccessor.HttpContext.Session.SetObjectAsJson(rCacheKey, list);
+            }
+            return list.Exists(x => x == roleCode);
         }
     }
 }

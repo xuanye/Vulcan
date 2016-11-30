@@ -14,5 +14,6 @@ namespace UUAC.Interface.Repository
         Task<int> AddAppInfo(IAppInfo appinfo);
         Task<int> UpdateAppInfo(IAppInfo appinfo);
         Task<int> RemoveAppInfo(string appCode);
+        Task<List<IAppInfo>> GetUserViewApp(string userId);
     }
 }

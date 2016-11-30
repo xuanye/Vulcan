@@ -8,6 +8,9 @@ namespace UUAC.Interface.Service
 {
     public interface ISystemService
     {
-        Task<IUserInfo> GetUserInfo(string userId);
+        Task<IUserInfo> GetUserInfo(string identity);
+        Task<bool> HasPrivilege(string identity, string privilegeCode);
+        Task<bool> IsInRole(string identity, string roleCode);
     }
+    
 }

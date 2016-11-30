@@ -91,5 +91,14 @@ namespace UUAC.DataAccess.Mysql.Repository
 
             return entity;
         }
+
+        public Task<List<IAppInfo>> GetUserViewApp(string userId)
+        {
+            string sql = @"select distinct a.app_code as AppCode,a.app_name as AppName from app_info a
+                            inner join role_info b on b.app_code = a.app_code
+                            inner join role_user_relation c on b.role_code=c.role_code
+                            where c.user_uid=@UserId";
+            return base.QueryAsync<AppInfo>(sql, new { UserId = userId }).ContinueWith<List<IAppInfo>>(x => x.Result.ToList<IAppInfo>());
+        }
     }
 }

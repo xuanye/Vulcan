@@ -8,7 +8,7 @@ namespace UUAC.Interface.Repository
 {
     public interface IPrivilegeRepository
     {
-        List<IPrivilege> QueryUserPrivilegeList(string appCode,string userId,int type);
+        Task<List<IPrivilege>> QueryUserPrivilegeList(string appCode,string userId,int type);
         Task<List<IPrivilege>> QueryPrivilegeByParentCode(string appCode, string pCode);
         Task<IPrivilege> GetPrivilege(string code);
         Task<bool> CheckCode(string privilegeCode);
@@ -16,5 +16,6 @@ namespace UUAC.Interface.Repository
         Task<int> UpdatePrivilege(IPrivilege entity);
         Task<int> RemovRolePrivilegeAsync(string code);
         Task<int> RemovePrivilege(string code);
+        Task<List<string>> QueryUserPrivilegeCodeList(string appCode, string identity, int pType);
     }
 }

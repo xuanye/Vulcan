@@ -21,11 +21,11 @@ namespace UUAC.WebApp.Controllers
         {
             this._pservice = pservice;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var model = new HomeModel
             {
-                Menus = _pservice.QueryUserPrivilegeList(Constans.APP_CODE, base.UserId, 1)
+                Menus = await _pservice.QueryUserPrivilegeList(Constans.APP_CODE, base.UserId, 1)
             };
             
             ViewBag.UserId = base.UserId;

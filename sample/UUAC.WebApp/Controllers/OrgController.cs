@@ -67,10 +67,7 @@ namespace UUAC.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> QueryOrgList(SearchOrgModel search)
         {
-            if(search.pcode == rootId)
-            {
-                search.pcode = "";
-            }
+         
             if(string.IsNullOrEmpty(search.pcode)) // 根组织
             {
                 //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
@@ -78,12 +75,15 @@ namespace UUAC.WebApp.Controllers
 
                 if (!admin)
                 {                 
-                    if (!string.IsNullOrEmpty(base.ViewRootCode))
+                    if(!string.IsNullOrEmpty(base.ViewRootCode))
                         search.pcode = base.ViewRootCode;
                 }
 
             }
-
+            if (search.pcode == rootId)
+            {
+                search.pcode = "";
+            }
             List<IOrganization> list = await this._service.QueryOrgListByParentCode(search.pcode);
             var ret= JsonQTable.ConvertFromList(list, search.colkey, search.colsArray);
             return Json(ret);
@@ -193,6 +193,10 @@ namespace UUAC.WebApp.Controllers
                     {
                         viewRootCode = "";
                     }
+                }
+                if(viewRootCode == rootId)
+                {
+                    viewRootCode = "";
                 }
                 int ret = await this._service.SaveOrgInfo(entity, type, viewRootCode);
                 if (ret > 0)

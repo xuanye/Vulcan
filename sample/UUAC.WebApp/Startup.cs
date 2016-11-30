@@ -16,6 +16,8 @@ using Microsoft.Extensions.Logging;
 using Vulcan.DataAccess;
 using Vulcan.DataAccess.Context;
 using NLog.Extensions.Logging;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Redis;
 
 namespace UUAC.WebApp
 {
@@ -29,9 +31,11 @@ namespace UUAC.WebApp
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
+            this.Evn = env;
 
         }
 
+        public IHostingEnvironment Evn { get; }
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -47,7 +51,16 @@ namespace UUAC.WebApp
             });
             // Add memory cache services
             services.AddMemoryCache();
-            services.AddDistributedMemoryCache();
+            if(Evn.IsDevelopment())
+            {
+                // 分布式缓存本地实现，开发模式使用，
+                services.AddDistributedMemoryCache();
+            }
+            else
+            {
+                services.AddSingleton<IDistributedCache, RedisCache>();
+            }
+            
 
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -66,6 +79,8 @@ namespace UUAC.WebApp
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSingleton<IConnectionFactory, MySqlConnectionFactory>();
+
+            //
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -83,7 +98,7 @@ namespace UUAC.WebApp
             //设置默认的数据库连接
             ConnectionFactoryHelper.Configure(app.ApplicationServices.GetRequiredService<IConnectionFactory>());
 
-
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -108,6 +123,7 @@ namespace UUAC.WebApp
                 AutomaticChallenge = true
             });
 
+            
             if (env.IsDevelopment())
             {
                 //开发模式下使用模拟用户
