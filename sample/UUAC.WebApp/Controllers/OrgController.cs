@@ -31,7 +31,7 @@ namespace UUAC.WebApp.Controllers
             
             return View();
         }
-        public IActionResult Edit(string orgCode,string pcode,string pname)
+        public async Task<IActionResult> Edit(string orgCode,string pcode,string pname)
         {
             IOrganization model;
             if (string.IsNullOrEmpty(orgCode))
@@ -49,7 +49,7 @@ namespace UUAC.WebApp.Controllers
             }
             else
             {
-                model = this._service.GetOrgInfo(orgCode);
+                model = await this._service.GetOrgInfo(orgCode);
                 if(model == null)
                 {
                     throw new ArgumentOutOfRangeException("orgCode", "不存在对应的组织");
@@ -67,23 +67,24 @@ namespace UUAC.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> QueryOrgList(SearchOrgModel search)
         {
-            if(search.pcode == rootId)
-            {
-                search.pcode = "";
-            }
+
             if(string.IsNullOrEmpty(search.pcode)) // 根组织
             {
                 //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
-                bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
 
                 if (!admin)
-                {                 
-                    if (!string.IsNullOrEmpty(base.ViewRootCode))
-                        search.pcode = base.ViewRootCode;
+                {
+                    var user = await base.GetSignedUser();
+                    if (!string.IsNullOrEmpty(user.ViewRootCode))
+                        search.pcode = user.ViewRootCode;
                 }
 
             }
-
+            if (search.pcode == rootId)
+            {
+                search.pcode = "";
+            }
             List<IOrganization> list = await this._service.QueryOrgListByParentCode(search.pcode);
             var ret= JsonQTable.ConvertFromList(list, search.colkey, search.colsArray);
             return Json(ret);
@@ -92,29 +93,39 @@ namespace UUAC.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> QueryOrgTree([FromForm]string id)
         {
-            if (string.IsNullOrEmpty(id)) // 根组织
+            bool isRootNode = string.IsNullOrEmpty(id) || id == rootId;
+            if (isRootNode) // 根组织
             {
+                isRootNode = true;
                 //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
-                bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
                 if (!admin)
                 {
-                    if (!string.IsNullOrEmpty(base.ViewRootCode))
-                        id = base.ViewRootCode;
+                    var user = await base.GetSignedUser();
+                    if (!string.IsNullOrEmpty(user.ViewRootCode))
+                        id = user.ViewRootCode;
                 }
 
             }         
               
             List<IOrganization> list = await this._service.QueryOrgTreeByParentCode(id==rootId?"":id);
             List<JsonTreeNode> rlist = new List<JsonTreeNode>();
-            if (string.IsNullOrEmpty(id) || id == rootId)
+            if (isRootNode)
             {
-
-                JsonTreeNode root = new JsonTreeNode
+                JsonTreeNode root = new JsonTreeNode();
+                if (!string.IsNullOrEmpty(id) && id != rootId)
                 {
-                    text = "根组织",
-                    id = rootId,
-                    value = rootId
-                };
+                    var user = await base.GetSignedUser();
+                    root.text = user.ViewRootName;
+                    root.value = id;
+                    root.id = id;
+                }
+                else
+                {
+                    root.text = "根组织";
+                    root.id = rootId;
+                    root.value = rootId;
+                }               
                 BuildChildNodes(root, list);
                 root.hasChildren = root.ChildNodes.Count > 0;
                 root.complete = true;
@@ -177,7 +188,21 @@ namespace UUAC.WebApp.Controllers
                 {
                     entity.ParentCode = null;
                 }
-                int ret = await this._service.SaveOrgInfo(entity, type);
+                var user = await base.GetSignedUser();
+                string viewRootCode = user.ViewRootCode;
+                if (!string.IsNullOrEmpty(viewRootCode) && viewRootCode != rootId)
+                {
+                    bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                    if (admin)
+                    {
+                        viewRootCode = "";
+                    }
+                }
+                if(viewRootCode == rootId)
+                {
+                    viewRootCode = "";
+                }
+                int ret = await this._service.SaveOrgInfo(entity, type, viewRootCode);
                 if (ret > 0)
                 {
                     msg.status = 0;

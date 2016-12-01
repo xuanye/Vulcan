@@ -15,7 +15,8 @@
     "UUAC.Interface": {
       "1.0.0-*": null,
       "target": "project"
-    }
+    },
+    "Vulcan.AspNetCoreMvc": "1.0.0-*"
   },
 
   "frameworks": {

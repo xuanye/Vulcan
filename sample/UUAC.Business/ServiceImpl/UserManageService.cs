@@ -16,11 +16,11 @@ namespace UUAC.Business.ServiceImpl
     public class UserManageService: IUserManageService
     {
         private readonly IUserManageRepository _repo;
-        private readonly IOrgManageRepository _orgRepo;
-        public UserManageService(IUserManageRepository repo,IOrgManageRepository orgRepo)
+        private readonly IOrgManageService _orgService;
+        public UserManageService(IUserManageRepository repo, IOrgManageService orgService)
         {
             this._repo = repo;
-            this._orgRepo = orgRepo;
+            this._orgService = orgService;
         }
 
         public Task<PagedList<IUserInfo>> QueryUserList(string orgCode, string qText, PageView view)
@@ -46,10 +46,15 @@ namespace UUAC.Business.ServiceImpl
             return _repo.CheckUserId(userId);
         }
 
-        public async Task<int> SaveUserInfo(DtoUserInfo entity, int type)
+        public async Task<int> SaveUserInfo(DtoUserInfo entity, int type,string viewRootCode)
         {
             using (ConnectionScope scope = new ConnectionScope())
             {
+                bool inView = await this._orgService.CheckOrgCodeInView(entity.OrgCode, viewRootCode);
+                if (!inView)
+                {
+                    throw new BizException("没有相应的权限");
+                }
 
                 if (type == 1) // 新增
                 {
@@ -60,7 +65,7 @@ namespace UUAC.Business.ServiceImpl
                         return -1;
                     }
                 }
-                IOrganization pOrg = await _orgRepo.GetOrgInfoAsync(entity.OrgCode);
+                IOrganization pOrg = await this._orgService.GetOrgInfo(entity.OrgCode);
                 if (pOrg == null)
                 {
                     throw new BizException("父组织不存在，请检查后重新保存");
@@ -79,7 +84,7 @@ namespace UUAC.Business.ServiceImpl
                 }
                 else
                 {
-                    IOrganization rOrg = await _orgRepo.GetOrgInfoAsync(entity.ViewRootCode);
+                    IOrganization rOrg = await this._orgService.GetOrgInfo(entity.ViewRootCode);
                     if (rOrg == null)
                     {
                         throw new BizException("组织范围顶组织代码不存在，请检查后重试");

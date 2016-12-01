@@ -19,13 +19,12 @@ namespace UUAC.WebApp.Libs
         private readonly RequestDelegate _next;
       
         private readonly MockAppUserOption _option;
-        private readonly IAppContextService _service;
-
-        public MockAppUserMiddleware(RequestDelegate next, IAppContextService service, MockAppUserOption option = null)
+    
+        public MockAppUserMiddleware(RequestDelegate next,  MockAppUserOption option = null)
         {
             _next = next;
             _option = option ?? new MockAppUserOption() { MockUserId = "admin" };
-            _service = service;
+            
         }
 
         public async Task Invoke(HttpContext context)
@@ -34,19 +33,12 @@ namespace UUAC.WebApp.Libs
             if (!context.User.Identity.IsAuthenticated)
             {
                 string userId = _option.MockUserId;
-                var user = await _service.GetUserInfo(userId);
-                if(user == null)
-                {
-                    throw new Exception("无法加载配置默认用户的基本信息");
-                }
-                const string Issuer = "https://contoso.com";
+             
+                const string Issuer = "https://vulcan.com";
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name,user.UserId, ClaimValueTypes.String, Issuer),
-                    new Claim(MyClaimTypes.FullName,user.FullName, ClaimValueTypes.String, Issuer),
-                    new Claim(MyClaimTypes.GroupCode,user.GroupCode, ClaimValueTypes.String, Issuer),
-                    new Claim(MyClaimTypes.OrgCode,user.OrgCode, ClaimValueTypes.String, Issuer),
-                    new Claim(MyClaimTypes.ViewRootCode,user.ViewRootCode, ClaimValueTypes.String, Issuer)                    
+                    new Claim(ClaimTypes.Name,userId, ClaimValueTypes.String, Issuer),
+                
                 };
 
 

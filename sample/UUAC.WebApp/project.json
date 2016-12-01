@@ -1,8 +1,12 @@
 {
   "dependencies": {
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.1.0"
+    },
     "Microsoft.AspNetCore.Authentication.Cookies": "1.1.0",
     "SapientGuardian.MySql.Data": "6.9.813",
-    "NLog.Extensions.Logging":"1.0.0-rtm-alpha4",
+    "NLog.Extensions.Logging": "1.0.0-rtm-alpha4",
     "Vulcan.DataAccess": {
       "1.0.0-*": null,
       "target": "project"
@@ -40,10 +44,11 @@
     "Microsoft.Extensions.Logging.Console": "1.1.0",
     "Microsoft.Extensions.Logging.Debug": "1.1.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "Microsoft.NETCore.App": "1.1.0",
+
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.1.0",
     "Microsoft.AspNetCore.Mvc": "1.1.0",
-    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0"  },
+    "Microsoft.AspNetCore.Server.IISIntegration": "1.1.0"
+  },
 
   "tools": {  },
 

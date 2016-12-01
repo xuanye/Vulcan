@@ -13,5 +13,6 @@ namespace UUAC.Interface.Service
         IAppInfo GetAppInfo(string appCode);
         Task<int> SaveAppInfo(IAppInfo appInfo, int type);
         Task<int> RemoveAppInfo(string appCode);
+        Task<List<IAppInfo>> GetUserViewApp(string userId);
     }
 }

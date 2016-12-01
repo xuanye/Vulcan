@@ -16,5 +16,11 @@ namespace UUAC.Interface.Repository
         Task<int> RemoveRole(string code);
         Task<long> AddRole(IRoleInfo entity);
         Task<int> UpdateRole(IRoleInfo entity);
+        Task<List<string>> GetUserRoleCodeList(string appCode, string identity);
+        Task<List<IRoleInfo>> QueryUserRoles(string appCode, string userId);
+        Task<int> GetMaxOrgPoint(string appCode);
+        Task UpdateRolePoint(string appCode, int point);
+        Task<bool> CheckChildRole(string appCode,string roleCode);
+        Task MinusRolePoint(string appCode, int right);
     }
 }

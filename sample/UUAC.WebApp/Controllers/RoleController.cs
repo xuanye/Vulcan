@@ -9,7 +9,7 @@ using UUAC.Interface.Service;
 using UUAC.WebApp.Libs;
 using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
-
+using Vulcan.AspNetCoreMvc.Interfaces;
 
 namespace UUAC.WebApp.Controllers
 {
@@ -18,6 +18,7 @@ namespace UUAC.WebApp.Controllers
 
         private readonly IRoleService _service;
         private readonly IAppManageService _appService;
+              
         public RoleController(IRoleService service,IAppManageService appService)
         {
             this._service = service;
@@ -28,18 +29,22 @@ namespace UUAC.WebApp.Controllers
         {
             return View();
         }
-
- 
-
+        
         [HttpPost]
         public async Task<IActionResult> QueryTree([FromForm]string id,[FromForm]string value)
         {
-
             string appCode = value;
             string pCode = id == value ? "" : id;
-
-            List<IRoleInfo> list = await this._service.QueryRoleByParentCode(appCode, pCode);
-
+            List<IRoleInfo> list;
+            if (string.IsNullOrEmpty(pCode))
+            {
+                list = await this._service.QueryUserTopRole(appCode, base.UserId);
+            }
+            else
+            {
+                list = await this._service.QueryRoleByParentCode(appCode, pCode);
+            }
+            
             List<JsonTreeNode> nodeList = new List<JsonTreeNode>();
 
             foreach(IRoleInfo p in list)
@@ -71,9 +76,16 @@ namespace UUAC.WebApp.Controllers
             {
                 return Json(new JsonQTable() { error = "请先选择系统" });
             }
-
-            List<IRoleInfo> list = await this._service.QueryRoleByParentCode(search.appCode, search.pCode);
-
+            List<IRoleInfo> list;
+            if (string.IsNullOrEmpty(search.pCode))
+            {
+                list = await this._service.QueryUserTopRole(search.appCode, base.UserId);
+            }
+            else
+            {
+                list = await this._service.QueryRoleByParentCode(search.appCode, search.pCode);
+            }
+         
             var jsonData = JsonQTable.ConvertFromList(list, search.colkey, search.colsArray);
 
             return Json(jsonData);
@@ -139,7 +151,7 @@ namespace UUAC.WebApp.Controllers
                     msg.status = -1;
                     msg.message = errMsg;
                     return Json(msg);
-                }
+                }               
                 entity.LastModifyTime = DateTime.Now;
                 entity.LastModifyUserId = base.UserId;
                 entity.LastModifyUserName = base.UserId;

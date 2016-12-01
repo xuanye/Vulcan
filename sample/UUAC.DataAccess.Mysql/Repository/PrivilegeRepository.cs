@@ -19,7 +19,7 @@ namespace UUAC.DataAccess.Mysql.Repository
              : base(key)
         {
         }
-        public List<IPrivilege> QueryUserPrivilegeList(string appCode,string userId,int type)
+        public async Task<List<IPrivilege>> QueryUserPrivilegeList(string appCode,string userId,int type)
         {
             string sql = @"SELECT DISTINCT A.privilege_code as PrivilegeCode,A.privilege_name as PrivilegeName,A.privilege_type as PrivilegeType,A.parent_code as ParentCode,A.mark as Mark,A.resource as Resource,A.sequence as Sequence FROM privilege A
                             INNER JOIN role_privilege_relation B on A.privilege_code = B.privilege_code 
@@ -39,7 +39,8 @@ namespace UUAC.DataAccess.Mysql.Repository
                 UserUID = userId,
                 EveryoneRoleCode = RuleHelper.GetAppEveryoneRuleCode(appCode)
             };
-            return base.Query<Privilege>(sql, param).ToList<IPrivilege>();
+            var list = await base.QueryAsync<Privilege>(sql, param);
+            return list.ToList<IPrivilege>();
         }
 
         public async Task<List<IPrivilege>> QueryPrivilegeByParentCode(string appCode, string pCode)
@@ -141,6 +142,19 @@ namespace UUAC.DataAccess.Mysql.Repository
 
 
             return p;
+        }
+
+        public Task<List<string>> QueryUserPrivilegeCodeList(string appCode, string identity, int pType)
+        {
+            string sql = @"select distinct a.privilege_code from privilege a
+                            inner join role_privilege_relation b on a.privilege_code = b.privilege_code
+                            inner join role_user_relation c on b.role_code = c.role_code
+                            where c.user_uid = @UserId and a.app_code=@AppCode";
+            if (pType >= 0)
+            {
+                sql += " and a.privilege_type=" + pType;
+            }
+            return base.QueryAsync<string>(sql, new { UserId = identity, AppCode = appCode });
         }
     }
 }

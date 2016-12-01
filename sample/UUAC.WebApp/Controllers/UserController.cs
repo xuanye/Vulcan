@@ -9,6 +9,8 @@ using UUAC.Interface.Service;
 using UUAC.WebApp.Libs;
 using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
+using Vulcan.AspNetCoreMvc.Interfaces;
+using UUAC.Common;
 
 namespace UUAC.WebApp.Controllers
 {
@@ -16,9 +18,11 @@ namespace UUAC.WebApp.Controllers
     {
         const string rootId = "000000";
         private readonly IUserManageService _service;
-        public UserController(IUserManageService service)
+        private readonly IAppContextService _contextService;
+        public UserController(IUserManageService service, IAppContextService contextService)
         {
             this._service = service;
+            this._contextService = contextService;
         }
         // GET: /<controller>/
         public IActionResult List()
@@ -33,6 +37,19 @@ namespace UUAC.WebApp.Controllers
             if (search.orgCode == rootId)
             {
                 search.orgCode = "";
+            }
+          
+            if (string.IsNullOrEmpty(search.orgCode)) // 权限控制
+            {
+                string userId = base.UserId;
+                var user = await base.GetSignedUser();
+                string viewCode = user.ViewRootCode;
+                bool admin = await this._contextService.IsInRole(userId, Constans.SUPPER_ADMIN_ROLE);
+                if (!admin)
+                {
+                    if (!string.IsNullOrEmpty(viewCode))
+                        search.orgCode = viewCode;
+                }
             }
 
             PageView view = new PageView(search.page, search.rp);
@@ -118,8 +135,18 @@ namespace UUAC.WebApp.Controllers
                 entity.LastModifyTime = DateTime.Now;
                 entity.LastModifyUserId = base.UserId;
                 entity.LastModifyUserName = base.UserId;
+                var user = await base.GetSignedUser();
+                string viewRootCode = user.ViewRootCode;
+                if (!string.IsNullOrEmpty(viewRootCode) && viewRootCode !=rootId)
+                {
+                    bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                    if (admin)
+                    {
+                        viewRootCode = "";
+                    }
+                }
 
-                int ret = await this._service.SaveUserInfo(entity, type);
+                int ret = await this._service.SaveUserInfo(entity, type, viewRootCode);
                 if (ret > 0)
                 {
                     msg.status = 0;
@@ -161,8 +188,7 @@ namespace UUAC.WebApp.Controllers
             {
                 errMsg += "用户工号不能为空；";
             }
-
-
+            
             return string.IsNullOrEmpty(errMsg);
         }
 

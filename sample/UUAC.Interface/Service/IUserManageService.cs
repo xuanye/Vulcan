@@ -13,7 +13,7 @@ namespace UUAC.Interface.Service
         Task<PagedList<IUserInfo>> QueryUserList(string orgCode, string qText, PageView view);
         Task<IUserInfo> GetUserInfo(string userId);
         Task<bool> CheckUserId(string id, string userId);
-        Task<int> SaveUserInfo(DtoUserInfo entity, int type);
+        Task<int> SaveUserInfo(DtoUserInfo entity, int type,string viewRootCode);
         Task<int> RemoveUserInfo(string userId);
     }
 }

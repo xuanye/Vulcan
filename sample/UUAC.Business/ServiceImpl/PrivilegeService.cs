@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,17 +9,20 @@ using UUAC.Interface.Repository;
 using UUAC.Interface.Service;
 using Vulcan.Core;
 using Vulcan.Core.Exceptions;
+using Vulcan.AspNetCoreMvc.Extensions;
 
 namespace UUAC.Business.ServiceImpl
 {
     public class PrivilegeService: IPrivilegeService
     {
         private readonly IPrivilegeRepository _repo;
-        public PrivilegeService(IPrivilegeRepository repo)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public PrivilegeService(IPrivilegeRepository repo, IHttpContextAccessor httpContextAccessor)
         {
             this._repo = repo;
+            this._contextAccessor = httpContextAccessor;
         }
-        public List<IPrivilege> QueryUserPrivilegeList(string appCode, string userId, int type)
+        public Task<List<IPrivilege>> QueryUserPrivilegeList(string appCode, string userId, int type)
         {
             return _repo.QueryUserPrivilegeList(appCode, userId, type);
         }
@@ -93,6 +97,23 @@ namespace UUAC.Business.ServiceImpl
                 return Task.FromResult<bool>(true);
             }
             return  this._repo.CheckCode(privilegeCode);
+        }
+
+        public Task<List<string>> QueryUserPrivilegeCodeList(string appCode, string identity, int pType)
+        {
+            return  this._repo.QueryUserPrivilegeCodeList(appCode, identity, pType);
+        }
+        private readonly string pCacheKey = Constans.APP_CODE + "_USER_P";
+        public async Task<bool> HasPrivilege(string identity, string privilegeCode)
+        {
+            var list = this._contextAccessor.HttpContext.Session.GetObjectFromByteArray<List<string>>(pCacheKey);
+            if (list == null)
+            {
+                // 获取用户的所有权限
+                list = await this._repo.QueryUserPrivilegeCodeList(Constans.APP_CODE, identity, -1);
+                this._contextAccessor.HttpContext.Session.SetObjectAsByteArray(pCacheKey, list);
+            }
+            return list.Exists(x => x == privilegeCode);
         }
     }
 }

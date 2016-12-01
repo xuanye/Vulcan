@@ -21,5 +21,9 @@ namespace UUAC.Interface.Repository
         Task<bool> CheckOrgUser(string orgCode);
         Task<List<IOrganization>> QueryOrgTreeByParentCode(string pcode);
         Task<List<IOrganization>> QueryRootOrgTree();
+        Task<bool> CheckOrgCodeInView(string parentCode, int point);
+        Task<int> GetMaxOrgPoint();
+        Task<int> UpdateOrgPoint(int point);
+        Task MinusOrgPoint(int point);
     }
 }

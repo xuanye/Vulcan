@@ -27,6 +27,8 @@ namespace UUAC.Entity.DTOEntities
         public string ParentName { get; set; }
         public string Remark { get; set; }
         public int Sequence { get; set; }
+        public int Left { get; set; }
+        public int Right { get; set; }
         public sbyte OrgType { get; set; }
         public string UnitCode { get; set; }
         public string UnitName { get; set; }
@@ -85,7 +87,8 @@ namespace UUAC.Entity.DTOEntities
         public bool HasChild { get; set; }
         public sbyte IsSystemRole { get; set; }
         public string Remark { get; set; }
-        public string RolePath { get; set; }
+        public int Left { get; set; }
+        public int Right { get; set; }
         public string AppCode { get; set; }
         public string AppName { get; set; }
     }

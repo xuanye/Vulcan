@@ -50,7 +50,8 @@ namespace UUAC.Entity
         bool HasChild { get; set; }
         sbyte IsSystemRole { get; set; }
         string Remark { get; set; }
-        string RolePath { get; set; }
+        int Left { get; set; }
+        int Right { get; set; }
         string AppCode { get; set; }
         string AppName { get; set; }
     }
@@ -78,6 +79,8 @@ namespace UUAC.Entity
         sbyte  OrgType { set; get; }
         string UnitCode { get; set; }
         string UnitName { get; set; }
+        int Left { get; set; }
+        int Right { get; set; }
         bool HasChild { get; set; }
     }
     public interface IEntity
