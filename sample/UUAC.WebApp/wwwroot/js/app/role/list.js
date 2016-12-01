@@ -48,9 +48,9 @@
             colModel: [
                 { display: "角色标识", name: "RoleCode", width:130, sortable: false, align: "left", iskey: true },
                 { display: "角色名称", name: "RoleName", sortable: false, align: "center" },
-                { display: "系统角色", name: "IsSystemRole", sortable: false, align: "center" },
+                { display: "系统角色", name: "IsSystemRole", sortable: false, align: "center", process: formatSR },
                 { display: "备注", name: "Remark", sortable: false, align: "left" },
-                { display: "操作", name: "PrivilegeCode", width: 120, sortable: false, align: "center", dvCss: "hidden-sm hidden-xs action-buttons", process: formatOp, toggle: false }
+                { display: "操作", name: "RoleCode", width: 140, sortable: false, align: "center", dvCss: "hidden-sm hidden-xs action-buttons", process: formatOp, toggle: false }
             ],
             sortname: "sequence",
             sortorder: "asc",
@@ -115,8 +115,8 @@
             }
             var url = StrFormatNoEncode("{0}?pcode={1}&pname={2}&appcode={3}", [opt.editUrl, encodeURIComponent(pcode), encodeURIComponent(pname), appcode]);
             window.Choose.Open(url, {
-                width: 580,
-                height:650,
+                width: 480,
+                height:450,
                 caption: '新建权限',
                 theme: "simple", //默认
                 onclose: function (state) {
@@ -130,11 +130,22 @@
         }
        
     });
-   
-    function formatOp(value) {
+    function formatSR(value) {
+        if (value == 0) {
+            return "否";
+        }
+        else {
+            return "是";
+        }
+    }
+    function formatOp(value,cell) {
         var ret = [];
-        ret.push('<a class="green" href="javascript:window.options.Edit(\'', value, '\')"><i class="ace-icon fa fa-pencil bigger-130"></i></a>');
-        ret.push('<a class="red" href="javascript:window.options.Remove(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
+        if (cell[2] == 0) {
+            ret.push('<a class="green" href="javascript:window.options.Edit(\'', value, '\')"><i class="ace-icon fa fa-pencil bigger-130"></i></a>');
+            ret.push('<a class="red" href="javascript:window.options.Remove(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
+        }
+        ret.push('<a class="green" title="查看角色用户" href="javascript:window.options.ViewUsers(\'', value, '\')"><i class="ace-icon fa fa-pencil bigger-130"></i></a>');
+        ret.push('<a class="red" title="角色授权"  href="javascript:window.options.Auth(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
         return ret.join("");
 
     }
@@ -142,16 +153,16 @@
         
         var url = opt.editUrl + "/" + Id;
         window.Choose.Open(url, {
-            width: 580,
-            height: 650,
-            caption: '修改权限信息',
+            width: 480,
+            height: 450,
+            caption: '修改角色信息',
             onclose: function () {
                 xjgrid.Reload();
             }
         });
     };
     opt.Remove = function (Id) {
-        if (!confirm("你确定要删除该权限吗？")) {
+        if (!confirm("你确定要删除角色信息吗？")) {
             return false;
         }
         var url = opt.removeUrl + "/" + Id;

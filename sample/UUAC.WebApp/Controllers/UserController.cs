@@ -42,8 +42,9 @@ namespace UUAC.WebApp.Controllers
             if (string.IsNullOrEmpty(search.orgCode)) // 权限控制
             {
                 string userId = base.UserId;
-                string viewCode = base.ViewRootCode;
-                bool admin = this._contextService.IsInRole(userId, Constans.SUPPER_ADMIN_ROLE);
+                var user = await base.GetSignedUser();
+                string viewCode = user.ViewRootCode;
+                bool admin = await this._contextService.IsInRole(userId, Constans.SUPPER_ADMIN_ROLE);
                 if (!admin)
                 {
                     if (!string.IsNullOrEmpty(viewCode))
@@ -134,11 +135,11 @@ namespace UUAC.WebApp.Controllers
                 entity.LastModifyTime = DateTime.Now;
                 entity.LastModifyUserId = base.UserId;
                 entity.LastModifyUserName = base.UserId;
-
-                string viewRootCode = base.ViewRootCode;
+                var user = await base.GetSignedUser();
+                string viewRootCode = user.ViewRootCode;
                 if (!string.IsNullOrEmpty(viewRootCode) && viewRootCode !=rootId)
                 {
-                    bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                    bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
                     if (admin)
                     {
                         viewRootCode = "";
@@ -187,8 +188,7 @@ namespace UUAC.WebApp.Controllers
             {
                 errMsg += "用户工号不能为空；";
             }
-
-
+            
             return string.IsNullOrEmpty(errMsg);
         }
 

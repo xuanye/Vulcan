@@ -45,6 +45,7 @@ namespace UUAC.DataAccess.Mysql.Repository
         public async Task<IRoleInfo> GetRole(string code)
         {
             string sql = @"select a.role_code as RoleCode,a.role_name as RoleName, a.parent_code as ParentCode,a.is_system_role as IsSystemRole,a.remark as Remark,a.app_code as AppCode,
+                        a.`left` as `Left`,a.`right` as Right,
                         a.last_modify_user_id as LastModifyUserId,a.last_modify_time as LastModifyTime,a.last_modify_user_name as LastModifyUserName,b.app_name as AppName,c.role_name as ParentName
                         from role_info a
                         left join app_info b on a.app_code = b.app_code
@@ -82,6 +83,7 @@ namespace UUAC.DataAccess.Mysql.Repository
         {
             var data = Map(entity);
             data.RemoveUpdateColumn("AppCode");
+            data.RemoveUpdateColumn("IsSystemRole");
             data.RemoveUpdateColumn("ParentCode");
             return base.UpdateAsync(data);
 
@@ -118,7 +120,8 @@ where a.app_code=@AppCode and b.user_uid =@UserId";
 
         public async Task<List<IRoleInfo>> QueryUserRoles(string appCode, string userId)
         {
-            string sql = @"select b.role_code,b.role_name,IFNULL(c.childCount,0) as childCount,b.parent_code,b.is_system_role,b.`left` as `Left`,b.`right` as `Right` from role_user_relation a
+            string sql = @"select b.role_code as RoleCode,b.role_name as RoleName,IFNULL(c.childCount,0)>0 as HasChild,b.parent_code as ParentCode,
+                        b.is_system_role as IsSystemRole,b.`left` as `Left`,b.`right` as `Right` from role_user_relation a
                             inner join role_info b on a.role_code= b.role_code
                             left join (select count(1) as childCount,parent_code from role_info where app_code='UUAC' group by parent_code) c on b.role_code = c.parent_code
                             where b.app_code=@AppCode and a.user_uid=@UserId";
@@ -126,6 +129,33 @@ where a.app_code=@AppCode and b.user_uid =@UserId";
             var list = await base.QueryAsync<RoleInfo>(sql, new { AppCode = appCode, UserId = userId });
 
             return list.ToList<IRoleInfo>();
+        }
+
+        public Task<int> GetMaxOrgPoint(string appCode)
+        {
+            string sql = @"select max(`right`) from role_info where app_code =@AppCode";
+
+            return base.GetAsync<int>(sql, new { AppCode = appCode });
+        }
+
+        public Task UpdateRolePoint(string appCode,int point)
+        {
+            string sql = "update role_info set `right` = `right`+2 where app_code=@AppCode and  `right`>=@Point; update role_info set `left` = `left`+2 where app_code=@AppCode and `left`>@Point;";
+            return base.ExcuteAsync(sql, new { AppCode =appCode, Point = point });
+        }
+
+        public async Task<bool> CheckChildRole(string appCode,string roleCode)
+        {
+            string sql = "select 1 from role_info where app_code =@AppCode and parent_code =@RoleCode";
+            int ret = await base.GetAsync<int>(sql, new { AppCode = appCode, RoleCode = roleCode });
+
+            return ret > 0;
+        }
+
+        public Task MinusRolePoint(string appCode, int point)
+        {
+            string sql = "update role_info set `right` = `right`-2 where app_code=@AppCode and  `right`>=@Point ; update role_info set `left` = `left`-2 where app_code=@AppCode and `left`>@Point;";
+            return base.ExcuteAsync(sql, new { AppCode = appCode, Point = point });
         }
     }
 }

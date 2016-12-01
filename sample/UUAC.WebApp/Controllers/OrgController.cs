@@ -67,16 +67,17 @@ namespace UUAC.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> QueryOrgList(SearchOrgModel search)
         {
-         
+
             if(string.IsNullOrEmpty(search.pcode)) // 根组织
             {
                 //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
-                bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
 
                 if (!admin)
-                {                 
-                    if(!string.IsNullOrEmpty(base.ViewRootCode))
-                        search.pcode = base.ViewRootCode;
+                {
+                    var user = await base.GetSignedUser();
+                    if (!string.IsNullOrEmpty(user.ViewRootCode))
+                        search.pcode = user.ViewRootCode;
                 }
 
             }
@@ -97,11 +98,12 @@ namespace UUAC.WebApp.Controllers
             {
                 isRootNode = true;
                 //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
-                bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
                 if (!admin)
                 {
-                    if (!string.IsNullOrEmpty(base.ViewRootCode))
-                        id = base.ViewRootCode;
+                    var user = await base.GetSignedUser();
+                    if (!string.IsNullOrEmpty(user.ViewRootCode))
+                        id = user.ViewRootCode;
                 }
 
             }         
@@ -113,7 +115,8 @@ namespace UUAC.WebApp.Controllers
                 JsonTreeNode root = new JsonTreeNode();
                 if (!string.IsNullOrEmpty(id) && id != rootId)
                 {
-                    root.text = base.ViewRootName;
+                    var user = await base.GetSignedUser();
+                    root.text = user.ViewRootName;
                     root.value = id;
                     root.id = id;
                 }
@@ -185,10 +188,11 @@ namespace UUAC.WebApp.Controllers
                 {
                     entity.ParentCode = null;
                 }
-                string viewRootCode = base.ViewRootCode;
+                var user = await base.GetSignedUser();
+                string viewRootCode = user.ViewRootCode;
                 if (!string.IsNullOrEmpty(viewRootCode) && viewRootCode != rootId)
                 {
-                    bool admin = this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                    bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
                     if (admin)
                     {
                         viewRootCode = "";

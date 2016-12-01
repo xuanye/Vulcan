@@ -13,7 +13,7 @@ namespace Vulcan.AspNetCoreMvc.Interfaces
         /// <param name="identity">The identity.</param>
         /// <param name="privilegeCode">The privilege code.</param>
         /// <returns></returns>
-        bool HasPrivilege(string identity, string privilegeCode);
+        Task<bool> HasPrivilege(string identity, string privilegeCode);
 
         /// <summary>
         /// Determines whether [is in role] [the specified identity].
@@ -21,7 +21,7 @@ namespace Vulcan.AspNetCoreMvc.Interfaces
         /// <param name="identity">The identity.</param>
         /// <param name="roleCode">The role code.</param>
         /// <returns></returns>
-        bool IsInRole(string identity, string roleCode);
+        Task<bool> IsInRole(string identity, string roleCode);
 
 
         /// <summary>
@@ -29,26 +29,23 @@ namespace Vulcan.AspNetCoreMvc.Interfaces
         /// </summary>
         /// <param name="identity">The identity.</param>
         /// <returns></returns>
-        Task<IAppUser> GetUserInfo(string identity);
+        Task<AppUser> GetUserInfo(string identity);
     }
 
-    public interface IAppUser
+    public class AppUser
     {
-        string UserId { get; }
-        string FullName { get; }
-        string EmployID { get; }
+        public string UserId { get; set; }
+        public string FullName { get; set; }
+        public string EmployID { get; set; }
 
-        string GroupCode { get;  }
-        string GroupName { get;  }
+        public string GroupCode { get; set; }
+        public string GroupName { get; set; }
 
-        string DeptCode { get;  }
-        string DeptName { get;  }
+        public string DeptCode { get; set; }
+        public string DeptName { get; set; }
 
-        string OrgCode { get;  }
-        string OrgName { get;  }
-
-        string ViewRootCode { get;  }
-
-        string ViewRootName { get;  }
+        public string OrgCode { get; set; }
+        public string OrgName { get; set; }            
+           
     }
 }

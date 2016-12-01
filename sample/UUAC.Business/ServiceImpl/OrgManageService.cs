@@ -84,23 +84,22 @@ namespace UUAC.Business.ServiceImpl
 
         public async Task<int> SaveOrgInfo(IOrganization entity, int type,string viewRootCode)
         {
-            using (ConnectionScope scope = new ConnectionScope())
+            int ret = -1;
+            using (TransScope scope = new TransScope())
             {
                 bool inView = await CheckOrgCodeInView(entity.ParentCode, viewRootCode);
                 if (!inView)
                 {
                     throw new BizException("没有相应的权限");
                 }
-
                 if (type == 1) // 新增
                 {
                     // 校验
                     bool result = await this._repo.CheckOrgCode(entity.OrgCode);
                     if (!result)
                     {
-                        return -1;
+                       return - 1;
                     }
-
                     if (string.IsNullOrEmpty(entity.ParentCode) ) // 根组织
                     {
                         entity.UnitCode = entity.OrgCode;
@@ -132,25 +131,30 @@ namespace UUAC.Business.ServiceImpl
                         await _repo.UpdateOrgPoint(pOrg.Right);
                         entity.Left = pOrg.Right ;
                         entity.Right = entity.Left + 1;
-                    }
-                                      
+                    }                                      
                     await this._repo.AddOrg(entity);
-                    return 1;
-                   
+                    ret = 1;
                 }
                 else
                 {
-                    return await this._repo.UpdateOrg(entity);
+                    ret = await this._repo.UpdateOrg(entity);
                 }
+                scope.Complete();
             }
+            return ret;
         }
 
         public async Task<int> RemoveOrgInfo(string orgCode)
         {
-            using (ConnectionScope scope = new ConnectionScope())
+            using (TransScope scope = new TransScope())
             {
                 orgCode = Utility.ClearSafeStringParma(orgCode);
 
+                IOrganization org = await _repo.GetOrgInfoAsync(orgCode);
+                if(org == null)
+                {
+                    throw new BizException("组织结构不存在");
+                }
                 bool checkChild = await _repo.CheckChildOrg(orgCode);
                 if (!checkChild)
                 {
@@ -163,7 +167,12 @@ namespace UUAC.Business.ServiceImpl
                     throw new BizException("该组织下存在用户，不能删除");
                 }
 
-                return await _repo.RemoveOrgInfo(orgCode);
+                await _repo.MinusOrgPoint(org.Right);
+
+
+                int ret = await _repo.RemoveOrgInfo(orgCode);
+                scope.Complete();
+                return ret;
             }
         }
 

@@ -33,9 +33,6 @@ namespace UUAC.WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> QueryTree([FromForm]string id,[FromForm]string value)
         {
-            //TODO: 如果ID为空，则获取用户顶级角色树
-
-
             string appCode = value;
             string pCode = id == value ? "" : id;
             List<IRoleInfo> list;
@@ -79,9 +76,16 @@ namespace UUAC.WebApp.Controllers
             {
                 return Json(new JsonQTable() { error = "请先选择系统" });
             }
-
-            List<IRoleInfo> list = await this._service.QueryRoleByParentCode(search.appCode, search.pCode);
-
+            List<IRoleInfo> list;
+            if (string.IsNullOrEmpty(search.pCode))
+            {
+                list = await this._service.QueryUserTopRole(search.appCode, base.UserId);
+            }
+            else
+            {
+                list = await this._service.QueryRoleByParentCode(search.appCode, search.pCode);
+            }
+         
             var jsonData = JsonQTable.ConvertFromList(list, search.colkey, search.colsArray);
 
             return Json(jsonData);
@@ -147,7 +151,7 @@ namespace UUAC.WebApp.Controllers
                     msg.status = -1;
                     msg.message = errMsg;
                     return Json(msg);
-                }
+                }               
                 entity.LastModifyTime = DateTime.Now;
                 entity.LastModifyUserId = base.UserId;
                 entity.LastModifyUserName = base.UserId;

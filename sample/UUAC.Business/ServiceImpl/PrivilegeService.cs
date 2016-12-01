@@ -106,12 +106,12 @@ namespace UUAC.Business.ServiceImpl
         private readonly string pCacheKey = Constans.APP_CODE + "_USER_P";
         public async Task<bool> HasPrivilege(string identity, string privilegeCode)
         {
-            var list = this._contextAccessor.HttpContext.Session.GetObjectFromJson<List<string>>(pCacheKey);
+            var list = this._contextAccessor.HttpContext.Session.GetObjectFromByteArray<List<string>>(pCacheKey);
             if (list == null)
             {
                 // 获取用户的所有权限
                 list = await this._repo.QueryUserPrivilegeCodeList(Constans.APP_CODE, identity, -1);
-                this._contextAccessor.HttpContext.Session.SetObjectAsJson(pCacheKey, list);
+                this._contextAccessor.HttpContext.Session.SetObjectAsByteArray(pCacheKey, list);
             }
             return list.Exists(x => x == privilegeCode);
         }

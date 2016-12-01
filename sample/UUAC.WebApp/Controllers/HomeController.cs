@@ -29,7 +29,10 @@ namespace UUAC.WebApp.Controllers
             };
             
             ViewBag.UserId = base.UserId;
-            ViewBag.FullName = base.FullName;
+
+            var user = await base.GetSignedUser();
+
+            ViewBag.FullName = user.FullName;
             //只获取菜单
             return View(model);
         }
@@ -66,8 +69,7 @@ namespace UUAC.WebApp.Controllers
                 const string Issuer = "https://contoso.com";
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, model.UserId, ClaimValueTypes.String, Issuer),
-                    new Claim(MyClaimTypes.FullName,"超级管理员", ClaimValueTypes.String, Issuer)
+                    new Claim(ClaimTypes.Name, model.UserId, ClaimValueTypes.String, Issuer),                 
                 };
 
 

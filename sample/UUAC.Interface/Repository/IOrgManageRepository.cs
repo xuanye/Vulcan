@@ -24,5 +24,6 @@ namespace UUAC.Interface.Repository
         Task<bool> CheckOrgCodeInView(string parentCode, int point);
         Task<int> GetMaxOrgPoint();
         Task<int> UpdateOrgPoint(int point);
+        Task MinusOrgPoint(int point);
     }
 }

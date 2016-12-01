@@ -178,5 +178,11 @@ group by parent_code) b  on a.org_code = b.parent_code
             string sql = "update organization set `right` = `right`+2 where `right`>=@Point; update organization set `left` = `left`+2 where `left`>@Point;";
             return base.ExcuteAsync(sql, new { Point = point });
         }
+
+        public Task MinusOrgPoint(int point)
+        {
+            string sql = "update organization set `right` = `right`-2 where `right`>=@Point; update organization set `left` = `left`-2 where `left`>@Point;";
+            return base.ExcuteAsync(sql, new { Point = point });
+        }
     }
 }

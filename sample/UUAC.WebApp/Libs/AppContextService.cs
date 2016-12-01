@@ -14,17 +14,18 @@ namespace UUAC.WebApp.Libs
         {
             this._service = service;
         }
-        public bool HasPrivilege(string identity, string privilegeCode)
+        public Task<bool> HasPrivilege(string identity, string privilegeCode)
         {
-            return false;
+            return this._service.HasPrivilege(identity, privilegeCode);
+            
         }
 
-        public bool IsInRole(string identity, string roleCode)
+        public Task<bool> IsInRole(string identity, string roleCode)
         {
-            return false;
+            return this._service.IsInRole(identity, roleCode);
         }
 
-        public async Task<IAppUser> GetUserInfo(string identity)
+        public async Task<AppUser> GetUserInfo(string identity)
         {
             var u = await this._service.GetUserInfo(identity);
            
@@ -32,7 +33,7 @@ namespace UUAC.WebApp.Libs
             {
                 throw new Vulcan.Core.Exceptions.NoAuthorizeExecption("用户信息不存在，请检查后重试!");
             }
-            AppUser user = new AppUser();
+            MyAppUser user = new MyAppUser();
             user.UserId = identity;
             user.FullName = u.FullName;
             user.GroupCode = u.OrgCode;
@@ -45,20 +46,9 @@ namespace UUAC.WebApp.Libs
         }
     }
 
-    public class AppUser : IAppUser
+    public class MyAppUser:AppUser
     {
-        public string UserId { get; set; }
-        public string FullName { get; set; }
-        public string EmployID { get; set; }
-        public string GroupCode { get; set; }
-        public string GroupName { get; set; }
-        public string DeptCode { get; set; }
-        public string DeptName { get; set; }
-        public string OrgCode { get; set; }
-        public string OrgName { get; set; }
-
         public string ViewRootCode { get; set; }
-
         public string ViewRootName { get; set; }
     }
 }

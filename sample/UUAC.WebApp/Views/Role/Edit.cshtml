@@ -1,7 +1,7 @@
 ﻿@{
     Layout = "../Shared/_Layout_For_Dailog";
 }
-@model UUAC.Entity.IPrivilege
+@model UUAC.Entity.IRoleInfo
 @section styles{
     <style type="text/css">
         .control-label {
@@ -12,14 +12,14 @@
 }
 <div class="choose">
     <div class="choose-top">
-        <h4>@(string.IsNullOrEmpty(Model.PrivilegeCode) ? "新建权限" : "修改权限信息")</h4>
+        <h4>@(string.IsNullOrEmpty(Model.RoleCode) ? "新建角色" : "修改角色信息")</h4>
         <a href="javascript:;" id="btnClose" class="aclose">&times;</a>
     </div>
     <div class="row" style="margin-top:20px">
         <div class="col-xs-12">
-            <form class="form-horizontal" method="post" action="@Url.Action("Save", new {type = string.IsNullOrEmpty(Model.PrivilegeCode) ? 1 : 2})" id="frmEdit">
+            <form class="form-horizontal" method="post" action="@Url.Action("Save", new {type = string.IsNullOrEmpty(Model.RoleCode) ? 1 : 2})" id="frmEdit">
                 <div class="form-group">
-                    <label class="col-xs-3 control-label">上级权限:</label>
+                    <label class="col-xs-3 control-label">上级角色:</label>
                     <div class="col-xs-6">
                         <span class="form_tip">@Model.ParentName</span>
                         <input type="hidden" id="ParentCode" name="ParentCode" value="@Model.ParentCode"/>
@@ -27,47 +27,25 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 control-label">权限标识:</label>
+                    <label class="col-xs-3 control-label">角色标识:</label>
                     <div class="col-xs-6">
-                        <input type="text" id="PrivilegeCode" name="PrivilegeCode" value="@Model.PrivilegeCode" placeholder="权限标识" class="form-control" @(string.IsNullOrEmpty(Model.PrivilegeCode) ? "" : " readonly")/>
+                        <input type="text" id="RoleCode" name="RoleCode" value="@Model.RoleCode" placeholder="角色标识" class="form-control" @(string.IsNullOrEmpty(Model.RoleCode) ? "" : " readonly")/>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-xs-3 control-label">权限名称:</label>
+                    <label class="col-xs-3 control-label">角色名称:</label>
                     <div class="col-xs-6">
-                        <input type="text" id="PrivilegeName" name="PrivilegeName" value="@Model.PrivilegeName" placeholder="权限名称" class="form-control"/>
+                        <input type="text" id="RoleName" name="RoleName" value="@Model.RoleName" placeholder="角色名称" class="form-control"/>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">权限资源:</label>
-                    <div class="col-xs-6">
-                        <input type="text" id="Resource" name="Resource" value="@Model.Resource" placeholder="权限资源" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">权限标记:</label>
-                    <div class="col-xs-6">
-                        <input type="text" id="Mark" name="Mark" value="@Model.Mark" placeholder="权限标记" class="form-control" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">权限类型:</label>
-                    <div class="col-xs-6">
-                        <select asp-for="@Model.PrivilegeType" rs-code="PRIVILEGE_TYPE" has-all-option="true" class="form-control"></select>
-                    </div>
-                </div>
+                </div>  
+              
                 <div class="form-group">
                     <label class="col-xs-3 control-label">备注:</label>
                     <div class="col-xs-6">
                         <textarea id="Remark" name="Remark" placeholder="系统介绍" class="form-control">@Model.Remark</textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label class="col-xs-3 control-label">排序号:</label>
-                    <div class="col-xs-3">
-                        <input type="text" id="Sequence" name="Sequence" value="@Model.Sequence" placeholder="排序号" class="form-control"/>
-                    </div>
-                </div>
+        
             </form>
         </div>
     </div>
@@ -80,10 +58,10 @@
 @section scripts{
     <script type="text/javascript">
         window.options = {
-            saveUrl: "@Url.Action("SaveUser")",
-            checkCodeUrl:"@Url.Action("CheckCode", new { id = Model.PrivilegeCode, appCode = Model.AppCode})"
+            saveUrl: "@Url.Action("Save")",
+            checkCodeUrl:"@Url.Action("CheckCode", new { id = Model.RoleCode, appCode = Model.AppCode})"
         }
     </script>
-    <script src="~/js/app/privilege/edit.js"></script>
+    <script src="~/js/app/role/edit.js"></script>
 
 }

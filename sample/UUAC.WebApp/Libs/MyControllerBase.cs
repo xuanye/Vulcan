@@ -6,68 +6,41 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using UUAC.Common;
 using Vulcan.AspNetCoreMvc.Interfaces;
+using UUAC.Interface.Service;
+using Vulcan.Core.Exceptions;
+using Vulcan.AspNetCoreMvc.Extensions;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace UUAC.WebApp.Libs
 {
-    public class MyControllerBase:Controller
+    public class MyControllerBase : Controller
     {
-      
+       
+        
         protected string UserId => this.User.Identity.IsAuthenticated ? this.User.Identity.Name : "";
 
-        protected string FullName
+        
+        protected async Task<MyAppUser> GetSignedUser()
         {
-            get
+            
+            string userId = this.UserId;
+            if (string.IsNullOrEmpty(userId))
             {
-                if(this.User.HasClaim(x=>x.Type == MyClaimTypes.FullName))
-                {
-                    return this.User.FindFirst(MyClaimTypes.FullName).Value;
-                }
-                return null;
+                throw new NoAuthorizeExecption("当前没有用户登录或登录状态已过期，请刷新后重试");
             }
-        }
-        protected string GroupCode
-        {
-            get
+            var user = HttpContext.Session.GetObjectFromByteArray<MyAppUser>(Constans.AppUserSessionKey);
+            if (user == null)
             {
-                if (this.User.HasClaim(x => x.Type == MyClaimTypes.GroupCode))
+                var service = HttpContext.RequestServices.GetService<IAppContextService>();
+
+                user = await service.GetUserInfo(userId) as MyAppUser;
+                if(user == null)
                 {
-                    return this.User.FindFirst(MyClaimTypes.GroupCode).Value;
+                    throw new NoAuthorizeExecption("意外错误，用户信息加载异常");
                 }
-                return null;
+                HttpContext.Session.SetObjectAsByteArray<MyAppUser>(Constans.AppUserSessionKey, user);
             }
-        }
-        protected string OrgCode
-        {
-            get
-            {
-                if (this.User.HasClaim(x => x.Type == MyClaimTypes.OrgCode))
-                {
-                    return this.User.FindFirst(MyClaimTypes.OrgCode).Value;
-                }
-                return null;
-            }
-        }
-        protected string ViewRootCode
-        {
-            get
-            {
-                if (this.User.HasClaim(x => x.Type == MyClaimTypes.ViewRootCode))
-                {
-                    return this.User.FindFirst(MyClaimTypes.ViewRootCode).Value;
-                }
-                return null;
-            }
-        }
-        protected string ViewRootName
-        {
-            get
-            {
-                if (this.User.HasClaim(x => x.Type == MyClaimTypes.ViewRootName))
-                {
-                    return this.User.FindFirst(MyClaimTypes.ViewRootName).Value;
-                }
-                return null;
-            }
+            return user;
         }
     }
 }
