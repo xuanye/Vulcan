@@ -11,7 +11,7 @@ using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
 
 
-namespace UUAC.WebApp.Controllers
+namespace UUAC.WebApp.Features.Privilege
 {
     public class PrivilegeController : MyControllerBase
     {

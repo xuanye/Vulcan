@@ -12,7 +12,7 @@ using Vulcan.Core.Enities;
 using Vulcan.AspNetCoreMvc.Interfaces;
 using UUAC.Common;
 
-namespace UUAC.WebApp.Controllers
+namespace UUAC.WebApp.Features.User
 {
     public class UserController : MyControllerBase
     {

@@ -11,7 +11,7 @@ using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
 using Vulcan.AspNetCoreMvc.Interfaces;
 
-namespace UUAC.WebApp.Controllers
+namespace UUAC.WebApp.Features.Role
 {
     public class RoleController : MyControllerBase
     {

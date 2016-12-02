@@ -145,7 +145,7 @@
             ret.push('<a class="red" href="javascript:window.options.Remove(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
         }
         ret.push('<a class="green" title="查看角色用户" href="javascript:window.options.ViewUsers(\'', value, '\')"><i class="ace-icon fa fa-pencil bigger-130"></i></a>');
-        ret.push('<a class="red" title="角色授权"  href="javascript:window.options.Auth(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
+        ret.push('<a class="red" title="角色授权" href="javascript:window.options.Auth(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
         return ret.join("");
 
     }
