@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using UUAC.DataAccess.Mysql.Entitis;
 using UUAC.Entity;
 using UUAC.Interface.Repository;
+using Vulcan.Core.Enities;
 
 namespace UUAC.DataAccess.Mysql.Repository
 {
@@ -45,7 +46,7 @@ namespace UUAC.DataAccess.Mysql.Repository
         public async Task<IRoleInfo> GetRole(string code)
         {
             string sql = @"select a.role_code as RoleCode,a.role_name as RoleName, a.parent_code as ParentCode,a.is_system_role as IsSystemRole,a.remark as Remark,a.app_code as AppCode,
-                        a.`left` as `Left`,a.`right` as Right,
+                        a.`left` as `Left`,a.`right` as `Right`,
                         a.last_modify_user_id as LastModifyUserId,a.last_modify_time as LastModifyTime,a.last_modify_user_name as LastModifyUserName,b.app_name as AppName,c.role_name as ParentName
                         from role_info a
                         left join app_info b on a.app_code = b.app_code
@@ -156,6 +157,26 @@ where a.app_code=@AppCode and b.user_uid =@UserId";
         {
             string sql = "update role_info set `right` = `right`-2 where app_code=@AppCode and  `right`>=@Point ; update role_info set `left` = `left`-2 where app_code=@AppCode and `left`>@Point;";
             return base.ExcuteAsync(sql, new { AppCode = appCode, Point = point });
+        }
+
+        public async Task<PagedList<IUserInfo>> QueryRoleUsers(string roleCode, string queryText, PageView page)
+        {
+            string cols = @"a.user_uid as UserUid,a.full_name as FullName,a.org_code as OrgCode,a.org_name as OrgName,a.status as Status,a.user_num as UserNum";
+            string from = "user_info a inner join role_user_relation b on a.user_uid = b.user_uid";
+            string where = " and b.role_code = @RoleCode";
+            if (!string.IsNullOrEmpty(queryText))
+            {
+                where += " and (a.user_uid like '%" + queryText + "%' or a.full_name like '%" + queryText + "%')";
+            }
+
+            var list = await base.PagedQueryAsync<UserInfo>(page, cols, from, where, new { RoleCode = roleCode }, "a.user_uid", "");
+
+            PagedList<IUserInfo> plist = new PagedList<IUserInfo>();
+            plist.DataList = list.DataList.ToList<IUserInfo>();
+            plist.PageIndex = list.PageIndex;
+            plist.PageSize = list.PageSize;
+            plist.Total = list.Total;
+            return plist;
         }
     }
 }

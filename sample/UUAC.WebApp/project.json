@@ -72,8 +72,9 @@
   "publishOptions": {
     "include": [
       "wwwroot",
-      "Views",
-      "Areas/**/Views",
+      "Views",    
+      "Areas/**/*.cshtml",
+      "Features/**/*.cshtml",
       "appsettings.json",
       "NLog.config",
       "web.config"

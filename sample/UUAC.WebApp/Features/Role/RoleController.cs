@@ -11,7 +11,7 @@ using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
 using Vulcan.AspNetCoreMvc.Interfaces;
 
-namespace UUAC.WebApp.Controllers
+namespace UUAC.WebApp.Features.Role
 {
     public class RoleController : MyControllerBase
     {
@@ -132,7 +132,11 @@ namespace UUAC.WebApp.Controllers
             }
             else
             {
-                model = await _service.GetRole(id);
+                model = await _service.GetRole(id);               
+            }
+            if (string.IsNullOrEmpty(model.ParentCode))
+            {
+                model.ParentName = "根角色";
             }
             return View(model);
         }
@@ -229,5 +233,36 @@ namespace UUAC.WebApp.Controllers
             return Json(msg);
         }
 
+
+        public IActionResult RoleUsers(string roleCode)
+        {
+            if (string.IsNullOrEmpty(roleCode))
+            {
+                throw new ArgumentNullException("角色代码不能为空");
+            }
+            ViewBag.RoleCode = roleCode;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> QueryRoleUsers([FromForm] SearchRoleModel search)
+        {
+            JsonQTable ret;
+            if (search==null || string.IsNullOrEmpty(search.roleCode))
+            {
+                ret = new JsonQTable();
+                ret.error = "角色代码不能为空";
+                return Json(ret);
+            }
+            PageView page = new PageView();
+            page.PageIndex = search.page-1;
+            page.PageSize = search.rp;
+            page.SortName = search.sortname;
+            page.SortOrder = search.sortorder;
+            PagedList<IUserInfo> list = await _service.QueryRoleUsers(search.roleCode, search.queryText, page);
+            ret = JsonQTable.ConvertFromPagedList(list, search.colkey, search.colsArray);
+            return Json(ret);
+        }
     }
 }

@@ -12,7 +12,7 @@ using Vulcan.Core.Enities;
 using Vulcan.AspNetCoreMvc.Interfaces;
 using UUAC.Common;
 
-namespace UUAC.WebApp.Controllers
+namespace UUAC.WebApp.Features.User
 {
     public class UserController : MyControllerBase
     {
@@ -52,7 +52,7 @@ namespace UUAC.WebApp.Controllers
                 }
             }
 
-            PageView view = new PageView(search.page, search.rp);
+            PageView view = new PageView(search.page-1, search.rp);
             PagedList<IUserInfo> list = await this._service.QueryUserList(search.orgCode,search.qText, view);
             var ret = JsonQTable.ConvertFromPagedList(list.DataList,list.PageIndex,list.Total, search.colkey, search.colsArray);
             return Json(ret);
@@ -218,5 +218,64 @@ namespace UUAC.WebApp.Controllers
             return Json(msg);
         }
 
+        public  IActionResult ChooseUser()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> QueryUserTree([FromForm]string id)
+        {
+            var nodes = new List<JsonTreeNode>();
+            string parentCode = id;
+            if (string.IsNullOrEmpty(id))
+            {
+
+            }
+            else
+            {
+                var glist = await this._service.QueryOrgTreeByParentCode(parentCode);
+                if (glist != null)
+                {
+                    foreach (var item in glist)
+                    {
+                        JsonTreeNode gnode = new JsonTreeNode();
+                        gnode.id = item.OrgCode;
+                        gnode.text = item.OrgName;
+                        gnode.value = "1";
+                        gnode.hasChildren = true;
+
+                        gnode.classes = "group";
+                        nodes.Add(gnode);
+                    }
+                }
+                PageView view = new PageView(0, 1000);
+                var ulist = await this._service.QueryUserListByParentCode(parentCode);
+                //
+                if (ulist != null)
+                {
+                    foreach (var user in ulist)
+                    {
+                        JsonTreeNode unode = new JsonTreeNode();
+                        unode.id = user.UserUid;
+                        unode.text = user.FullName;
+                        unode.value = "2";
+                        unode.showcheck = true;
+                        unode.hasChildren = false;
+                        unode.classes = "user";
+                        nodes.Add(unode);
+                    }
+                }
+
+
+            }
+
+            return Json(nodes);
+        }
+
+        private  void GetChildTreeNode(string orgCode)
+        {
+          
+        }
     }
 }

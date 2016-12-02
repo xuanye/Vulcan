@@ -11,7 +11,7 @@ using UUAC.WebApp.Libs;
 using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
 
-namespace UUAC.WebApp.Controllers
+namespace UUAC.WebApp.Features.App
 {
     public class AppController : MyControllerBase
     {

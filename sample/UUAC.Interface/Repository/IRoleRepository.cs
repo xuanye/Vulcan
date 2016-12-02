@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UUAC.Entity;
+using Vulcan.Core.Enities;
 
 namespace UUAC.Interface.Repository
 {
@@ -22,5 +23,6 @@ namespace UUAC.Interface.Repository
         Task UpdateRolePoint(string appCode, int point);
         Task<bool> CheckChildRole(string appCode,string roleCode);
         Task MinusRolePoint(string appCode, int right);
+        Task<PagedList<IUserInfo>> QueryRoleUsers(string roleCode, string queryText, PageView page);
     }
 }

@@ -17,6 +17,12 @@ namespace UUAC.WebApp.ViewModels
         public string qText { get; set; }
     }
 
+    public class SearchRoleModel : SearchModel
+    {
+        public string roleCode { get; set; }
+
+        public string queryText { get; set; }
+    }
 
     public class SearchPrivilegeModel: SearchModel
     {

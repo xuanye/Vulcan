@@ -18,6 +18,7 @@ using Vulcan.DataAccess.Context;
 using NLog.Extensions.Logging;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Redis;
+using Vulcan.AspNetCoreMvc;
 
 namespace UUAC.WebApp
 {
@@ -41,14 +42,54 @@ namespace UUAC.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+          
             // Add framework services.
             services.AddMvc(config =>
             {
+
                 var policy = new AuthorizationPolicyBuilder()
                                  .RequireAuthenticatedUser()
                                  .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            });
+
+                config.Conventions.Add(new FeatureConvention());
+            })
+            .AddRazorOptions(options =>
+            {
+                // 支持默认的方式
+                // {0} - Action Name
+                // {1} - Controller Name
+                // {2} - Area Name
+                // {3} - Feature Name
+                options.AreaViewLocationFormats.Clear();
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{1}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Features/{3}/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/{2}/Features/Shared/{0}.cshtml");
+                options.AreaViewLocationFormats.Add("/Areas/Shared/{0}.cshtml");
+
+                // 支持Features文件夹组织代码的方式
+                // replace normal view location entirely
+                options.ViewLocationFormats.Clear();
+                options.ViewLocationFormats.Add("/Features/{3}/{1}/{0}.cshtml");
+                options.ViewLocationFormats.Add("/Features/{3}/{0}.cshtml");
+                options.ViewLocationFormats.Add("/Features/Shared/{0}.cshtml");
+
+                // add support for features side-by-side with /Views
+                // (do NOT clear ViewLocationFormats)
+                //options.ViewLocationFormats.Insert(0, "/Features/Shared/{0}.cshtml");
+                //options.ViewLocationFormats.Insert(0, "/Features/{3}/{0}.cshtml");
+                //options.ViewLocationFormats.Insert(0, "/Features/{3}/{1}/{0}.cshtml");
+                //
+                // (do NOT clear AreaViewLocationFormats)
+                //options.AreaViewLocationFormats.Insert(0, "/Areas/{2}/Features/Shared/{0}.cshtml");
+                //options.AreaViewLocationFormats.Insert(0, "/Areas/{2}/Features/{3}/{0}.cshtml");
+                //options.AreaViewLocationFormats.Insert(0, "/Areas/{2}/Features/{3}/{1}/{0}.cshtml");
+
+
+                options.ViewLocationExpanders.Add(new FeatureViewLocationExpander());
+            }); 
+
+
             // Add memory cache services
             services.AddMemoryCache();
             if(Evn.IsDevelopment())
