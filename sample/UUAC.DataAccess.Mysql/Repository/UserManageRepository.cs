@@ -125,5 +125,15 @@ namespace UUAC.DataAccess.Mysql.Repository
             return user;
 
         }
+
+        public async Task<List<IUserInfo>> QueryUserListByParentCode(string orgCode)
+        {
+            string sql = @"select user_uid as UserUid, full_name as FullName, account_type as AccountType,org_code as OrgCode
+org_name as OrgName sequence as Sequence,user_num as UserNum 
+from user_info where org_code=@OrgCode and status =1";
+
+            var list = await base.QueryAsync<UserInfo>(sql, new { OrgCode = orgCode });
+            return list.ToList<IUserInfo>();
+        }
     }
 }

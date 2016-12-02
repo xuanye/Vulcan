@@ -15,5 +15,7 @@ namespace UUAC.Interface.Service
         Task<bool> CheckUserId(string id, string userId);
         Task<int> SaveUserInfo(DtoUserInfo entity, int type,string viewRootCode);
         Task<int> RemoveUserInfo(string userId);
+        Task<List<IOrganization>> QueryOrgTreeByParentCode(string parentCode);
+        Task<List<IUserInfo>> QueryUserListByParentCode(string parentCode);
     }
 }

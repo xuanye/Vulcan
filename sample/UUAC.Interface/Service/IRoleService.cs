@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using UUAC.Entity;
 using UUAC.Entity.DTOEntities;
+using Vulcan.Core.Enities;
 
 namespace UUAC.Interface.Service
 {
@@ -17,5 +18,6 @@ namespace UUAC.Interface.Service
         Task<List<IRoleInfo>> QueryUserTopRole(string appCode, string userId);
         Task<List<string>> GetUserRoleCodeList(string appCode, string userId);
         Task<bool> IsInRole(string identity, string roleCode);
+        Task<PagedList<IUserInfo>> QueryRoleUsers(string roleCode, string queryText, PageView page);
     }
 }

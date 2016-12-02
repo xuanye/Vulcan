@@ -128,7 +128,14 @@ namespace Vulcan.Core.Enities
             }
             return data;
         }
-
+        public static JsonQTable ConvertFromPagedList<T>(PagedList<T> pageList, string key, string[] cols, Func<string, bool> checkExtP, Func<string, T, string> excuteExtP) where T : class
+        {
+            return JsonQTable.ConvertFromPagedList(pageList.DataList, pageList.PageIndex, pageList.Total, key, cols, checkExtP, excuteExtP);
+        }
+        public static JsonQTable ConvertFromPagedList<T>(PagedList<T> pageList, string key, string[] cols) where T : class
+        {
+            return JsonQTable.ConvertFromPagedList(pageList.DataList, pageList.PageIndex, pageList.Total, key, cols);
+        }
         public static JsonQTable ConvertFromPagedList<T>(List<T> pageList, int pageIndex, int total, string key, string[] cols) where T : class
         {
             JsonQTable data = new JsonQTable();

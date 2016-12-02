@@ -50,7 +50,7 @@
                 { display: "角色名称", name: "RoleName", sortable: false, align: "center" },
                 { display: "系统角色", name: "IsSystemRole", sortable: false, align: "center", process: formatSR },
                 { display: "备注", name: "Remark", sortable: false, align: "left" },
-                { display: "操作", name: "RoleCode", width: 140, sortable: false, align: "center", dvCss: "hidden-sm hidden-xs action-buttons", process: formatOp, toggle: false }
+                { display: "操作", name: "RoleCode", width: 140, sortable: false, align: "left", dvCss: "hidden-sm hidden-xs action-buttons", process: formatOp, toggle: false }
             ],
             sortname: "sequence",
             sortorder: "asc",
@@ -144,8 +144,8 @@
             ret.push('<a class="green" href="javascript:window.options.Edit(\'', value, '\')"><i class="ace-icon fa fa-pencil bigger-130"></i></a>');
             ret.push('<a class="red" href="javascript:window.options.Remove(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
         }
-        ret.push('<a class="green" title="查看角色用户" href="javascript:window.options.ViewUsers(\'', value, '\')"><i class="ace-icon fa fa-pencil bigger-130"></i></a>');
-        ret.push('<a class="red" title="角色授权" href="javascript:window.options.Auth(\'', value, '\')"><i class="ace-icon fa fa-trash-o bigger-130"></i></a>');
+        ret.push('<a class="orange" title="查看角色用户" href="javascript:window.options.ViewUsers(\'', value, '\')"><i class="ace-icon fa fa-users bigger-130"></i></a>');
+        ret.push('<a class="blue" title="角色授权" href="javascript:window.options.Auth(\'', value, '\')"><i class="ace-icon fa fa-sitemap bigger-130"></i></a>');
         return ret.join("");
 
     }
@@ -159,6 +159,26 @@
             onclose: function () {
                 xjgrid.Reload();
             }
+        });
+    };
+
+    opt.ViewUsers = function (Id) {
+        
+        var url = opt.usersUrl + "/?roleCode=" + Id;
+        window.Choose.Open(url, {
+            width: 750,
+            height: 650,
+            caption: '查看角色用户'
+        });
+      };
+
+    opt.Auth = function (Id) {
+
+        var url = opt.authUrl + "/" + Id;
+        window.Choose.Open(url, {
+            width: 480,
+            height: 520,
+            caption: '角色授权'
         });
     };
     opt.Remove = function (Id) {

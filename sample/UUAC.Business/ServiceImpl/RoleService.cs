@@ -10,6 +10,7 @@ using UUAC.Interface.Service;
 using Vulcan.Core;
 using Vulcan.AspNetCoreMvc.Extensions;
 using Vulcan.Core.Exceptions;
+using Vulcan.Core.Enities;
 
 namespace UUAC.Business.ServiceImpl
 {
@@ -175,6 +176,13 @@ namespace UUAC.Business.ServiceImpl
                 this._contextAccessor.HttpContext.Session.SetObjectAsByteArray(rCacheKey, list);
             }
             return list.Exists(x => x == roleCode);
+        }
+
+        public Task<PagedList<IUserInfo>> QueryRoleUsers(string roleCode, string queryText, PageView page)
+        {
+            queryText = Utility.ClearSafeStringParma(queryText);
+            roleCode = Utility.ClearSafeStringParma(roleCode);
+            return _repo.QueryRoleUsers(roleCode, queryText, page);
         }
     }
 }

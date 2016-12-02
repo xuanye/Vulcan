@@ -135,5 +135,17 @@ namespace UUAC.Business.ServiceImpl
             }
             return ret;
         }
+
+        public Task<List<IOrganization>> QueryOrgTreeByParentCode(string parentCode)
+        {
+            parentCode = Utility.ClearSafeStringParma(parentCode);
+            return this._orgService.QueryOrgTreeByParentCode(parentCode);
+        }
+
+        public Task<List<IUserInfo>> QueryUserListByParentCode(string parentCode)
+        {
+            parentCode = Utility.ClearSafeStringParma(parentCode);
+            return this._repo.QueryUserListByParentCode(parentCode);
+        }
     }
 }

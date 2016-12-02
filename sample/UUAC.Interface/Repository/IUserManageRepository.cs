@@ -17,5 +17,6 @@ namespace UUAC.Interface.Repository
         Task<int> UpdateUser(IUserInfo entity);
         Task<int> RemoveUserRolesAsync(string userId);
         Task<int> RemoveUserInfoAsync(string userId);
+        Task<List<IUserInfo>> QueryUserListByParentCode(string parentCode);
     }
 }
