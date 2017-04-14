@@ -5,7 +5,7 @@
   "version": "1.0.0-*",
 
   "dependencies": {
-    "MsgPack.Cli": "0.8.0",
+    "MsgPack.Cli": "0.8.1",
     "NETStandard.Library": "1.6.1",
     "Newtonsoft.Json": "9.0.1"
   },

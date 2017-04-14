@@ -52,7 +52,7 @@ namespace UUAC.WebApp.Features.User
                 }
             }
 
-            PageView view = new PageView(search.page-1, search.rp);
+            PageView view = new PageView(search.page, search.rp);
             PagedList<IUserInfo> list = await this._service.QueryUserList(search.orgCode,search.qText, view);
             var ret = JsonQTable.ConvertFromPagedList(list.DataList,list.PageIndex,list.Total, search.colkey, search.colsArray);
             return Json(ret);
