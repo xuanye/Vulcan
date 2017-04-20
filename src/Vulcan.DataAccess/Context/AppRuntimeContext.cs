@@ -2,29 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Vulcan.Core;
 
 namespace Vulcan.DataAccess.Context
 {
     public static class AppRuntimeContext
     {
-        private static IHttpContextAccessor HttpContextAccessor;
-        public static void Configure(IHttpContextAccessor httpContextAccessor)
+        private static IRuntimeContextStorage _ctxStorage;
+        public static void Configure(IRuntimeContextStorage ctxStorage)
         {
-            HttpContextAccessor = httpContextAccessor;
+            _ctxStorage = ctxStorage;
 
         }
 
         public static bool Contains(string key)
         {
-            return HttpContextAccessor.HttpContext.Items.ContainsKey(key);
+            return _ctxStorage.ContainsKey(key);
         }
 
         public static void SetItem(string key,object item)
         {
             if (!Contains(key))
             {
-                HttpContextAccessor.HttpContext.Items[key] = item;
+                _ctxStorage.Set(key,item);
             }
 
         }
@@ -33,7 +33,7 @@ namespace Vulcan.DataAccess.Context
             object item = null;
             if (Contains(key))
             {
-                item = HttpContextAccessor.HttpContext.Items[key];
+                item =_ctxStorage.Get(key);
             }
             return item;
         }
@@ -41,7 +41,7 @@ namespace Vulcan.DataAccess.Context
         {
             if (Contains(key))
             {
-                HttpContextAccessor.HttpContext.Items.Remove(key);
+                _ctxStorage.Remove(key);
             }
         }
 

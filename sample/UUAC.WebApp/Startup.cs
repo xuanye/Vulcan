@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Vulcan.Core;
 using Vulcan.DataAccess;
 using Vulcan.DataAccess.Context;
 using NLog.Extensions.Logging;
@@ -42,7 +43,7 @@ namespace UUAC.WebApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-          
+
             // Add framework services.
             services.AddMvc(config =>
             {
@@ -87,7 +88,7 @@ namespace UUAC.WebApp
 
 
                 options.ViewLocationExpanders.Add(new FeatureViewLocationExpander());
-            }); 
+            });
 
 
             // Add memory cache services
@@ -101,7 +102,7 @@ namespace UUAC.WebApp
             {
                 services.AddSingleton<IDistributedCache, RedisCache>();
             }
-            
+
 
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -118,7 +119,7 @@ namespace UUAC.WebApp
             LocalRegistry.Registry(services);//注册本地服务
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            services.AddSingleton<IRuntimeContextStorage, AspNetMvcContext>();
             services.AddSingleton<IConnectionFactory, MySqlConnectionFactory>();
 
             //
@@ -134,12 +135,12 @@ namespace UUAC.WebApp
             loggerFactory.AddNLog(); //添加NLog支持
 
             //获取注入的当前运行时上下文，用于临时存放数据库连接
-            AppRuntimeContext.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
+            AppRuntimeContext.Configure(app.ApplicationServices.GetRequiredService<IRuntimeContextStorage>());
 
             //设置默认的数据库连接
             ConnectionFactoryHelper.Configure(app.ApplicationServices.GetRequiredService<IConnectionFactory>());
 
-            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -164,7 +165,7 @@ namespace UUAC.WebApp
                 AutomaticChallenge = true
             });
 
-            
+
             if (env.IsDevelopment())
             {
                 //开发模式下使用模拟用户
