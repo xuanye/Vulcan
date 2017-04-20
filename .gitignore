@@ -26,4 +26,5 @@ nuget.exe
 *.sln.ide
 project.lock.json
 .vs/
+.vscode/
 *.bak

@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Vulcan数据库访问类库 基于Dapper 默认支持Mysql和MsSql</Description>
+    <Copyright>Xuanye  2016</Copyright>
+    <AssemblyTitle>Vulcan数据库访问类库</AssemblyTitle>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>Vulcan.DataAccess</AssemblyName>
+    <PackageId>Vulcan.DataAccess</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Vulcan.Core\Vulcan.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+  </ItemGroup>
+
+</Project>
