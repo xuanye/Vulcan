@@ -9,22 +9,12 @@ namespace Vulcan.DataAccess.Context
     public static class AppRuntimeContext
     {
         private static IHttpContextAccessor HttpContextAccessor;
-        /// <summary>
-        /// 需要在初始化的时候设置httpContextAccessor的实例，AspNet Mvc Core StartUp.cs中
-        ///  public void Configure(IApplicationBuilder app)
-        /// {
-#pragma warning disable 1570
-        ///    AppRuntimeContext.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
-#pragma warning restore 1570
-        ///  }
-        /// </summary>
-        /// <param name="httpContextAccessor"></param>
         public static void Configure(IHttpContextAccessor httpContextAccessor)
         {
             HttpContextAccessor = httpContextAccessor;
-           
+
         }
-        
+
         public static bool Contains(string key)
         {
             return HttpContextAccessor.HttpContext.Items.ContainsKey(key);
@@ -36,7 +26,7 @@ namespace Vulcan.DataAccess.Context
             {
                 HttpContextAccessor.HttpContext.Items[key] = item;
             }
-           
+
         }
         public static object GetItem(string key)
         {
