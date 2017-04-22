@@ -1,4 +1,4 @@
-﻿using Vulcan.Core.Enities;
+﻿
 
 namespace Vulcan.DataAccess.ORMapping.MSSql
 {

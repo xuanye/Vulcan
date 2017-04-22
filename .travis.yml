@@ -1,0 +1,10 @@
+language: csharp
+mono: none
+dotnet: 1.0.1
+dist: trusty
+solution: ./src/Vulcan.DataAccess.sln
+install:
+  - dotnet restore ./src/Vulcan.DataAccess.sln
+script:
+  - dotnet build ./src/Vulcan.DataAccess.sln -c Release
+  - dotnet pack 
