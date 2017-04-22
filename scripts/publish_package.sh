@@ -2,7 +2,7 @@ set -ex
 
 cd $(dirname $0)/../src/
 
-artifactsFolder="../artifacts/"
+artifactsFolder="../artifacts"
 
 if [ -d $artifactsFolder ]; then
   rm -R $artifactsFolder
@@ -21,5 +21,5 @@ versionNumber="0.1.${revision}-alpha"
 dotnet pack ./Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release -o ../$artifactsFolder --version-suffix=$versionNumber
 
 if [ "$TRAVIS_BRANCH" == "master" ]; then
-    dotnet nuget push ./$artifactsFolder/Vulcan.DataAccess.${versionNumber}.nupkg -k $NUGET-KEY -s https://www.nuget.org
+    dotnet nuget push ../$artifactsFolder/Vulcan.DataAccess.${versionNumber}.nupkg -k $NUGET-KEY -s https://www.nuget.org
 fi
