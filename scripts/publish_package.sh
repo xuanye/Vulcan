@@ -23,5 +23,5 @@ dotnet pack ./Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release -o ../$artif
 pwd
 
 if [ "$TRAVIS_BRANCH" == "master" ]; then
-    dotnet nuget push ./$artifactsFolder/Vulcan.DataAccess.${versionNumber}.nupkg -k $NUGET-KEY -s https://www.nuget.org
+    dotnet nuget push ./$artifactsFolder/Vulcan.DataAccess.${versionNumber}.nupkg -k $NUGET_KEY -s https://www.nuget.org
 fi
