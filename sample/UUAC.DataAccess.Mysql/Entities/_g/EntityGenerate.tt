@@ -1,0 +1,16 @@
+﻿<#@ template debug="true" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ include file="Base.ttinclude" #>
+<#@ include file="MySql.ttinclude"  #>
+
+<#
+    ConnectionString = "server=10.240.225.136;port=3306;database=unified_user_access_control;uid=root;pwd=Welcome@456;charset=utf8;Connection Timeout=18000;";
+	DataProviderAssembly = @"..\..\..\Libs\mysql.data.dll" ;
+    Namespace       = "UUAC.DataAccess.Mysql.Entitis";
+    DataContextName = "DataContext";
+	BaseEntityClass = "UUAC.DataAccess.Mysql.Enities.BaseEntity";
+	RenderForeignKeys = false;
+	RenderBackReferences = false;
+    GenerateModel();
+
+#>

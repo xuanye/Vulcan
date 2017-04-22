@@ -1,0 +1,78 @@
+﻿@{
+    Layout = "../Shared/_Layout_For_Dailog";
+}
+@model UUAC.Entity.IOrganization
+@section styles{
+    <style type="text/css">
+        .control-label {
+            text-align: right;
+        }
+    </style>
+
+}
+<div class="choose">
+    <div class="choose-top">
+        <h4>@(string.IsNullOrEmpty(Model.OrgCode) ? "新建组织" : "修改组织信息")</h4>
+        <a href="javascript:;" id="btnClose" class="aclose">&times;</a>
+    </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12">
+            <form class="form-horizontal" method="post" action="@Url.Action("SaveOrg", new {type = string.IsNullOrEmpty(Model.OrgCode) ? 1 : 2})" id="frmEdit">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">上层组织:</label>
+                    <div class="col-xs-6">
+                        <span class="form_tip">@Model.ParentName</span>
+                        <input type="hidden" id="ParentCode" name="ParentCode" value="@Model.ParentCode" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">组织代码:</label>
+                    <div class="col-xs-6">
+                        <input type="text" id="OrgCode" name="OrgCode" value="@Model.OrgCode" placeholder="组织代码" class="form-control" @(string.IsNullOrEmpty(Model.OrgCode) ? "" : " readonly")/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">组织名称:</label>
+                    <div class="col-xs-6">
+                        <input type="text" id="OrgName" name="OrgName" value="@Model.OrgName" placeholder="组织名称" class="form-control"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">组织类型:</label>
+                    <div class="col-xs-6">
+                        <select asp-for="@Model.OrgType" rs-code="ORG_TYPE" has-all-option="true" class="form-control"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">备注:</label>
+                    <div class="col-xs-6">
+                        <textarea id="Remark" name="Remark" placeholder="备注内容（选填）" class="form-control">@Model.Remark</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">排序号:</label>
+                    <div class="col-xs-3">
+                        <input type="text" id="Sequence" name="Sequence" value="@Model.Sequence" placeholder="排序号" class="form-control"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="choose-bottom">
+        <button id="btnSave" class="btn btn-success btn-sm no-border"> 确 定 </button>
+        <button id="btnCancel" class="btn btn-white btn-default no-border"> 取 消 </button>
+    </div>
+    <input type="hidden" name="_csrf" id="_csrf" value="{_csrf}" />
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        window.options = {
+            saveUrl: "@Url.Action("SaveOrg")",
+            checkCodeUrl:"@Url.Action("CheckOrgCode" ,new {id = Model.OrgCode})"
+        }
+    </script>
+    <script src="~/js/app/org/edit.js"></script>
+
+}

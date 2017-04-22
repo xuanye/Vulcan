@@ -1,0 +1,31 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div style="margin:0 40px;">
+    <div style="margin-bottom:5px;float:right;">
+        <button id="btnAdd" class="btn btn-success btn-sm no-border">
+            <i class="ace-icon fa fa-plus-circle icon-on-right bigger-110"></i>
+            新建系统
+        </button>
+    </div>
+    <div style='clear:none;' id="list">
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        window.options = {
+            listUrl: "@Url.Action("QueryAppList")",
+            removeUrl:"@Url.Action("Remove")",
+            editUrl: "@Url.Action("Edit")"
+        }
+        window.setTimeout(function(){
+            $(document).trigger('ajaxscriptsloaded');
+        }, 10);
+    </script>
+    <script src="~/js/app/app/list.js"></script>
+
+}

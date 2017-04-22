@@ -1,0 +1,10 @@
+language: csharp
+mono: none
+dotnet: 1.0.1
+dist: trusty
+solution: ./src/Vulcan.DataAccess.sln
+install:
+  - dotnet restore ./src/Vulcan.DataAccess.sln
+script:
+  - bash ./scripts/publish_package.sh
+

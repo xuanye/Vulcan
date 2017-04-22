@@ -1,0 +1,110 @@
+﻿@{
+    Layout = "../Shared/_Layout_For_Dailog";
+}
+@model UUAC.Entity.IUserInfo
+@section styles{
+    <style type="text/css">
+        .control-label {
+            text-align: right;
+        }
+    </style>
+
+}
+<div class="choose">
+    <div class="choose-top">
+        <h4>@(string.IsNullOrEmpty(Model.UserUid) ? "新建用户" : "修改用户信息")</h4>
+        <a href="javascript:;" id="btnClose" class="aclose">&times;</a>
+    </div>
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12">
+            <form class="form-horizontal" method="post" action="@Url.Action("SaveUser", new {type = string.IsNullOrEmpty(Model.UserUid) ? 1 : 2})" id="frmEdit">
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">所属组织:</label>
+                    <div class="col-xs-6">
+                        <span id="OrgName" class="form_tip">@Model.OrgName</span>
+                        <a href="javascript:;" id="btnPOrg" class="choose-btn"><i class="glyphicon glyphicon-globe"></i></a>
+                        <input type="hidden" id="OrgCode" name="OrgCode" value="@Model.OrgCode" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">用户标识:</label>
+                    <div class="col-xs-6">
+                        <input type="text" id="UserUid" name="UserUid" value="@Model.UserUid" placeholder="用户标识" class="form-control" @(string.IsNullOrEmpty(Model.UserUid) ? "" : " readonly")/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">用户姓名:</label>
+                    <div class="col-xs-6">
+                        <input type="text" id="FullName" name="FullName" value="@Model.FullName" placeholder="用户姓名" class="form-control"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">登录密码:</label>
+                    <div class="col-xs-6">
+                        <input type="password" id="Password" name="Password" value="@Model.Password" placeholder="登录密码" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">工号:</label>
+                    <div class="col-xs-6">
+                        <input type="text" id="UserNum" name="UserNum" value="@Model.UserNum" placeholder="工号" class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">用户类型:</label>
+                    <div class="col-xs-6">
+                        <rs-radiobox asp-for="@Model.AccountType" rs-code="ACCOUNT_TYPE" item-class="ace" class="radio-box-group"></rs-radiobox>                        
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">性别:</label>
+                    <div class="col-xs-6">
+                        <rs-radiobox asp-for="@Model.Gender" rs-code="GENDER" item-class="ace" class="radio-box-group"></rs-radiobox>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">可见范围:</label>
+                    <div class="col-xs-6">
+                        <span id="ViewRootName" class="form_tip">@Model.ViewRootName</span>
+                        <a href="javascript:;" id="btnViewRootOrg" class="choose-btn"><i class="glyphicon glyphicon-globe"></i></a>
+                        <input type="hidden" id="ViewRootCode" name="ViewRootCode" value="@Model.ViewRootCode" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">是否有效:</label>
+                    <div class="col-xs-6">
+                        <div class="checkbox">
+                            <label>
+                                <input name="Status" type="checkbox"  value="1"  class="ace" @(Model.Status == 1 ? " checked" : "")>
+                                <span class="lbl"> 是</span>
+                            </label>
+                        </div>                     
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-3 control-label">排序号:</label>
+                    <div class="col-xs-3">
+                        <input type="text" id="Sequence" name="Sequence" value="@Model.Sequence" placeholder="排序号" class="form-control"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="choose-bottom">
+        <button id="btnSave" class="btn btn-success btn-sm no-border"> 确 定 </button>
+        <button id="btnCancel" class="btn btn-white btn-default no-border"> 取 消 </button>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        window.options = {
+            saveUrl: "@Url.Action("SaveUser")",
+            chooseOrgUrl:"@Url.Action("Choose","Org")",
+            checkCodeUrl:"@Url.Action("CheckUserUid" ,new {id = Model.UserUid})"
+        }
+    </script>
+    <script src="/js/plugin/choose.js"></script>
+    <script src="~/js/app/user/edit.js"></script>
+
+}

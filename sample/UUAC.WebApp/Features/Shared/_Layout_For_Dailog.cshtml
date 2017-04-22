@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta charset="utf-8" />
+    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/font-awesome.min.css" />
+    <!-- text fonts -->
+    <link rel="stylesheet" href="~/css/ace-fonts.css" />
+    <!-- ace styles -->
+    <link rel="stylesheet" href="~/css/ace.min.css" id="main-ace-style" />
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="~/css/ace-part2.min.css" />
+    <![endif]-->
+    <!--[if lte IE 9]>
+      <link rel="stylesheet" href="~/css/ace-ie.min.css" />
+    <![endif]-->
+    <!--common plugin css-->
+    <link rel="stylesheet" href="~/css/plugin/validator.css" />
+    <link rel="stylesheet" href="~/css/app.css"/>
+    <style type="text/css">
+        body {
+            background-color:#fff;
+        }
+    </style>
+    @RenderSection("styles", required: false)
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="~/js/lib/html5shiv.js"></script>
+    <script src="~/js/lib/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    @RenderBody()
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+            window.jQuery || document.write("<script src='/js/lib/jquery.min.js'>"+"<"+"/script>");
+    </script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script type="text/javascript">
+     window.jQuery || document.write("<script src='/js/lib/jquery1x.min.js'>"+"<"+"/script>");
+    </script>
+    <![endif]-->
+    <script src="~/js/lib/bootstrap.min.js"></script>
+    <!-- plugin scripts -->
+        <!-- app scripts -->
+    <script src="~/js/plugin/validator.js"></script>
+    <script src="~/js/app/app.js?v=20150211"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

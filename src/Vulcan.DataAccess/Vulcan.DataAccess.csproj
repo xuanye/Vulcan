@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Vulcan 基于Dapper.NET的数据库链接托管类库，支持数据库链接管理透明化，支持事务包装，内置支持Mysql和MSSQL数据库，可扩展支持其他数据库，只要Dapper支持即可</Description>
+    <Copyright>Xuanye @ 2016</Copyright>
+    <Authors>Xuanye</Authors>
+    <AssemblyTitle>Vulcan 基于Dapper.NET的数据库链接托管类库</AssemblyTitle>
+    <AssemblyName>Vulcan.DataAccess</AssemblyName>
+    <PackageId>Vulcan.DataAccess</PackageId>
+    <TargetFramework>netstandard1.4</TargetFramework>
+    <Version>$(VersionSuffix)</Version>
+    <NeutralLanguage>zh-CN</NeutralLanguage>
+
+
+    <PackageTags>Dapper,DAO,连接托管</PackageTags>
+    <PackageReleaseNotes>Vulcan 基于Dapper.NET的数据库链接托管类库</PackageReleaseNotes>
+    <PackageProjectUrl>https://github.com/xuanye/Vulcan</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/xuanye/Vulcan/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/xuanye/Vulcan</RepositoryUrl>
+
+
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Dapper" Version="1.50.2" />
+  </ItemGroup>
+</Project>

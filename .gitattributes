@@ -13,6 +13,7 @@
 *.png 	binary
 *.gif 	binary
 
+<<<<<<< HEAD
 *.cs text eol=crlf diff=csharp 
 *.html text=auto
 *.htm text=auto
@@ -24,3 +25,40 @@
 *.fsproj text=auto merge=union 
 *.dbproj text=auto merge=union 
 *.sln text=auto eol=crlf merge=union 
+=======
+*.cs text=auto diff=csharp 
+*.vb text=auto
+*.resx text=auto
+*.c text=auto
+*.cpp text=auto
+*.cxx text=auto
+*.h text=auto
+*.hxx text=auto
+*.py text=auto
+*.rb text=auto
+*.java text=auto
+*.html text=auto
+*.htm text=auto
+*.css text=auto
+*.scss text=auto
+*.sass text=auto
+*.less text=auto
+*.js text=auto
+*.lisp text=auto
+*.clj text=auto
+*.sql text=auto
+*.php text=auto
+*.lua text=auto
+*.m text=auto
+*.asm text=auto
+*.erl text=auto
+*.fs text=auto
+*.fsx text=auto
+*.hs text=auto
+
+*.csproj text=auto
+*.vbproj text=auto
+*.fsproj text=auto
+*.dbproj text=auto
+*.sln text=auto eol=crlf
+>>>>>>> develop

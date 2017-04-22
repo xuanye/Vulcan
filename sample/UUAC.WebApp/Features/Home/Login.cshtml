@@ -1,0 +1,183 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width"/>
+    <link rel="stylesheet" href="~/css/bootstrap.min.css" type="text/css"/>
+    <link  rel="stylesheet"  href="~/css/font-awesome.min.css" type="text/css" />
+    <title></title>
+    <style>
+    html, body {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+        font-family: "Microsoft YaHei",Helvetica,Arial,SimSun;
+    }
+
+    .container {
+        position: relative;
+        overflow-x: auto;
+        overflow-y: hidden;
+        width: 100%;
+        height: 100%;
+        background: #ebedf0 url("/img/login_bg.jpg");
+        background-position: center;
+        background-size: cover;
+        padding-top: 6%;
+    }
+
+    .form-signin {
+        max-width: 330px;
+        padding: 15px;
+        margin: 0 auto;
+    }
+
+    .form-signin .form-signin-heading,
+    .form-signin .checkbox {
+        margin-bottom: 10px;
+    }
+
+    .form-signin .checkbox {
+        font-weight: normal;
+    }
+
+    .form-signin .form-control {
+        position: relative;
+        height: auto;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 10px;
+        font-size: 16px;
+    }
+
+    .form-signin .form-control:focus {
+        z-index: 2;
+    }
+
+    .form-signin input[type="text"] {
+        margin-bottom: 10px;
+    }
+
+    .form-signin input[type="password"] {
+        margin-bottom: 10px;
+    }
+
+    .form-signin label {
+        font-weight: normal;
+        font-size: 16px;
+    }
+
+    .form-wrap {
+        width: 440px;
+        margin: 0 auto;
+        margin-top: 150px;
+    }
+
+    .appName {
+        margin-bottom: 10px;
+        font-size: 26px;
+        color: #fff;
+    }
+
+    .form-signin-heading {
+    font-size: 24px;
+    }
+
+    .appName .fa {
+        font-size: 28px;
+        color: #93cbf9;
+        margin-right: 10px;
+    }
+
+    .form-body {
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 25px 0 20px 0;
+        -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.13);
+        -ms-box-shadow: 0 1px 3px rgba(0,0,0,.13);
+        box-shadow: 0 1px 3px rgba(0,0,0,.13);
+    }
+
+    .light-red {
+        color: #f77 !important;
+    }
+
+    .form-body-wrap {
+        width: 456px;
+        padding: 8px;
+        background-color: #ccc;
+    }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-wrap">
+            <div class="appName">
+                <i class="fa fa-leaf fa-fw"></i>统一用户和授权管理系统
+            </div>
+
+            <div class="form-body-wrap">
+                <div class="form-body">
+                    <form class="form-signin" action="@Url.Action("Login")" method="post" name="formLogin" id="formLogin">
+                        <label for="UserId">用户名：</label>
+                        <input type="text" id="UserId" name="UserId" class="form-control" placeholder="用户名" value="" />
+                        <label for="Password">密码：</label>
+                        <input type="password" id="Password" class="form-control" name="Password" placeholder="密码" value="" />
+                        <button class="btn btn-lg btn-success btn-block" id="btnLogin" type="button"><i class="fa fa-unlock"></i> &nbsp;Login</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div> <!-- /container -->
+
+    <script src="~/js/lib/jquery.min.js"></script>
+    <script src="~/js/lib/bootstrap.min.js"></script>
+    <script src="~/js/app/app.js"></script>
+    <script type="text/javascript">
+
+        $(function () {
+            $("#btnLogin").click(function (e) {
+                var me = $(this);
+                var userid = $("#UserId").val();
+                var password = $("#Password").val();
+                if (!userid) {
+                    alert("用户不为空！");
+                    return;
+                }
+                if (!password) {
+                    alert("密码不能为空！");
+                    return;
+                }
+                var form = $("#formLogin")[0];
+
+                me.html("正在验证...");
+                $.ajax({
+                    url: form.action,
+                    type: form.method,
+                    data: { UserId: userid, Password: password },
+                    success: function (ret) {
+                        if (ret.status === 0) {
+                            location.href = "/!ajax";
+                        }
+                        else {
+                            alert(ret.message);
+                            me.html('<i class="fa fa-unlock"></i> &nbsp;Login');
+                        }
+                    },
+                    error: function (result) {
+                        alert("提交表单失败：" + result);
+                        me.html('<i class="fa fa-unlock"></i> &nbsp;Login');
+                    }
+                });
+            });
+        })
+    </script>
+
+</body>
+</html>

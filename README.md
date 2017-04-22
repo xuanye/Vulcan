@@ -1,5 +1,6 @@
-# vulcan
+# Vulcan
 
+<<<<<<< HEAD
 * * *
 
 Vulcan 基于[Dapper.NET][1]的数据库链接托管类库，支持数据库链接管理透明化，支持事务包装，内置支持Mysql和MSSQL数据库，可扩展支持其他数据库，只要Dapper支持即可
@@ -265,3 +266,5 @@ public class UserInfoService
   [2]: https://github.com/StackExchange/dapper-dot-net
   [3]: https://github.com/xuanye/vulcan/tree/master/sample/template/mysql
   [4]: https://github.com/xuanye/vulcan/tree/master/sample/template/sqlserver
+=======
+>>>>>>> develop

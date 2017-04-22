@@ -1,0 +1,44 @@
+﻿@{
+    Layout = "../Shared/_Layout_For_Dailog";
+}
+
+@section styles{
+    <link rel="stylesheet" href="/css/plugin/xjgrid.css" />
+    <style type="text/css">
+ 
+    </style>
+
+}
+<div class="choose">
+    <div class="choose-top">
+        <h4>角色用户</h4>
+        <a href="javascript:;" id="btnClose" class="aclose">&times;</a>
+    </div>
+    <div style="margin:10px 10px 0 10px">
+        
+        <div style="position:relative">
+            <a style="position:absolute;left:10px;top:6px;"><i class="fa fa-search"></i></a>
+            <input type="text" class="form-control" id="btnQuery" style="padding-left:25px;width:250px;" placeholder="输入账号或姓名过滤">
+            <div style="position:absolute;right:10px;top:5px;width:100px"><a id="btnAddRoleUser" class="btn btn-block btn-no-border btn-success"><i class="fa fa-plus-circle fa-fw"></i> 添加用户 </a></div>
+            
+        </div>
+        
+        <div style="margin-top:10px;">
+            <div id="glist"></div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+        window.options = {
+            roleCode:"@ViewBag.RoleCode",
+            listUrl: "@Url.Action("QueryRoleUsers")",
+            chooseUserUrl:"@Url.Action("ChooseUser","User")"
+        }
+    </script>
+    <script src="/js/plugin/choose.js"></script>
+    <script src="/js/plugin/xjgrid.js"></script>
+    <script src="~/js/app/role/roleusers.js"></script>
+
+}
