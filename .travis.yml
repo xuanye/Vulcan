@@ -6,5 +6,5 @@ solution: ./src/Vulcan.DataAccess.sln
 install:
   - dotnet restore ./src/Vulcan.DataAccess.sln
 script:
-  - dotnet build ./src/Vulcan.DataAccess.sln -c Release
-  - dotnet pack 
+  - bash ./scripts/publish_package.sh
+
