@@ -7,7 +7,7 @@
     <AssemblyTitle>Vulcan 基于Dapper.NET的数据库链接托管类库</AssemblyTitle>
     <AssemblyName>Vulcan.DataAccess</AssemblyName>
     <PackageId>Vulcan.DataAccess</PackageId>
-    <TargetFramework>netstandard1.4</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Version>$(VersionSuffix)</Version>
     <NeutralLanguage>zh-CN</NeutralLanguage>
 
