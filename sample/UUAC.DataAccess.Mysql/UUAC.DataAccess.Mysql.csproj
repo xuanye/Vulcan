@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>UUAC.DataAccess.Mysql</AssemblyName>
     <PackageId>UUAC.DataAccess.Mysql</PackageId>
     <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
@@ -12,11 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Vulcan.DataAccess\Vulcan.DataAccess.csproj" />
     <ProjectReference Include="..\UUAC.Common\UUAC.Common.csproj" />
     <ProjectReference Include="..\UUAC.Entity\UUAC.Entity.csproj" />
     <ProjectReference Include="..\UUAC.Interface\UUAC.Interface.csproj" />
-    <ProjectReference Include="..\..\src\Vulcan.Core\Vulcan.Core.csproj" />
-    <ProjectReference Include="..\..\src\Vulcan.DataAccess\Vulcan.DataAccess.csproj" />
   </ItemGroup>
 
 </Project>

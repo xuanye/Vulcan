@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UUAC.Entity;
-using Vulcan.Core.Enities;
+using Vulcan.DataAccess;
 
 namespace UUAC.Interface.Repository
 {

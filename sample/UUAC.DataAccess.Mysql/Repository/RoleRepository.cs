@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using UUAC.DataAccess.Mysql.Entitis;
 using UUAC.Entity;
 using UUAC.Interface.Repository;
-using Vulcan.Core.Enities;
+using Vulcan.DataAccess;
 
 namespace UUAC.DataAccess.Mysql.Repository
 {
