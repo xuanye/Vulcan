@@ -25,6 +25,6 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="1.50.2" />
+    <PackageReference Include="Dapper" Version="1.50.4" />
   </ItemGroup>
 </Project>

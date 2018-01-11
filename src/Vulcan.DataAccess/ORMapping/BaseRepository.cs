@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -68,6 +68,17 @@ namespace Vulcan.DataAccess.ORMapping
             return ret;
         }
 
+        public async Task<int> BatchInsertAsync<T>(List<T> list) where T : AbstractBaseEntity
+        {
+            int ret = -1;
+            if (list != null && list.Count > 0)
+            {
+                string sql = list[0].GetInsertSQL();
+                ret = await ExcuteAsync(sql, list);
+            }
+            return ret;
+        }
+
         public int Update(AbstractBaseEntity model)
         {
             return Excute(model.GetUpdateSQL(), model);
@@ -93,6 +104,16 @@ namespace Vulcan.DataAccess.ORMapping
             return ret;
         }
 
+        public async Task<int> BatchUpdateAsync<T>(List<T> list) where T : AbstractBaseEntity
+        {
+            int ret = -1;
+            if (list != null && list.Count > 0)
+            {
+                string sql = list[0].GetUpdateSQL();
+                ret = await ExcuteAsync(sql, list);
+            }
+            return ret;
+        }
         protected int Excute(string sql, object paras)
         {
             int ret;
