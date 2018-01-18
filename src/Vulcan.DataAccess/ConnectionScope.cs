@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,17 +12,17 @@ namespace Vulcan.DataAccess
         private ConnectionManager _connectionManager;
         //private IConnectionFactory _dbFactory;
 
-        public ConnectionScope(string constr) : this(constr, null)
+        public ConnectionScope(IConnectionManagerFactory mgr, string constr) : this(mgr,constr, null)
         {
         }
 
-        public ConnectionScope(string constr, IConnectionFactory factory )
+        public ConnectionScope(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory )
         {
        
             this._conStr = constr;
             _connectionManager = factory == null ?
-               ConnectionManager.GetManager(constr)
-               : ConnectionManager.GetManager(factory, constr);
+               mgr.GetConnectionManager(constr)
+               : mgr.GetConnectionManager(factory, constr);
             //this._dbFactory = factory;
         }
   

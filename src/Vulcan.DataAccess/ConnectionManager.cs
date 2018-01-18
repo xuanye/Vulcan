@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using Vulcan.DataAccess.Context;
 
@@ -16,6 +16,7 @@ namespace Vulcan.DataAccess
         private IDbConnection _connection;
         private IDbTransaction _transaction;
         private string _uuid;
+        private readonly IRuntimeContextStorage _ctxStorage;
         public IDbConnection Connection
         {
             get
@@ -34,49 +35,22 @@ namespace Vulcan.DataAccess
 
         #endregion 属性和字段
 
-        #region 静态方法
-
-        public static ConnectionManager GetManager(string connectionString)
-        {
-            return GetManager(null, connectionString);
-        }
-        public static ConnectionManager GetManager(IConnectionFactory factory,string connectionString)
-        {
-            ConnectionManager mgr;
-            if (!AppRuntimeContext.Contains(connectionString))
-            {
-                lock (_lock)
-                {
-                    if (!AppRuntimeContext.Contains(connectionString))
-                    {
-                        mgr = new ConnectionManager(factory, connectionString);
-                        AppRuntimeContext.SetItem(connectionString, mgr);
-                    }
-                }
-            }
-            mgr = (ConnectionManager)AppRuntimeContext.GetItem(connectionString);
-
-            mgr.AddRef();
-            return mgr;
-        }
-        #endregion 静态方法
 
         #region 构造
 
-        private ConnectionManager(IConnectionFactory factory, string connectionString)
+        internal ConnectionManager(IConnectionFactory factory, string connectionString, IRuntimeContextStorage ctxStorage)
         {
             _dbConnectionString = connectionString;
+            _ctxStorage = ctxStorage;
 
-            _connection = factory == null ? 
-                ConnectionFactoryHelper.CreateDefaultDbConnection(connectionString) 
-                : factory.CreateDbConnection(connectionString);
+            _connection = factory.CreateDbConnection(connectionString);
            
             if (_connection.State != ConnectionState.Open)
             {
                 _connection.Open();
             }
 
-            _uuid = new Guid().ToString("D");
+            _uuid = new Guid().ToString("N");
         }
         #endregion 构造
 
@@ -104,7 +78,7 @@ namespace Vulcan.DataAccess
             get { return _refCount; }
         }
 
-        private void AddRef()
+        internal void AddRef()
         {
             _refCount += 1;
         }
@@ -118,7 +92,8 @@ namespace Vulcan.DataAccess
                 {
                     if (_connection != null && _connection.State != ConnectionState.Closed)
                         _connection.Close();//Dispose
-                    AppRuntimeContext.RemoveItem(_dbConnectionString);
+
+                    _ctxStorage.Remove(_dbConnectionString);
                 }
             }
         }

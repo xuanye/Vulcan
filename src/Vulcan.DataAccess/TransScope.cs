@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 
 namespace Vulcan.DataAccess
@@ -15,17 +15,17 @@ namespace Vulcan.DataAccess
         /// </summary>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="option">The option.</param>
-        public TransScope(string connectionString, TransScopeOption option = TransScopeOption.Required)
-            :this(null, connectionString, option)
+        public TransScope(IConnectionManagerFactory mgr,string connectionString, TransScopeOption option = TransScopeOption.Required)
+            :this(mgr, null, connectionString, option)
         {
             _option = option;
         }
 
-        public TransScope(IConnectionFactory factory,string connectionString, TransScopeOption option = TransScopeOption.Required)
+        public TransScope(IConnectionManagerFactory mgr, IConnectionFactory factory,string connectionString, TransScopeOption option = TransScopeOption.Required)
         {
-            _connectionManager = factory == null ? 
-                ConnectionManager.GetManager(connectionString) 
-                : ConnectionManager.GetManager(factory, connectionString);
+            _connectionManager = factory == null ?
+                mgr.GetConnectionManager(connectionString) 
+                : mgr.GetConnectionManager(factory, connectionString);
 
             if (!_connectionManager.IsExistDbTransaction() || option == TransScopeOption.RequiresNew)
             {

@@ -9,18 +9,21 @@ namespace Vulcan.DataAccess.ORMapping
 {
     public abstract class BaseRepository
     {
-        protected BaseRepository(string constr)
+        protected BaseRepository(IConnectionManagerFactory mgr,string constr)
+            : this(mgr, null, constr)
         {
-            this._conStr = constr;
+
         }
-        protected BaseRepository(IConnectionFactory factory,string constr)
+       
+        protected BaseRepository(IConnectionManagerFactory mgr,IConnectionFactory factory,string constr)
         {
             this._conStr = constr;
             this._dbFactory = factory;
         }
+
         private readonly IConnectionFactory _dbFactory;
         private readonly string _conStr;
-
+        private readonly IConnectionManagerFactory _mgr;
         /// <summary>
         /// 如果主键是自增返回插入主键 否则返回0
         /// </summary>
@@ -114,6 +117,26 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return ret;
         }
+
+        /// <summary>
+        /// 开启一个事务
+        /// </summary>
+        /// <param name="option"></param>
+        /// <returns></returns>
+        public TransScope BeginTransScope(TransScopeOption option = TransScopeOption.Required)
+        {
+            return new TransScope(this._mgr,this._dbFactory,this._conStr, option);
+        }
+
+        /// <summary>
+        /// 开启一个数据库操作模块，模块中的数据操作，将共用同一个链接，当然如果是同一个链接的话
+        /// </summary>
+        /// <returns></returns>
+        public ConnectionScope BeginConnectionScope()
+        {
+            return new ConnectionScope(this._mgr, this._conStr, this._dbFactory);
+        }
+
         protected int Excute(string sql, object paras)
         {
             int ret;
@@ -123,6 +146,7 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return ret;
         }
+
         protected int Excute(string sql,int timeOut, object paras)
         {
             int ret;
@@ -179,15 +203,15 @@ namespace Vulcan.DataAccess.ORMapping
         }
 
 
-        protected Task<List<T>> QueryAsync<T>(string sql, object paras)
+        protected async Task<List<T>> QueryAsync<T>(string sql, object paras)
         {
-            Task<List<T>> task;
+            var list = default(List<T>);
             using (ConnectionManager mgr = GetConnection())
             {
-                task = mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, null, CommandType.Text)
-                   .ContinueWith<List<T>>(x => x.Result.ToList());
+                var qlist= await mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, null, CommandType.Text);
+                list = qlist.ToList();
             }
-            return task;
+            return list;
         }
 
 
@@ -201,15 +225,15 @@ namespace Vulcan.DataAccess.ORMapping
             return list;
         }
 
-        protected Task<List<T>> QueryAsync<T>(string sql, int timeOut, object paras)
+        protected async Task<List<T>> QueryAsync<T>(string sql, int timeOut, object paras)
         {
-            Task<List<T>> task;
+            List<T> list;
             using (ConnectionManager mgr = GetConnection())
             {
-                task = mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, timeOut, CommandType.Text)
-                   .ContinueWith<List<T>>(x => x.Result.ToList());
+                var qlist = await mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, timeOut, CommandType.Text);
+                list = qlist.ToList();
             }
-            return task;
+            return list;
         }
 
 
@@ -243,41 +267,38 @@ namespace Vulcan.DataAccess.ORMapping
             return list;
         }
 
-
-
-
-        protected Task<List<T>> QueryAsync<T, T1>(string sql, object paras, Func<T, T1, T> parse, string splitOn)
+        protected async Task<List<T>> QueryAsync<T, T1>(string sql, object paras, Func<T, T1, T> parse, string splitOn)
         {
-            Task<List<T>> task;
+            List<T> list;
             using (ConnectionManager mgr = GetConnection())
             {
-                task = mgr.Connection.QueryAsync<T, T1, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text)
-                    .ContinueWith<List<T>>(x => x.Result.ToList());
+                var qlist = await mgr.Connection.QueryAsync<T, T1, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text);
+                list = qlist.ToList();                  
             }
-            return task;
+            return list;
 
         }
 
-        protected Task<List<T>> QueryAsync<T, T1, T2>(string sql, object paras, Func<T, T1, T2, T> parse, string splitOn)
+        protected async Task<List<T>> QueryAsync<T, T1, T2>(string sql, object paras, Func<T, T1, T2, T> parse, string splitOn)
         {
-            Task<List<T>> task;
+            List<T> list;
             using (ConnectionManager mgr = GetConnection())
             {
-                task = mgr.Connection.QueryAsync<T, T1, T2, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text)
-                    .ContinueWith<List<T>>(x => x.Result.ToList());
+                var qlist = await mgr.Connection.QueryAsync<T, T1, T2, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text);
+                list = qlist.ToList();
             }
-            return task;
+            return list;
         }
 
-        protected Task<List<T>> QueryAsync<T, T1, T2, T3>(string sql, object paras, Func<T, T1, T2, T3, T> parse, string splitOn)
+        protected async Task<List<T>> QueryAsync<T, T1, T2, T3>(string sql, object paras, Func<T, T1, T2, T3, T> parse, string splitOn)
         {
-            Task<List<T>> task;
+            List<T> list;
             using (ConnectionManager mgr = GetConnection())
             {
-                task = mgr.Connection.QueryAsync<T, T1, T2, T3, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text)
-                    .ContinueWith<List<T>>(x => x.Result.ToList());
+                var qlist = await mgr.Connection.QueryAsync<T, T1, T2, T3, T>(sql, parse, paras, mgr.Transaction, false, splitOn, 60000, CommandType.Text);
+                list = qlist.ToList();
             }
-            return task;
+            return list;
         }
 
 
@@ -340,7 +361,7 @@ namespace Vulcan.DataAccess.ORMapping
 
         protected ConnectionManager GetConnection()
         {
-            return _dbFactory != null ? ConnectionManager.GetManager(_dbFactory, this._conStr) : ConnectionManager.GetManager(this._conStr);
+            return _mgr.GetConnectionManager(_dbFactory, this._conStr);
         }
     }
 }

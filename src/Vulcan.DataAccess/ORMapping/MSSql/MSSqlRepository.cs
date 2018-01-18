@@ -1,4 +1,4 @@
-﻿
+
 
 namespace Vulcan.DataAccess.ORMapping.MSSql
 {
@@ -8,13 +8,13 @@ namespace Vulcan.DataAccess.ORMapping.MSSql
         /// Initializes a new instance of the <see cref="MSSqlRepository"/> class.
         /// </summary>
         /// <param name="constr">The constr.</param>
-        public MSSqlRepository(string constr)
-            : base(constr)
+        public MSSqlRepository(IConnectionManagerFactory cmFactory, string constr)
+            : base(cmFactory,constr)
         {
         }
 
-        protected MSSqlRepository(IConnectionFactory factory, string constr)
-            :base(factory,constr)
+        protected MSSqlRepository(IConnectionManagerFactory cmFactory,IConnectionFactory factory, string constr)
+            :base(cmFactory,factory, constr)
         {
             
         }

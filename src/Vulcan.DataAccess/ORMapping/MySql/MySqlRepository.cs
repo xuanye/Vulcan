@@ -1,15 +1,16 @@
-﻿using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Vulcan.DataAccess.ORMapping.MySql
 {
     public class MySqlRepository : BaseRepository
     {
-        public MySqlRepository(string constr)
-            : base(constr)
+        public MySqlRepository(IConnectionManagerFactory cmFactory,string constr)
+            : base(cmFactory,constr)
         {
         }
-        protected MySqlRepository(IConnectionFactory factory, string constr)
-            :base(factory,constr)
+        protected MySqlRepository(IConnectionManagerFactory cmFactory,IConnectionFactory factory, string constr)
+            :base(cmFactory,factory, constr)
         {
 
         }
@@ -33,6 +34,14 @@ namespace Vulcan.DataAccess.ORMapping.MySql
             {
                 string totalSql = string.Format(" select count(1) from {0} where 1=1 {1} ;", sqlTable, sqlCondition);
                 totalCount = Get<long>(totalSql, param);
+                if (totalCount == 0)
+                {
+                    pList.DataList = new List<T>();
+                    pList.Total = 0;
+                    pList.PageIndex = view.PageIndex;
+                    pList.PageSize = view.PageSize;
+                    return pList;
+                }
             }
 
             if (string.IsNullOrEmpty(sqlOrder))
@@ -57,7 +66,16 @@ namespace Vulcan.DataAccess.ORMapping.MySql
             {
                 string totalSql = string.Format(" select count(1) from {0} where 1=1 {1} ;", sqlTable, sqlCondition);
                 totalCount = await GetAsync<long>(totalSql, param);
+                if (totalCount == 0)
+                {
+                    pList.DataList = new List<T>();
+                    pList.Total = 0;
+                    pList.PageIndex = view.PageIndex;
+                    pList.PageSize = view.PageSize;
+                    return pList;
+                }
             }
+
 
             if (string.IsNullOrEmpty(sqlOrder))
             {
