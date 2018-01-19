@@ -1,6 +1,5 @@
 using System;
 using System.Data;
-using Vulcan.DataAccess.Context;
 
 namespace Vulcan.DataAccess
 {
@@ -17,6 +16,7 @@ namespace Vulcan.DataAccess
         private IDbTransaction _transaction;
         private string _uuid;
         private readonly IRuntimeContextStorage _ctxStorage;
+
         public IDbConnection Connection
         {
             get
@@ -35,7 +35,6 @@ namespace Vulcan.DataAccess
 
         #endregion 属性和字段
 
-
         #region 构造
 
         internal ConnectionManager(IConnectionFactory factory, string connectionString, IRuntimeContextStorage ctxStorage)
@@ -44,7 +43,7 @@ namespace Vulcan.DataAccess
             _ctxStorage = ctxStorage;
 
             _connection = factory.CreateDbConnection(connectionString);
-           
+
             if (_connection.State != ConnectionState.Open)
             {
                 _connection.Open();
@@ -52,6 +51,7 @@ namespace Vulcan.DataAccess
 
             _uuid = new Guid().ToString("N");
         }
+
         #endregion 构造
 
         #region public
