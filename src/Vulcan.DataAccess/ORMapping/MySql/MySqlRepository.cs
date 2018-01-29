@@ -99,11 +99,11 @@ namespace Vulcan.DataAccess.ORMapping.MySql
             base.Excute(sql, entity);
         }
 
-        public void ReplaceIntoAsync(MySqlEntity entity)
+        public Task ReplaceIntoAsync(MySqlEntity entity)
         {
             string sql = entity.GetReplaceInsertSQL();
 
-            base.ExcuteAsync(sql, entity);
+            return base.ExcuteAsync(sql, entity);
         }
     }
 }
