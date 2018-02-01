@@ -1,8 +1,5 @@
 # Vulcan
 ---
-# vulcan
-
-* * *
 
 Vulcan 基于[Dapper.NET][1]的数据库链接托管类库，支持数据库链接管理透明化，支持事务包装，内置支持Mysql和MSSQL数据库，可扩展支持其他数据库，只要Dapper支持即可
 
@@ -63,13 +60,14 @@ ConnectionFactory.Default = new SqlConnectionFactory();
 `Vulcan` 中内部已经实现了SQl SERVER 的ConnectionFactory，如果你使用Mysql的话 需要，添加引用`MySql.Data`，并将下面的类复制到你的应用程序中：
 
 ```CSharp
-   public class MySqlConnectionFactory : ConnectionFactory
+ public class MySqlConnectionFactory: IConnectionFactory
+ {
+    public IDbConnection CreateDbConnection(string connectionString)
     {
-        protected override IDbConnection CreateDefaultDbConnection(string connectionString)
-        {
-            return new MySqlConnection(connectionString);
-        }
+       return new MySqlConnection(connectionString);
     }
+ }
+
 ```
 
 然后在Startup设置：
