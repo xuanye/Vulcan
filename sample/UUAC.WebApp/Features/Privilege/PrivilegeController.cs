@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +34,6 @@ namespace UUAC.WebApp.Features.Privilege
         [HttpPost]
         public async Task<IActionResult> QueryPrivilegeTree([FromForm]string id,[FromForm]string value)
         {
-
             string appCode = value;
             string pCode = id == value ? "" : id;
 

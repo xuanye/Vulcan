@@ -1,4 +1,5 @@
-﻿using System;
+using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,9 +11,11 @@ namespace UUAC.WebApp.Libs
     public class AppContextService: IAppContextService
     {
         private readonly ISystemService _service;
-        public AppContextService(ISystemService service)
+        private readonly IHttpContextAccessor _contextAccessor;
+        public AppContextService(ISystemService service, IHttpContextAccessor contextAccessor)
         {
             this._service = service;
+            this._contextAccessor = contextAccessor;
         }
         public Task<bool> HasPrivilege(string identity, string privilegeCode)
         {
@@ -20,9 +23,22 @@ namespace UUAC.WebApp.Libs
             
         }
 
-        public Task<bool> IsInRole(string identity, string roleCode)
+        public async Task<bool> IsInRole(string identity, string roleCode)
         {
-            return this._service.IsInRole(identity, roleCode);
+            string roleKey = $"HAS_{roleCode}";
+            object hasValue;
+            if (_contextAccessor.HttpContext.Items.TryGetValue(roleKey, out hasValue))
+            {
+                if(hasValue != null){
+                    return (bool)hasValue;
+                }
+            }
+            
+            var hasRole = await this._service.IsInRole(identity, roleCode);
+
+            _contextAccessor.HttpContext.Items[roleKey] = hasRole;
+
+            return hasRole;
         }
 
         public async Task<AppUser> GetUserInfo(string identity)

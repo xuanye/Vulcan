@@ -1,4 +1,4 @@
-﻿@{
+@{
     Layout = "../Shared/_Layout_For_Dailog";
 }
 
@@ -30,13 +30,15 @@
 </div>
 
 @section scripts{
-    <script type="text/javascript">
-        window.options = {
-            roleCode:"@ViewBag.RoleCode",
-            listUrl: "@Url.Action("QueryRoleUsers")",
-            chooseUserUrl:"@Url.Action("ChooseUser","User")"
-        }
-    </script>
+<script type="text/javascript">
+    window.options = {
+        roleCode: "@ViewBag.RoleCode",
+        addRoleUserUrl: "@Url.Action("AddRoleUsers")",
+        listUrl: "@Url.Action("QueryRoleUsers")",
+        removeUrl:"@Url.Action("RemoveRoleUser")",
+        chooseUserUrl: "@Url.Action("ChooseUser","User")"
+    };
+</script>
     <script src="/js/plugin/choose.js"></script>
     <script src="/js/plugin/xjgrid.js"></script>
     <script src="~/js/app/role/roleusers.js"></script>

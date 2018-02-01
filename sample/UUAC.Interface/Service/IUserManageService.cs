@@ -17,5 +17,7 @@ namespace UUAC.Interface.Service
         Task<int> RemoveUserInfo(string userId);
         Task<List<IOrganization>> QueryOrgTreeByParentCode(string parentCode);
         Task<List<IUserInfo>> QueryUserListByParentCode(string parentCode);
+
+        Task<int> CheckLogin(string userId, string password);
     }
 }

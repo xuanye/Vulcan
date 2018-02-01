@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -93,7 +93,7 @@ namespace UUAC.WebApp.Features.Org
         [HttpPost]
         public async Task<IActionResult> QueryOrgTree([FromForm]string id)
         {
-            bool isRootNode = string.IsNullOrEmpty(id) || id == rootId;
+            bool isRootNode = string.IsNullOrEmpty(id) ;
             if (isRootNode) // 根组织
             {
                 isRootNode = true;

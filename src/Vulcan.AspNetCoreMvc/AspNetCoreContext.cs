@@ -1,23 +1,20 @@
 
 using System;
 using Microsoft.AspNetCore.Http;
-using Vulcan.Core;
+using Vulcan.DataAccess;
 
 namespace Vulcan.AspNetCoreMvc
 {
-    public class AspNetMvcContext:IRuntimeContextStorage
+    public class AspNetCoreContext:IRuntimeContextStorage
     {
         private readonly IHttpContextAccessor _context;
-        public AspNetMvcContext(IHttpContextAccessor context){
+        public AspNetCoreContext(IHttpContextAccessor context){
             _context = context;
         }
 
-        public object Get(string key){
-            object item = null;
-            if(ContainsKey(key)){
-                return _context.HttpContext.Items[key];
-            }
-            return item;
+        public object Get(string key){           
+           
+            return _context.HttpContext.Items[key];           
         }
 
         public void Set(string key, object item){
@@ -25,9 +22,8 @@ namespace Vulcan.AspNetCoreMvc
         }
 
         public void Remove(string key){
-            if(ContainsKey(key)){
-                _context.HttpContext.Items.Remove(key);
-            }
+           
+           _context.HttpContext.Items.Remove(key);            
         }
 
 

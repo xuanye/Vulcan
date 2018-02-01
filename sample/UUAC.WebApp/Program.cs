@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -10,23 +11,24 @@ namespace UUAC.WebApp
 {
     public class Program
     {
-        public static void Main(string[] args)
+     
+        static void Main(string[] args)
         {
-            var config = new ConfigurationBuilder()
-                        .AddJsonFile("hosting.json", optional: true)
-                        .AddCommandLine(args)
-                        .AddEnvironmentVariables(prefix: "ASPNETCORE_")
-                        .Build();
+            BuildWebHost(args).Run();
+        }
 
-            var host = new WebHostBuilder()
-                .UseConfiguration(config)
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
-                .UseStartup<Startup>()
+        public static IWebHost BuildWebHost(string[] args) {
+
+            var hostingConfig = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("hosting.json", optional: true)
                 .Build();
 
-            host.Run();
+            return WebHost.CreateDefaultBuilder(args)
+               .UseConfiguration(hostingConfig)
+               .UseStartup<Startup>()
+               .Build();
         }
+           
     }
 }

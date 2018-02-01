@@ -1,4 +1,4 @@
-﻿(function (window, $, factory) {
+(function (window, $, factory) {
     if (typeof define === 'function') {
         // 如果define已被定义，模块化代码
         define('app/role/roleusers', function (require, exports, module) {
@@ -58,8 +58,17 @@
             height: 450,
             blackBG: false,
             caption: '选择用户',
-            onclose: function (item) {
-            
+            onclose: function (users) {
+                if (users && users.length > 0) {
+                    var userids = users.join(",");
+                    post(opt.addRoleUserUrl, { "roleCode": opt.roleCode, "userIds": userids },
+                        function (data) {
+                            if (data.status ==0) {
+                                xjgrid.Reload();
+                            }
+                        }
+                    );                   
+                }
             }
         });
     });
@@ -81,14 +90,14 @@
         if (!confirm("你确定要该角色中移除当前用户吗？")) {
             return false;
         }
-        var url = opt.removeUrl + "/" + Id;
+        var url = opt.removeUrl + "/" + Id+"?roleCode="+ opt.roleCode ;
         post(url, null, function (ret) {
             if (ret && ret.status === 0) {
-                showSuccess("操作成功", "删除成功", true);
+               
                 xjgrid.Reload();
             }
             else {
-                showError("操作失败", ret ? ret.message : "删除失败，请刷新后重试", true);
+                alert("操作失败，请刷新后重试")
             }
         });
     };

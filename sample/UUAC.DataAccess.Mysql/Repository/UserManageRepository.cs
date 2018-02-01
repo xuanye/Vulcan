@@ -1,17 +1,26 @@
-﻿using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UUAC.Common;
 using UUAC.DataAccess.Mysql.Entitis;
 using UUAC.Entity;
-using UUAC.Entity.DTOEntities;
 using UUAC.Interface.Repository;
-using Vulcan.Core.Enities;
+using Vulcan.DataAccess;
 
 namespace UUAC.DataAccess.Mysql.Repository
 {
-    public class UserManageRepository:BaseRepository, IUserManageRepository
+    public class UserManageRepository : BaseRepository, IUserManageRepository
     {
+
+        public UserManageRepository(IConnectionManagerFactory factory,
+           IOptions<DBOption> Option,
+           ILoggerFactory loggerFactory) : base(factory, Option.Value.Master, loggerFactory)
+        {
+
+        }
+
         public async Task<PagedList<IUserInfo>> QueryUserList(string orgCode, string qText, PageView view)
         {
             string cols = @"user_uid as UserUid, full_name as FullName, account_type as AccountType,org_code as OrgCode,org_name as OrgName
@@ -21,13 +30,12 @@ namespace UUAC.DataAccess.Mysql.Repository
             string condition = "";
             if (!string.IsNullOrEmpty(orgCode))
             {
-                condition += " AND org_code='"+orgCode+"'";
+                condition += " AND org_code='" + orgCode + "'";
             }
             if (!string.IsNullOrEmpty(qText))
             {
-                condition += " AND ( user_uid LIKE '%" + qText + "%' OR  full_name LIKE '%"+qText+"%')";
+                condition += " AND ( user_uid LIKE '%" + qText + "%' OR  full_name LIKE '%" + qText + "%')";
             }
-
 
             PagedList<UserInfo> slist = await base.PagedQueryAsync<UserInfo>(view, cols, table, condition, new { }, "user_uid", "Order By sequence");
 
@@ -38,12 +46,11 @@ namespace UUAC.DataAccess.Mysql.Repository
                 Total = slist.Total
             };
 
-            foreach(var user in slist.DataList)
-           {
+            foreach (var user in slist.DataList)
+            {
                 rlist.DataList.Add(user);
-           }
+            }
             return rlist;
-
         }
 
         public async Task<IUserInfo> GetUserInfo(string userId)
@@ -83,7 +90,6 @@ namespace UUAC.DataAccess.Mysql.Repository
             }
 
             return base.UpdateAsync(user);
-           
         }
 
         public Task<int> RemoveUserRolesAsync(string userId)
@@ -115,25 +121,32 @@ namespace UUAC.DataAccess.Mysql.Repository
                 UserNum = source.UserNum,
                 FullName = source.FullName,
                 Status = source.Status,
+                Gender = source.Gender,
                 LastModifyTime = source.LastModifyTime,
                 LastModifyUserId = source.LastModifyUserId,
                 LastModifyUserName = source.LastModifyUserName
             };
 
-
-
             return user;
-
         }
 
         public async Task<List<IUserInfo>> QueryUserListByParentCode(string orgCode)
         {
-            string sql = @"select user_uid as UserUid, full_name as FullName, account_type as AccountType,org_code as OrgCode
-org_name as OrgName sequence as Sequence,user_num as UserNum 
+            string sql = @"select user_uid as UserUid, full_name as FullName, account_type as AccountType,org_code as OrgCode,
+org_name as OrgName, sequence as Sequence,user_num as UserNum
 from user_info where org_code=@OrgCode and status =1";
 
             var list = await base.QueryAsync<UserInfo>(sql, new { OrgCode = orgCode });
             return list.ToList<IUserInfo>();
+        }
+
+        public async Task<IUserInfo> GetUserOnlyWithPwd(string userId)
+        {
+            string sql = @"SELECT user_uid as UserUid, full_name as FullName,password as Password FROM user_info WHERE user_uid = @UserUId";
+
+            var user = await base.GetAsync<UserInfo>(sql, new { UserUId = userId });
+
+            return user;
         }
     }
 }

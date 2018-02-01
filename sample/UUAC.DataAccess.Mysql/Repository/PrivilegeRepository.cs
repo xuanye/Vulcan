@@ -1,4 +1,6 @@
-﻿using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,19 +8,20 @@ using UUAC.Common;
 using UUAC.DataAccess.Mysql.Entitis;
 using UUAC.Entity;
 using UUAC.Interface.Repository;
+using Vulcan.DataAccess;
 
 namespace UUAC.DataAccess.Mysql.Repository
 {
     public class PrivilegeRepository: BaseRepository,IPrivilegeRepository
     {
-        public PrivilegeRepository() 
-            : base(Constans.MAIN_DB_KEY)
+        public PrivilegeRepository(IConnectionManagerFactory factory,
+            IOptions<DBOption> Option,
+            ILoggerFactory loggerFactory) : base(factory, Option.Value.Master, loggerFactory)
         {
+
         }
-        public PrivilegeRepository(string key)
-             : base(key)
-        {
-        }
+
+
         public async Task<List<IPrivilege>> QueryUserPrivilegeList(string appCode,string userId,int type)
         {
             string sql = @"SELECT DISTINCT A.privilege_code as PrivilegeCode,A.privilege_name as PrivilegeName,A.privilege_type as PrivilegeType,A.parent_code as ParentCode,A.mark as Mark,A.resource as Resource,A.sequence as Sequence FROM privilege A
@@ -155,6 +158,19 @@ namespace UUAC.DataAccess.Mysql.Repository
                 sql += " and a.privilege_type=" + pType;
             }
             return base.QueryAsync<string>(sql, new { UserId = identity, AppCode = appCode });
+        }
+
+        public async Task<List<IPrivilege>> QueryPrivilegeList(string appCode)
+        {
+            string sql = @"SELECT A.privilege_code as PrivilegeCode,A.privilege_name as PrivilegeName,
+                            A.privilege_type as PrivilegeType,A.parent_code as ParentCode,A.mark as Mark
+                            ,A.resource as Resource,A.app_code as AppCode,A.sequence as Sequence FROM privilege A  
+                            WHERE A.app_code =@AppCode Order By A.sequence";
+
+          
+            var list = await base.QueryAsync<Privilege>(sql, new { AppCode = appCode });
+
+            return list.ToList<IPrivilege>();
         }
     }
 }

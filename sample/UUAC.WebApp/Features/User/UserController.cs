@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,19 +11,82 @@ using UUAC.WebApp.ViewModels;
 using Vulcan.Core.Enities;
 using Vulcan.AspNetCoreMvc.Interfaces;
 using UUAC.Common;
+using Vulcan.DataAccess;
 
 namespace UUAC.WebApp.Features.User
 {
     public class UserController : MyControllerBase
     {
         const string rootId = "000000";
-        private readonly IUserManageService _service;
         private readonly IAppContextService _contextService;
+        private readonly IUserManageService _service;
         public UserController(IUserManageService service, IAppContextService contextService)
         {
             this._service = service;
             this._contextService = contextService;
         }
+        [HttpPost]
+        public async Task<IActionResult> CheckUserUid(string id, [FromForm]string userId)
+        {
+            string ret = "";
+            try
+            {
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    bool valid = await this._service.CheckUserId(id, userId);
+                    if (!valid)
+                    {
+                        ret = "代码已存在";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ret = ex.Message;
+            }
+            return Content(ret);
+        }
+
+        public IActionResult ChooseUser()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> Edit(string userId, string pcode, string pname)
+        {
+            IUserInfo model;
+            if (string.IsNullOrEmpty(userId))
+            {
+                model = new DtoUserInfo();
+                if (string.IsNullOrEmpty(pcode))
+                {
+                    throw new ArgumentNullException("pcode", "请选择上层组织");
+                }
+                else
+                {
+                    model.OrgCode = pcode;
+                    model.OrgName = pname;
+                    model.ViewRootCode = pcode;
+                    model.ViewRootName = pname;
+                }
+            }
+            else
+            {
+                model = await this._service.GetUserInfo(userId);
+                if (model == null)
+                {
+                    throw new ArgumentOutOfRangeException("userId", "不存在对应的用户");
+                }
+                if (string.IsNullOrEmpty(model.ViewRootCode))
+                {
+                    model.ViewRootCode = pcode;
+                    model.ViewRootName = pname;
+                }
+            }
+
+            return View(model);
+        }
+
         // GET: /<controller>/
         public IActionResult List()
         {
@@ -57,64 +120,110 @@ namespace UUAC.WebApp.Features.User
             var ret = JsonQTable.ConvertFromPagedList(list.DataList,list.PageIndex,list.Total, search.colkey, search.colsArray);
             return Json(ret);
         }
-
-
-        public async Task<IActionResult> Edit(string userId, string pcode, string pname)
+        [HttpPost]
+        public async Task<IActionResult> QueryUserTree([FromForm]string id)
         {
-            IUserInfo model;
-            if (string.IsNullOrEmpty(userId))
+            var nodes = new List<JsonTreeNode>();
+
+            bool isRootNode = string.IsNullOrEmpty(id) || id == rootId;
+            if (isRootNode) // 根组织
             {
-                model = new DtoUserInfo();
-                if (string.IsNullOrEmpty(pcode))
+                isRootNode = true;
+                //判断用户是否为超级管理员，如果是超级管理员则 获取所有的组织结构，否则获取当前用户的可见组织结构
+                bool admin = await this._contextService.IsInRole(base.UserId, Constans.SUPPER_ADMIN_ROLE);
+                if (!admin)
                 {
-                    throw new ArgumentNullException("pcode", "请选择上层组织");
+                    var user = await base.GetSignedUser();
+                    if (!string.IsNullOrEmpty(user.ViewRootCode))
+                        id = user.ViewRootCode;
                 }
-                else
+
+            }
+
+            string parentCode = id;
+            if (string.IsNullOrEmpty(id)) //根
+            {
+                var glist = await this._service.QueryOrgTreeByParentCode(parentCode);
+                if (glist != null)
                 {
-                    model.OrgCode = pcode;
-                    model.OrgName = pname;
-                    model.ViewRootCode  =pcode;
-                    model.ViewRootName = pname;
+                    foreach (var item in glist)
+                    {
+                        JsonTreeNode gnode = new JsonTreeNode();
+                        gnode.id = item.OrgCode;
+                        gnode.text = item.OrgName;
+                        gnode.value = "1";
+                        gnode.hasChildren = true;
+
+                        gnode.classes = "group";
+                        nodes.Add(gnode);
+                    }
                 }
             }
             else
             {
-                model = await this._service.GetUserInfo(userId);
-                if (model == null)
+                var glist = await this._service.QueryOrgTreeByParentCode(parentCode);
+                if (glist != null)
                 {
-                    throw new ArgumentOutOfRangeException("userId", "不存在对应的用户");
+                    foreach (var item in glist)
+                    {
+                        JsonTreeNode gnode = new JsonTreeNode();
+                        gnode.id = item.OrgCode;
+                        gnode.text = item.OrgName;
+                        gnode.value = "1";
+                        gnode.hasChildren = true;
+
+                        gnode.classes = "group";
+                        nodes.Add(gnode);
+                    }
                 }
-                if(string.IsNullOrEmpty(model.ViewRootCode))
+                PageView view = new PageView(0, 1000);
+                var ulist = await this._service.QueryUserListByParentCode(parentCode);
+                //
+                if (ulist != null)
                 {
-                    model.ViewRootCode  =pcode;
-                    model.ViewRootName = pname;
+                    foreach (var user in ulist)
+                    {
+                        JsonTreeNode unode = new JsonTreeNode();
+                        unode.id = user.UserUid;
+                        unode.text = user.FullName;
+                        unode.value = "2";
+                        unode.showcheck = true;
+                        unode.hasChildren = false;
+                        unode.classes = "user";
+                        nodes.Add(unode);
+                    }
                 }
+
+
             }
 
-            return View(model);
+            return Json(nodes);
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> CheckUserUid(string id, [FromForm]string userId)
+        public async Task<IActionResult> Remove(string userId)
         {
-            string ret = "";
+            JsonMsg msg = new JsonMsg();
+
             try
             {
-                if (!string.IsNullOrEmpty(userId))
+                int ret = await this._service.RemoveUserInfo(userId);
+                if (ret > 0)
                 {
-                    bool valid = await this._service.CheckUserId(id, userId);
-                    if (!valid)
-                    {
-                        ret = "代码已存在";
-                    }
+                    msg.status = 0;
+                }
+                else
+                {
+                    msg.status = -1;
+                    msg.message = "操作不成功，请稍后重试";
                 }
             }
             catch (Exception ex)
             {
-                ret = ex.Message;
+                msg.status = -1;
+                msg.message = "操作不成功：" + ex.Message;
             }
-            return Content(ret);
+            return Json(msg);
         }
 
         [HttpPost]
@@ -191,88 +300,6 @@ namespace UUAC.WebApp.Features.User
             
             return string.IsNullOrEmpty(errMsg);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> Remove(string userId)
-        {
-            JsonMsg msg = new JsonMsg();
-
-            try
-            {
-                int ret = await this._service.RemoveUserInfo(userId);
-                if (ret > 0)
-                {
-                    msg.status = 0;
-                }
-                else
-                {
-                    msg.status = -1;
-                    msg.message = "操作不成功，请稍后重试";
-                }
-            }
-            catch (Exception ex)
-            {
-                msg.status = -1;
-                msg.message = "操作不成功：" + ex.Message;
-            }
-            return Json(msg);
-        }
-
-        public  IActionResult ChooseUser()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> QueryUserTree([FromForm]string id)
-        {
-            var nodes = new List<JsonTreeNode>();
-            string parentCode = id;
-            if (string.IsNullOrEmpty(id))
-            {
-
-            }
-            else
-            {
-                var glist = await this._service.QueryOrgTreeByParentCode(parentCode);
-                if (glist != null)
-                {
-                    foreach (var item in glist)
-                    {
-                        JsonTreeNode gnode = new JsonTreeNode();
-                        gnode.id = item.OrgCode;
-                        gnode.text = item.OrgName;
-                        gnode.value = "1";
-                        gnode.hasChildren = true;
-
-                        gnode.classes = "group";
-                        nodes.Add(gnode);
-                    }
-                }
-                PageView view = new PageView(0, 1000);
-                var ulist = await this._service.QueryUserListByParentCode(parentCode);
-                //
-                if (ulist != null)
-                {
-                    foreach (var user in ulist)
-                    {
-                        JsonTreeNode unode = new JsonTreeNode();
-                        unode.id = user.UserUid;
-                        unode.text = user.FullName;
-                        unode.value = "2";
-                        unode.showcheck = true;
-                        unode.hasChildren = false;
-                        unode.classes = "user";
-                        nodes.Add(unode);
-                    }
-                }
-
-
-            }
-
-            return Json(nodes);
-        }
-
         private  void GetChildTreeNode(string orgCode)
         {
           

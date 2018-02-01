@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,7 +29,7 @@ namespace UUAC.Business.ServiceImpl
 
         public async Task<int> SaveAppInfo(IAppInfo appinfo,int type)
         {
-            using (ConnectionScope scope = new ConnectionScope())
+            using (this._repo.BeginConnectionScope())
             {
                 if (type == 1) // 新增
                 {

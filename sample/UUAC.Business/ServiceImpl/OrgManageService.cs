@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -72,6 +72,11 @@ namespace UUAC.Business.ServiceImpl
                 return true;
             }
 
+            if(viewCode == "000000")
+            {
+                return true;
+            }
+
             var rootOrg = await _repo.GetOrgInfoAsync(viewCode);
             if(rootOrg == null)
             {
@@ -85,7 +90,7 @@ namespace UUAC.Business.ServiceImpl
         public async Task<int> SaveOrgInfo(IOrganization entity, int type,string viewRootCode)
         {
             int ret = -1;
-            using (TransScope scope = new TransScope())
+            using (var scope = this._repo.BeginTransScope())
             {
                 bool inView = await CheckOrgCodeInView(entity.ParentCode, viewRootCode);
                 if (!inView)
@@ -146,7 +151,7 @@ namespace UUAC.Business.ServiceImpl
 
         public async Task<int> RemoveOrgInfo(string orgCode)
         {
-            using (TransScope scope = new TransScope())
+            using (var scope = this._repo.BeginTransScope())
             {
                 orgCode = Utility.ClearSafeStringParma(orgCode);
 

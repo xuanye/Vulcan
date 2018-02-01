@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,5 +18,7 @@ namespace UUAC.Interface.Service
         Task<List<string>> QueryUserPrivilegeCodeList(string appCode, string identity, int pType);
 
         Task<bool> HasPrivilege(string identity, string privilegeCode);
+
+        Task<List<IPrivilege>> QueryPrivilegeList(string appCode);
     }
 }

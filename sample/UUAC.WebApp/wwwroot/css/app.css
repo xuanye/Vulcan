@@ -15,9 +15,11 @@ body, h1, h2, h3, h4, h5, h6, p, ul, ol, dl, dd, fieldset, textarea {
 
 
 /***************************************/
-
-.choose{
-
+.beta{
+    font-size:9px;
+    line-height:12px;
+}
+.choose {
 }
 .choose a.aclose{
     color: #aaa;

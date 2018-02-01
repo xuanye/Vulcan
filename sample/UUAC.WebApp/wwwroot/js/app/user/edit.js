@@ -1,4 +1,4 @@
-﻿(function (window, $, factory) {
+(function (window, $, factory) {
     if (typeof define === 'function') {
         // 如果define已被定义，模块化代码
         define('app/orgmanage/edit', function (require, exports, module) {
@@ -47,7 +47,7 @@
     });
     $('#frmEdit').validator({
         rules: {
-            code: [/^[_0-9a-zA-Z]{3,25}$/, "3-25位数字、字母和下划线的组合"]
+            code: [/^[_0-9a-zA-Z\.]{3,25}$/, "3-25位数字、字母和下划线的组合"]
         },
         theme: 'yellow_right_effect',
         fields: {

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,7 +6,7 @@ using UUAC.Entity;
 
 namespace UUAC.Interface.Repository
 {
-    public interface IOrgManageRepository
+    public interface IOrgManageRepository: IRepository
     {
         Task<List<IOrganization>> QueryAllOrgList();
         Task<List<IOrganization>> QueryRootOrgList();

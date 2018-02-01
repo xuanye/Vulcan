@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 
 namespace UUAC.Entity
@@ -83,10 +83,24 @@ namespace UUAC.Entity
         int Right { get; set; }
         bool HasChild { get; set; }
     }
+
+    public interface IRoleUser
+    {
+        string UserUid { get; set; }
+
+        string RoleCode { get; set; }
+    }
     public interface IEntity
     {
         string LastModifyUserId { get; set; }
         string LastModifyUserName { get; set; }
         DateTime LastModifyTime { get; set; }
+    }
+
+    public interface IRolePrivilege
+    {
+        string PrivilegeCode { get; set; }
+
+        string RoleCode { get; set; }
     }
 }

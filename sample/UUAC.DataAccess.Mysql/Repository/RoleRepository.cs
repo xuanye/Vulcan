@@ -1,7 +1,10 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UUAC.Common;
 using UUAC.DataAccess.Mysql.Entitis;
 using UUAC.Entity;
 using UUAC.Interface.Repository;
@@ -11,6 +14,15 @@ namespace UUAC.DataAccess.Mysql.Repository
 {
     public class RoleRepository:BaseRepository, IRoleRepository
     {
+
+
+        public RoleRepository(IConnectionManagerFactory factory,
+           IOptions<DBOption> Option,
+           ILoggerFactory loggerFactory) : base(factory, Option.Value.Master, loggerFactory)
+        {
+
+        }
+
         public async Task<List<IRoleInfo>> QueryRoleByParentCode(string appCode, string pCode)
         {
             string sql = @"select a.role_code as RoleCode,a.role_name as RoleName, a.parent_code as ParentCode,a.is_system_role as IsSystemRole,a.remark as Remark,a.app_code as AppCode,
@@ -56,16 +68,24 @@ namespace UUAC.DataAccess.Mysql.Repository
             return await base.GetAsync<RoleInfo>(sql, new { RoleCode = code });
         }
 
-        public Task<int> RemovRolePrivilegeAsync(string code)
+        public Task<int> RemovRolePrivilegeAsync(string roleCode,string privilegeCode)
         {
-            string sql = "DELETE FROM role_privilege_relation WHERE role_code = @RoleCode";
-            return base.ExcuteAsync(sql, new { RoleCode = code });
+            string sql = "DELETE FROM role_privilege_relation WHERE role_code = @RoleCode and privilege_code=@PrivilegeCode";
+            if (string.IsNullOrEmpty(privilegeCode))
+            {
+                sql = "DELETE FROM role_privilege_relation WHERE role_code = @RoleCode";
+            }
+            return base.ExcuteAsync(sql, new { RoleCode = roleCode, PrivilegeCode  = privilegeCode });
         }
 
-        public Task<int> RemovRoleUserAsync(string code)
+        public Task<int> RemovRoleUserAsync(string roleCode, string userId)
         {
-            string sql = "DELETE FROM role_user_relation WHERE role_code = @RoleCode";
-            return base.ExcuteAsync(sql, new { RoleCode = code });
+            string sql = "DELETE FROM role_user_relation WHERE role_code = @RoleCode and user_uid=@UserId";
+            if (string.IsNullOrEmpty(userId))
+            {
+                sql = "DELETE FROM role_user_relation WHERE role_code = @RoleCode";
+            }
+            return base.ExcuteAsync(sql, new { RoleCode = roleCode , UserId  = userId });
         }
 
         public Task<int> RemoveRole(string code)
@@ -132,7 +152,7 @@ where a.app_code=@AppCode and b.user_uid =@UserId";
             return list.ToList<IRoleInfo>();
         }
 
-        public Task<int> GetMaxOrgPoint(string appCode)
+        public Task<int> GetMaxRolePoint(string appCode)
         {
             string sql = @"select max(`right`) from role_info where app_code =@AppCode";
 
@@ -177,6 +197,43 @@ where a.app_code=@AppCode and b.user_uid =@UserId";
             plist.PageSize = list.PageSize;
             plist.Total = list.Total;
             return plist;
+        }
+
+        public async Task<List<IRoleUser>> GetRoleUsers(string roleCode)
+        {
+            string sql = "select role_code as RoleCode,user_uid as UserUid from role_user_relation where role_code=@RoleCode";
+
+            var list =  await base.QueryAsync<RoleUserRelation>(sql, new { RoleCode = roleCode });
+            return list.ToList<IRoleUser>();
+
+        }
+
+        public Task<int> AddRoleUsers(List<IRoleUser> newList)
+        {
+            List<RoleUserRelation> rulist = newList.ConvertAll<RoleUserRelation>(x => new RoleUserRelation()
+            {
+                UserUid = x.UserUid,
+                RoleCode = x.RoleCode
+            });
+
+            return base.BatchInsertAsync(rulist);
+        }
+
+        public Task<List<string>> QueryRolePrivilegeList(string appCode, string roleCode)
+        {
+            string sql = "select privilege_code from role_privilege_relation where role_code=@RoleCode";
+
+            return base.QueryAsync<string>(sql, new { RoleCode = roleCode });
+        }
+
+        public Task<int> SaveRolePrivileges(List<IRolePrivilege> plist)
+        {
+            List<RolePrivilegeRelation> rulist = plist.ConvertAll<RolePrivilegeRelation>(x => new RolePrivilegeRelation()
+            {
+                 PrivilegeCode =x.PrivilegeCode,
+                RoleCode = x.RoleCode
+            });
+            return base.BatchInsertAsync(rulist);
         }
     }
 }

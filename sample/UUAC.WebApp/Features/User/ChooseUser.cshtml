@@ -1,31 +1,69 @@
-﻿@{
+@{
     Layout = "../Shared/_Layout_For_Dailog";
 }
 
 @section styles{
     <link rel="stylesheet" href="/css/plugin/xjtree.css" />
     <style type="text/css">
-        .xj-tree-node .xj-tree-selected:after {
-            content: " √";
-            color: #ff6a00;
-            font-weight: 700;
+        .list-wrap, .tree-wrap {            
+            border: solid 1px #ccc;
+            padding: 5px;
+            height:330px;
+            overflow:auto;
+        }
+        .content-wrap {
+            padding: 4px;
+        }
+        .list-head {
+            background-color: #f4f5f9;
+            margin: -4px;
+            padding: 4px;
+            margin-bottom:4px;
+        }
+        .list-head em{
+            margin:0 4px;
+            font-style:normal;
+            color:brown;
+        }
+        .list-container .user {
+            margin:2px 6px;
+        }
+        ul,li{
+            padding:0;
+            margin:0;
+            list-style:none;
+        }
+        #btnClear{
+            float:right;
+            margin-right:10px;
+        }
+        .main-wrap {
+            background-color: #fefefe;
+            height: 350px;
+            overflow: auto;
+            padding:4px 5px;
+            margin:0 2px;
         }
     </style>
-
 }
 <div class="choose">
     <div class="choose-top">
         <h4>用户选择</h4>
         <a href="javascript:;" id="btnClose" class="aclose">&times;</a>
     </div>
-    <div class="row" style="background-color:#fefefe;height:350px;padding:5px 10px;overflow:auto;">
-        <div class="col-4">
-            <div>查询条件</div>
-            <div id="userTree"></div>
-            <div>ul list</div>
+    <div class="row main-wrap" >
+        <div class="col-xs-6 content-wrap">
+            <div class="tree-wrap">               
+                <div id="userTree"></div>
+            </div>
         </div>
-        <div class="col-8">
-            已经选中的XXXX
+        <div class="col-xs-6 content-wrap">
+            <div class="list-wrap" id="uslist">
+                <div class="list-head">已选择了<em id="uscount">0</em>个用户 <a href="javascript:;" class="red" id="btnClear"><i class="ace-icon fa fa-trash-o" aria-hidden="true"></i> 清空</a></div>
+                <ul class="list-container">
+                   
+                </ul>
+            </div>           
         </div>
     </div>
     <div class="choose-bottom">
@@ -36,6 +74,7 @@
 
 @section scripts{
     <script type="text/javascript">
+        window._utils = {};
         window.options = {
             loadTreeUrl:"@Url.Action("QueryUserTree")"
         }

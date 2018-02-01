@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -91,5 +91,16 @@ namespace UUAC.Entity.DTOEntities
         public int Right { get; set; }
         public string AppCode { get; set; }
         public string AppName { get; set; }
+    }
+
+    public class DtoRoleUser : IRoleUser
+    {
+        public string UserUid { get; set; }
+        public string RoleCode { get; set; }
+    }
+    public class DtoRolePrivilege : IRolePrivilege
+    {
+        public string PrivilegeCode { get; set; }
+        public string RoleCode { get; set; }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,19 +8,18 @@ using UUAC.Common;
 using UUAC.DataAccess.Mysql.Entitis;
 using UUAC.Entity;
 using UUAC.Interface.Repository;
+using Vulcan.DataAccess;
 
 namespace UUAC.DataAccess.Mysql.Repository
 {
     public class AppManageRepository: BaseRepository,IAppManageRepository
     {
-        public AppManageRepository() 
-            : base(Constans.MAIN_DB_KEY)
+        public AppManageRepository(IConnectionManagerFactory factory,
+            IOptions<DBOption> Option,
+            ILoggerFactory loggerFactory) : base(factory, Option.Value.Master, loggerFactory)
         {
         }
-        public AppManageRepository(string key)
-             : base(key)
-        {
-        }
+
 
 
         public Task<List<IAppInfo>> QueryAppInfoList(string appCode, string appName)

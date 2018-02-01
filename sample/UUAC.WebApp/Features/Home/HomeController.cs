@@ -1,11 +1,12 @@
-﻿using System;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.Authentication;
-using Microsoft.AspNetCore.Mvc;
 using UUAC.Common;
 using UUAC.Interface.Service;
 using UUAC.WebApp.Libs;
@@ -17,17 +18,23 @@ namespace UUAC.WebApp.Features.Home
     public class HomeController : MyControllerBase
     {
         private readonly IPrivilegeService _pservice;
-        public HomeController(IPrivilegeService pservice)
+        private readonly IDistributedCache _cache;
+        private readonly IUserManageService _uservice;
+
+        public HomeController(IPrivilegeService pservice, IUserManageService uservice, IDistributedCache cache)
         {
             this._pservice = pservice;
+            this._cache = cache;
+            this._uservice = uservice;
         }
+
         public async Task<IActionResult> Index()
         {
             var model = new HomeModel
             {
                 Menus = await _pservice.QueryUserPrivilegeList(Constans.APP_CODE, base.UserId, 1)
             };
-            
+
             ViewBag.UserId = base.UserId;
 
             var user = await base.GetSignedUser();
@@ -41,6 +48,7 @@ namespace UUAC.WebApp.Features.Home
         {
             return View();
         }
+
         [AllowAnonymous]
         public IActionResult Login(string ReturnUrl)
         {
@@ -52,9 +60,10 @@ namespace UUAC.WebApp.Features.Home
                 }
                 return Redirect(ReturnUrl);
             }
-          
+
             return View("Login");
         }
+
         [AllowAnonymous]
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
@@ -62,45 +71,47 @@ namespace UUAC.WebApp.Features.Home
             JsonMsg msg = new JsonMsg();
             try
             {
-                //TODO:这里要加数据校验+密码验证
-                //
-                msg.status = 0;
-
-                const string Issuer = "https://contoso.com";
-                var claims = new List<Claim>
+                int state = await this._uservice.CheckLogin(model.UserId, model.Password);
+                if(state == 0)
                 {
-                    new Claim(ClaimTypes.Name, model.UserId, ClaimValueTypes.String, Issuer),                 
-                };
+                    var claims = new[] { new Claim(ClaimTypes.Name, model.UserId) };
 
+                    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                var userIdentity = new ClaimsIdentity("SuperSecureLogin");
-                userIdentity.AddClaims(claims);
-                var userPrincipal = new ClaimsPrincipal(userIdentity);
+                    //重新登录后，重置角色和权限的缓存
+                    var pCacheKey = Constans.APP_CODE + "_" + model.UserId + "_P";
+                    var rCacheKey = Constans.APP_CODE + "_" + model.UserId + "_R";
+                    await _cache.RemoveAsync(pCacheKey);
+                    await _cache.RemoveAsync(rCacheKey);
+                }
+                else
+                {
+                    msg.status = -1;
+                    msg.message = "用户名或密码错误";
+                }
 
-                await HttpContext.Authentication.SignInAsync(Constans.AuthenticationScheme, userPrincipal,
-                    new AuthenticationProperties
-                    {
-                        ExpiresUtc = DateTime.UtcNow.AddMinutes(20),
-                        IsPersistent = false,
-                        AllowRefresh = false
-                    });
+               
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 msg.status = -1;
                 msg.message = "登录失败：" + ex.Message;
             }
             return Json(msg);
         }
-        public IActionResult Logout()
+
+        public async Task<IActionResult> Logout()
         {
-            this.SignOut(Constans.AuthenticationScheme);
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
         }
+
         public IActionResult ThrowError()
         {
             throw new Exception("尝试故意抛出一个异常");
         }
+
         public IActionResult Error()
         {
             return View();

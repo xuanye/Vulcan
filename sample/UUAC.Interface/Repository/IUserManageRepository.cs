@@ -7,10 +7,13 @@ using Vulcan.DataAccess;
 
 namespace UUAC.Interface.Repository
 {
-    public interface IUserManageRepository
+    public interface IUserManageRepository: IRepository
     {
         Task<PagedList<IUserInfo>> QueryUserList(string orgCode, string qText, PageView view);
         Task<IUserInfo> GetUserInfo(string userId);
+
+        Task<IUserInfo> GetUserOnlyWithPwd(string userId);
+
         Task<bool> CheckUserId(string userId);
         Task<long> AddUser(IUserInfo entity);
         Task<int> UpdateUser(IUserInfo entity);

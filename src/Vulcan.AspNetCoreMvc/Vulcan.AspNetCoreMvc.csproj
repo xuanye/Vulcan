@@ -3,15 +3,11 @@
   <PropertyGroup>
     <Description>Vulcan数据库访问类库 基于Dapper 默认支持Mysql和MsSql</Description>
     <Copyright>Xuanye  2016</Copyright>
-    <AssemblyTitle>Vulcan数据库访问类库</AssemblyTitle>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyTitle>Vulcan数据库访问类库</AssemblyTitle>   
     <AssemblyName>Vulcan.AspNetCoreMvc</AssemblyName>
     <PackageId>Vulcan.AspNetCoreMvc</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+	<TargetFramework>netstandard2.0</TargetFramework>
+
   </PropertyGroup>
 
   <ItemGroup>
@@ -19,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.0.2" />
   </ItemGroup>
 
 </Project>

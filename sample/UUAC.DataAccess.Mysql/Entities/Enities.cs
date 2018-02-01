@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,5 +37,16 @@ namespace UUAC.DataAccess.Mysql.Entitis
         public string ParentName { get; set; }
         public bool HasChild { get; set; }
     }
-   
+
+
+    public partial class RoleUserRelation: IRoleUser
+    {
+
+    }
+
+    public partial class RolePrivilegeRelation: IRolePrivilege
+    {
+
+    }
+
 }

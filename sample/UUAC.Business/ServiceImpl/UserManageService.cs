@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,6 +10,7 @@ using UUAC.Interface.Service;
 using Vulcan.Core;
 using Vulcan.Core.Enities;
 using Vulcan.Core.Exceptions;
+using Vulcan.DataAccess;
 
 namespace UUAC.Business.ServiceImpl
 {
@@ -48,7 +49,7 @@ namespace UUAC.Business.ServiceImpl
 
         public async Task<int> SaveUserInfo(DtoUserInfo entity, int type,string viewRootCode)
         {
-            using (ConnectionScope scope = new ConnectionScope())
+            using (var scope = this._repo.BeginConnectionScope())
             {
                 bool inView = await this._orgService.CheckOrgCodeInView(entity.OrgCode, viewRootCode);
                 if (!inView)
@@ -122,7 +123,7 @@ namespace UUAC.Business.ServiceImpl
         public async Task<int> RemoveUserInfo(string userId)
         {
             int ret;
-            using (TransScope scope = new TransScope())
+            using (var scope = this._repo.BeginTransScope())
             {
                 userId = Utility.ClearSafeStringParma(userId);
 
@@ -146,6 +147,19 @@ namespace UUAC.Business.ServiceImpl
         {
             parentCode = Utility.ClearSafeStringParma(parentCode);
             return this._repo.QueryUserListByParentCode(parentCode);
+        }
+
+        public async Task<int> CheckLogin(string userId, string password)
+        {
+            var user =await _repo.GetUserOnlyWithPwd(userId);
+            if(user ==null)
+            {
+                return -1;
+            }
+
+            string hspass = CryptographyManager.Md5Encrypt(userId + password);
+
+            return hspass.Equals(user.Password, StringComparison.OrdinalIgnoreCase) ? 0 : -2;
         }
     }
 }

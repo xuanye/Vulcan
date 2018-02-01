@@ -1,15 +1,26 @@
-﻿using System;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using UUAC.Common;
 using UUAC.DataAccess.Mysql.Entitis;
 using UUAC.Entity;
 using UUAC.Interface.Repository;
+using Vulcan.DataAccess;
 
 namespace UUAC.DataAccess.Mysql.Repository
 {
     public class OrgManageRepository:BaseRepository, IOrgManageRepository
     {
+
+        public OrgManageRepository(IConnectionManagerFactory factory,
+            IOptions<DBOption> Option,
+            ILoggerFactory loggerFactory) : base(factory, Option.Value.Master, loggerFactory)
+        {
+        }
+
         public Task<List<IOrganization>> QueryAllOrgList()
         {
             string sql = "SELECT org_code as OrgCode ,org_name as OrgName ,parent_code as ParentCode,unit_code as UnitCode,unit_name as UnitName from organization order by sequence";

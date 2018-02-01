@@ -16,7 +16,7 @@ dotnet restore ./Vulcan.DataAccess.sln
 dotnet build ./Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release
 
 revision="${TRAVIS_BUILD_NUMBER:=1}"
-versionNumber="0.1.${revision}-alpha"
+versionNumber="1.0.${revision}"
 
 dotnet pack ./Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release -o ../$artifactsFolder --version-suffix=$versionNumber
 

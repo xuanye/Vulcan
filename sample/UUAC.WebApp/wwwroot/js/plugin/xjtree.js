@@ -1,4 +1,4 @@
-﻿; (function (window, undefined, $) {
+; (function (window, undefined, $) {
     //扩展jquery的方法
     $.fn.swapClass = function(c1, c2) {
         return this.removeClass(c1).addClass(c2);
@@ -37,7 +37,7 @@
             return;
         }
         this.options = $.extend({},defaults,options);
-        this.treedata = this.options.data;
+        this.treedata = this.options.data || [];
      
         var html = [];
         __BuildTreeRoot__(this.treeid,this.treedata,html,this.options); //构建HTML
@@ -315,8 +315,9 @@
                 param = [];
             }
             if (options.extParam) {
-                for (var pi = 0; pi < options.length; pi++) param[param.length] = options.extParam[pi];
+                for (var pi = 0; pi < options.extParam.length; pi++) param[param.length] = options.extParam[pi];
             }
+            
             $.ajax({
                 type: options.method,
                 url: options.url,
@@ -527,12 +528,12 @@
     xjTree.prototype ={
         GetCheckedItems:function(gethalfchecknode){ //获取选中的项 包含所有的节点数据
             var s = [];
-            __GetCk__(this.treedata, s,gethalfchecknode, function(item) { return item; });            
+            __GetCk__(this.options.data, s, gethalfchecknode, function (item) { return item; });            
             return s;
         },
         GetCheckedValues:function(gethalfchecknode){ //获取选中的项的Values
             var s = [];
-            __GetCk__(this.treedata, s, gethalfchecknode, function (item) { return item.value; });
+            __GetCk__(this.options.data, s, gethalfchecknode, function (item) { return item.value; });
             return s;
         },
         GetCurrentItem:function(){ //获取当前项
@@ -549,16 +550,16 @@
             __Reflash__(this.treeid,id,this.options);
         },
         CheckAll:function(){ //选中全部
-            if (this.treedata != null && this.treedata.length > 0) {
-                for (var i = 0, j = this.treedata.length; i < j; i++) {
-                    __Cascade__(__Check__ , this.treeid , this.treedata[i] , 1 , this.options);
+            if (this.options.data != null && this.options.data.length > 0) {
+                for (var i = 0, j = this.options.data.length; i < j; i++) {
+                    __Cascade__(__Check__, this.treeid, this.options.data[i] , 1 , this.options);
                 }
             }
         },
         UnCheckAll:function(){ //反选全部
-            if (this.treedata != null && this.treedata.length > 0) {
-                for (var i = 0, j = this.treedata.length; i < j; i++) {
-                    __Cascade__(__Check__ , this.treeid , this.treedata[i] , 0 , this.options);
+            if (this.options.data != null && this.options.data.length > 0) {
+                for (var i = 0, j = this.options.data.length; i < j; i++) {
+                    __Cascade__(__Check__, this.treeid, this.options.data[i] , 0 , this.options);
                 }
             }
         },
@@ -570,9 +571,9 @@
                     if (cascadecheck != null) {
                         iscascadecheck = cascadecheck;
                     }
-                    var s = ischecked ? 1 : 0;
+                    var s = ischecked ? 1 : 0;                  
                     for (var i = 0, j = arrIds.length; i < j; i++) {
-                        __CheckItembyId__(this.treedata,this.treeid,arrIds[i], s, iscascadecheck ? 1 : 0,this.options);
+                        __CheckItembyId__(this.options.data,this.treeid,arrIds[i], s, iscascadecheck ? 1 : 0,this.options);
                     }
                 }
             }
@@ -583,11 +584,11 @@
             }
         },
         GetTreeData:function(){ //获取所有数据
-            return this.treedata;
+            return this.options.data;
         },
         LocateNode:function(nodeid){ //定位到某个节点
             if(nodeid){
-                return __LocateNodeById__(this.treedata,this.treeid,nodeid,this.options);
+                return __LocateNodeById__(this.options.data,this.treeid,nodeid,this.options);
             }
             else{
                 return false;

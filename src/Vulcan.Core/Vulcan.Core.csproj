@@ -3,24 +3,25 @@
   <PropertyGroup>
     <Description>Vulcan公共类库</Description>
     <Copyright>Xuanye  2016</Copyright>
-    <AssemblyTitle>Vulcan公共类库</AssemblyTitle>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <AssemblyTitle>Vulcan公共类库</AssemblyTitle>   
     <AssemblyName>Vulcan.Core</AssemblyName>
     <PackageId>Vulcan.Core</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+	<TargetFramework>netstandard2.0</TargetFramework>
+ 
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MsgPack.Cli" Version="0.9.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="2.0.0" />
+    <PackageReference Include="MsgPack.Cli" Version="0.9.2" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Vulcan.DataAccess\Vulcan.DataAccess.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
 
 </Project>

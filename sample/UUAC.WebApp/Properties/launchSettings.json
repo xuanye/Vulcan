@@ -3,7 +3,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:49368/",
+      "applicationUrl": "http://localhost:59019/",
       "sslPort": 0
     }
   },
@@ -18,10 +18,10 @@
     "UUAC.WebApp": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "applicationUrl": "http://localhost:59020/"
     }
   }
 }

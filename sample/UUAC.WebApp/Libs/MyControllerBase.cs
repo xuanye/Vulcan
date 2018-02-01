@@ -1,28 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using UUAC.Common;
-using Vulcan.AspNetCoreMvc.Interfaces;
-using UUAC.Interface.Service;
-using Vulcan.Core.Exceptions;
 using Vulcan.AspNetCoreMvc.Extensions;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Vulcan.AspNetCoreMvc.Interfaces;
+using Vulcan.Core.Exceptions;
 
 namespace UUAC.WebApp.Libs
 {
     public class MyControllerBase : Controller
     {
-       
-        
         protected string UserId => this.User.Identity.IsAuthenticated ? this.User.Identity.Name : "";
 
-        
         protected async Task<MyAppUser> GetSignedUser()
         {
-            
             string userId = this.UserId;
             if (string.IsNullOrEmpty(userId))
             {
@@ -34,7 +24,7 @@ namespace UUAC.WebApp.Libs
                 var service = HttpContext.RequestServices.GetService<IAppContextService>();
 
                 user = await service.GetUserInfo(userId) as MyAppUser;
-                if(user == null)
+                if (user == null)
                 {
                     throw new NoAuthorizeExecption("意外错误，用户信息加载异常");
                 }

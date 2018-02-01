@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+       	<TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>UUAC.DataAccess.Mysql</AssemblyName>
     <PackageId>UUAC.DataAccess.Mysql</PackageId>
-    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MySql.Data" Version="6.10.6" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Vulcan.DataAccess\Vulcan.DataAccess.csproj" />

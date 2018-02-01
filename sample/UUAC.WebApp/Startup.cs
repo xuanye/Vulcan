@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using UUAC.WebApp.Libs;
-using UUAC.Common;
-using Microsoft.AspNetCore.Session;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,41 +7,32 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Vulcan.Core;
-using Vulcan.DataAccess;
-using Vulcan.DataAccess.Context;
-using NLog.Extensions.Logging;
-using Microsoft.Extensions.Caching.Distributed;
-using Microsoft.Extensions.Caching.Redis;
+using System;
+using UUAC.Common;
+using UUAC.WebApp.Libs;
 using Vulcan.AspNetCoreMvc;
+using Vulcan.DataAccess;
 
 namespace UUAC.WebApp
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
-            this.Evn = env;
-
+            Configuration = configuration;
+            HostingEnvironment = env;
         }
 
-        public IHostingEnvironment Evn { get; }
-        public IConfigurationRoot Configuration { get; }
+        public IConfiguration Configuration { get; }
+
+        public IHostingEnvironment HostingEnvironment;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             // Add framework services.
             services.AddMvc(config =>
             {
-
                 var policy = new AuthorizationPolicyBuilder()
                                  .RequireAuthenticatedUser()
                                  .Build();
@@ -86,85 +71,72 @@ namespace UUAC.WebApp
                 //options.AreaViewLocationFormats.Insert(0, "/Areas/{2}/Features/{3}/{0}.cshtml");
                 //options.AreaViewLocationFormats.Insert(0, "/Areas/{2}/Features/{3}/{1}/{0}.cshtml");
 
-
                 options.ViewLocationExpanders.Add(new FeatureViewLocationExpander());
             });
 
-
             // Add memory cache services
             services.AddMemoryCache();
-            if(Evn.IsDevelopment())
+            if (HostingEnvironment.IsDevelopment())
             {
                 // 分布式缓存本地实现，开发模式使用，
                 services.AddDistributedMemoryCache();
             }
             else
             {
-                services.AddSingleton<IDistributedCache, RedisCache>();
+                services.AddDistributedRedisCache(option =>
+                {
+                    option.Configuration = "127.0.0.1";
+                    option.InstanceName = "UUAC:";
+                });
             }
-
-
-            services.AddSession(options => {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.CookieName = ".UUACAPP";
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options => {             
+                options.Cookie.Name = ".UUACAPP";
+                options.Cookie.HttpOnly = true;
+                options.LoginPath = "/Home/Login";
             });
 
 
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);            
+            });
 
-            ConnectionStringManager.Configure(Configuration.GetSection("ConnectionStrings"));
-
+            //获取数据库连接
+            services.Configure<DBOption>(Configuration.GetSection("connectionStrings"));
 
             UUAC.DataAccess.Mysql.RepositoryRegistry.Registry(services);// 注册DB接口
             UUAC.Business.ServiceRegistry.Registry(services); //注册服务接口
             LocalRegistry.Registry(services);//注册本地服务
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-            services.AddSingleton<IRuntimeContextStorage, AspNetMvcContext>();
+            services.AddSingleton<IRuntimeContextStorage, AspNetCoreContext>();
             services.AddSingleton<IConnectionFactory, MySqlConnectionFactory>();
 
-            //
+
+            //链接管理器
+            services.AddSingleton<IConnectionManagerFactory, ConnectionManagerFactory>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-
-            loggerFactory.AddNLog(); //添加NLog支持
-
-            //获取注入的当前运行时上下文，用于临时存放数据库连接
-            AppRuntimeContext.Configure(app.ApplicationServices.GetRequiredService<IRuntimeContextStorage>());
-
-            //设置默认的数据库连接
-            ConnectionFactoryHelper.Configure(app.ApplicationServices.GetRequiredService<IConnectionFactory>());
-
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseBrowserLink();
             }
             else
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-
+         
             app.UseSession();
 
             app.UseStaticFiles();
-
-            app.UseCookieAuthentication(new CookieAuthenticationOptions()
-            {
-                AuthenticationScheme = Constans.AuthenticationScheme,
-                LoginPath = new PathString("/Home/Login/"),
-                AccessDeniedPath = new PathString("/Home/Forbidden/"),
-                AutomaticAuthenticate = true,
-                AutomaticChallenge = true
-            });
-
 
             if (env.IsDevelopment())
             {
@@ -174,9 +146,8 @@ namespace UUAC.WebApp
                 {
                     MockUserId = Configuration["DebuggerUserId"]
                 });
-
             }
-
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
