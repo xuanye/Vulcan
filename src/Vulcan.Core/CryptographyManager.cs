@@ -29,18 +29,46 @@ namespace Vulcan.Core
 
         public static string Md5Encrypt(string encryptingString)
         {
-            var md5 = MD5.Create();
-            byte[] inputBytes = Encoding.UTF8.GetBytes(encryptingString);
-            byte[] hash = md5.ComputeHash(inputBytes);
-
-            // step 2, convert byte array to hex string
-            var sb = new StringBuilder();
-            for (int i = 0; i < hash.Length; i++)
+            using (var md5Hash = MD5.Create())
             {
-                sb.Append(i.ToString("x2"));
+                // Convert the input string to a byte array and compute the hash.
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(encryptingString));
+
+                // Create a new Stringbuilder to collect the bytes
+                // and create a string.
+                StringBuilder sBuilder = new StringBuilder();
+
+                // Loop through each byte of the hashed data 
+                // and format each one as a hexadecimal string.
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+
+                // Return the hexadecimal string.
+                return sBuilder.ToString();
             }
-            return sb.ToString();
+
         }
+
+        public static bool VerifyMd5Hash(string input, string hash)
+        {
+            // Hash the input.
+            string hashOfInput = Md5Encrypt(input);
+
+            // Create a StringComparer an compare the hashes.
+            StringComparer comparer = StringComparer.OrdinalIgnoreCase;
+
+            if (0 == comparer.Compare(hashOfInput, hash))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
 
         public static string AESEncrypt(string toEncrypt, string password)
         {
