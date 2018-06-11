@@ -1,19 +1,63 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Dapper;
 
 namespace Vulcan.DataAccess.ORMapping.MySql
 {
     public class MySqlRepository : BaseRepository
     {
-        public MySqlRepository(IConnectionManagerFactory cmFactory,string constr)
-            : base(cmFactory,constr)
+        public MySqlRepository(IConnectionManagerFactory cmFactory, string constr)
+            : base(cmFactory, constr)
         {
         }
-        protected MySqlRepository(IConnectionManagerFactory cmFactory,IConnectionFactory factory, string constr)
-            :base(cmFactory,factory, constr)
-        {
 
+        protected MySqlRepository(IConnectionManagerFactory cmFactory, IConnectionFactory factory, string constr)
+            : base(cmFactory, factory, constr)
+        {
         }
+
+        public override long Insert(AbstractBaseEntity entity)
+        {
+            long ret;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                using (ISQLMetrics metrics = CreateSQLMetrics())
+                {
+                    string sql = entity.GetInsertSQL();
+
+                    string[] splitSqL = sql.Split(';');
+
+                    mgr.Connection.Execute(splitSqL[0], entity);
+
+                    ret = mgr.Connection.QueryFirstOrDefault<long>(splitSqL[1]);
+
+                    metrics.AddToMetrics(sql, entity);
+                }
+            }
+            return ret;
+        }
+
+        public override async Task<long> InsertAsync(AbstractBaseEntity entity)
+        {
+            long ret;
+            using (ConnectionManager mgr = GetConnection())
+            {
+                using (ISQLMetrics metrics = CreateSQLMetrics())
+                {
+                    string sql = entity.GetInsertSQL();
+
+                    string[] splitSqL = sql.Split(';');
+
+                    await mgr.Connection.ExecuteAsync(splitSqL[0], entity);
+
+                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(splitSqL[1]);
+
+                    metrics.AddToMetrics(sql, entity);
+                }
+            }
+            return ret;
+        }
+
         /// <summary>
         /// 分页查询列表
         /// </summary>
@@ -58,6 +102,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
             pList.PageSize = view.PageSize;
             return pList;
         }
+
         public async Task<PagedList<T>> PagedQueryAsync<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition, object param, string sqlPk, string sqlOrder)
         {
             PagedList<T> pList = new PagedList<T>();
@@ -75,7 +120,6 @@ namespace Vulcan.DataAccess.ORMapping.MySql
                     return pList;
                 }
             }
-
 
             if (string.IsNullOrEmpty(sqlOrder))
             {

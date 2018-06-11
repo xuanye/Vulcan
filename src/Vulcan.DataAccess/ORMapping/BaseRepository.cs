@@ -4,19 +4,17 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
-using Microsoft.Extensions.Logging;
 
 namespace Vulcan.DataAccess.ORMapping
 {
     public abstract class BaseRepository
     {
-        protected BaseRepository(IConnectionManagerFactory mgr,string constr)
+        protected BaseRepository(IConnectionManagerFactory mgr, string constr)
             : this(mgr, null, constr)
         {
-
         }
-       
-        protected BaseRepository(IConnectionManagerFactory mgr,IConnectionFactory factory,string constr)
+
+        protected BaseRepository(IConnectionManagerFactory mgr, IConnectionFactory factory, string constr)
         {
             this._conStr = constr;
             this._dbFactory = factory;
@@ -26,24 +24,38 @@ namespace Vulcan.DataAccess.ORMapping
         private readonly IConnectionFactory _dbFactory;
         private readonly string _conStr;
         private readonly IConnectionManagerFactory _mgr;
-                      
+
         /// <summary>
         /// 如果主键是自增返回插入主键 否则返回0
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public long Insert(AbstractBaseEntity entity)
+        public virtual long Insert(AbstractBaseEntity entity)
         {
             long ret;
             using (ConnectionManager mgr = GetConnection())
             {
-                using(ISQLMetrics metrics = CreateSQLMetrics())
+                using (ISQLMetrics metrics = CreateSQLMetrics())
                 {
                     string sql = entity.GetInsertSQL();
-                    ret = mgr.Connection.Query<long>(sql, entity, mgr.Transaction, false, null, CommandType.Text).Single();
+
+                    var reader = mgr.Connection.QueryMultiple(sql, entity, mgr.Transaction, null, CommandType.Text);
+
+                    using (reader)
+                    {
+                        dynamic first = reader.ReadFirstOrDefault();
+                        if (first == null || first.Id == null)
+                        {
+                            ret = 0;
+                        }
+                        else
+                        {
+                            ret = (long)first.Id;
+                        }
+                    }
+
                     metrics.AddToMetrics(sql, entity);
                 }
-               
             }
             return ret;
         }
@@ -53,21 +65,33 @@ namespace Vulcan.DataAccess.ORMapping
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<long> InsertAsync(AbstractBaseEntity entity)
+        public virtual async Task<long> InsertAsync(AbstractBaseEntity entity)
         {
             long ret;
             using (ConnectionManager mgr = GetConnection())
             {
                 using (ISQLMetrics metrics = CreateSQLMetrics())
                 {
-                    var sql = entity.GetInsertSQL();   
-                    ret = await mgr.Connection.QueryFirstAsync<long>(entity.GetInsertSQL(), entity, mgr.Transaction, null, CommandType.Text);
+                    var sql = entity.GetInsertSQL();
+                    var multi = await mgr.Connection.QueryMultipleAsync(sql, entity, mgr.Transaction, null, CommandType.Text).ConfigureAwait(false);
+                    using (multi)
+                    {
+                        var first = multi.ReadFirstOrDefault();
+                        if (first == null || first.Id == null)
+                        {
+                            ret = 0;
+                        }
+                        else
+                        {
+                            ret = (long)first.Id;
+                        }
+                    }
                     metrics.AddToMetrics(sql, entity);
                 }
             }
             return ret;
-           
         }
+
         /// <summary>
         /// 批量新增 （新增相同的列）
         /// </summary>
@@ -100,10 +124,12 @@ namespace Vulcan.DataAccess.ORMapping
         {
             return Excute(model.GetUpdateSQL(), model);
         }
+
         public Task<int> UpdateAsync(AbstractBaseEntity model)
         {
             return ExcuteAsync(model.GetUpdateSQL(), model);
         }
+
         /// <summary>
         /// 批量修改
         /// </summary>
@@ -139,7 +165,7 @@ namespace Vulcan.DataAccess.ORMapping
         /// <returns></returns>
         public TransScope BeginTransScope(TransScopeOption option = TransScopeOption.Required)
         {
-            return new TransScope(this._mgr,this._dbFactory,this._conStr, option);
+            return new TransScope(this._mgr, this._dbFactory, this._conStr, option);
         }
 
         /// <summary>
@@ -157,7 +183,7 @@ namespace Vulcan.DataAccess.ORMapping
             using (ConnectionManager mgr = GetConnection())
             {
                 using (ISQLMetrics metrics = CreateSQLMetrics())
-                {                   
+                {
                     ret = mgr.Connection.Execute(sql, paras, mgr.Transaction, null, CommandType.Text);
                     metrics.AddToMetrics(sql, paras);
                 }
@@ -165,7 +191,7 @@ namespace Vulcan.DataAccess.ORMapping
             return ret;
         }
 
-        protected int Excute(string sql,int timeOut, object paras)
+        protected int Excute(string sql, int timeOut, object paras)
         {
             int ret;
             using (ConnectionManager mgr = GetConnection())
@@ -192,6 +218,7 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return ret;
         }
+
         protected async Task<int> ExcuteAsync(string sql, int timeOut, object paras)
         {
             int ret;
@@ -205,8 +232,6 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return ret;
         }
-
-       
 
         protected T Get<T>(string sql, object paras)
         {
@@ -227,7 +252,6 @@ namespace Vulcan.DataAccess.ORMapping
             return ret;
         }
 
-
         protected List<T> Query<T>(string sql, object paras)
         {
             List<T> list;
@@ -242,7 +266,6 @@ namespace Vulcan.DataAccess.ORMapping
             return list;
         }
 
-
         protected async Task<List<T>> QueryAsync<T>(string sql, object paras)
         {
             var list = default(List<T>);
@@ -250,7 +273,7 @@ namespace Vulcan.DataAccess.ORMapping
             {
                 using (ISQLMetrics metrics = CreateSQLMetrics())
                 {
-                    var qlist = await mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, null, CommandType.Text);                   
+                    var qlist = await mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, null, CommandType.Text);
                     list = qlist.ToList();
 
                     metrics.AddToMetrics(sql, paras);
@@ -258,7 +281,6 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return list;
         }
-
 
         protected List<T> Query<T>(string sql, int timeOut, object paras)
         {
@@ -288,7 +310,6 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return list;
         }
-
 
         protected List<T> Query<T, T1>(string sql, object paras, Func<T, T1, T> parse, string splitOn)
         {
@@ -345,7 +366,6 @@ namespace Vulcan.DataAccess.ORMapping
                 }
             }
             return list;
-
         }
 
         protected async Task<List<T>> QueryAsync<T, T1, T2>(string sql, object paras, Func<T, T1, T2, T> parse, string splitOn)
@@ -377,8 +397,6 @@ namespace Vulcan.DataAccess.ORMapping
             }
             return list;
         }
-
-
 
         protected int SPExcute(string spName, object paras)
         {
@@ -412,7 +430,8 @@ namespace Vulcan.DataAccess.ORMapping
         {
             return SPQuery<T>(spName, paras).FirstOrDefault();
         }
-        protected  async Task<T> SPGetAsync<T>(string spName, object paras)
+
+        protected async Task<T> SPGetAsync<T>(string spName, object paras)
         {
             T ret = default(T);
             using (ConnectionManager mgr = GetConnection())
@@ -442,7 +461,7 @@ namespace Vulcan.DataAccess.ORMapping
 
         protected async Task<List<T>> SPQueryAsync<T>(string spName, object paras)
         {
-            List<T> ret =null;
+            List<T> ret = null;
             using (ConnectionManager mgr = GetConnection())
             {
                 using (ISQLMetrics metrics = CreateSQLMetrics())
@@ -455,7 +474,6 @@ namespace Vulcan.DataAccess.ORMapping
             return ret;
         }
 
-
         protected ConnectionManager GetConnection()
         {
             return _mgr.GetConnectionManager(_dbFactory, this._conStr);
@@ -463,7 +481,7 @@ namespace Vulcan.DataAccess.ORMapping
 
         protected virtual ISQLMetrics CreateSQLMetrics()
         {
-            return new NullSQLMetrics() ;
+            return new NullSQLMetrics();
         }
     }
 }

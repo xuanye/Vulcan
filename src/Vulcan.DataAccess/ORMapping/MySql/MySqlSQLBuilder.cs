@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Vulcan.DataAccess.ORMapping.MySql
@@ -82,11 +82,11 @@ namespace Vulcan.DataAccess.ORMapping.MySql
 
             if (meta.Columns.Exists(x => x.Identity))
             {
-                sqlbuilder.Append("SELECT CAST(LAST_INSERT_ID() AS SIGNED);");
+                sqlbuilder.Append("SELECT CAST(LAST_INSERT_ID() AS SIGNED) Id;");
             }
             else
             {
-                sqlbuilder.Append(" SELECT CAST(0 AS SIGNED);");
+                sqlbuilder.Append("SELECT CAST(0 AS SIGNED) Id;");
             }
 
             return sqlbuilder.ToString();
@@ -165,11 +165,11 @@ namespace Vulcan.DataAccess.ORMapping.MySql
 
             if (meta.Columns.Exists(x => x.Identity))
             {
-                sqlbuilder.Append("SELECT CAST(LAST_INSERT_ID() AS SIGNED);");
+                sqlbuilder.Append("SELECT CAST(LAST_INSERT_ID() AS SIGNED) Id;");
             }
             else
             {
-                sqlbuilder.Append(" SELECT CAST(0 AS SIGNED);");
+                sqlbuilder.Append(" SELECT CAST(0 AS SIGNED) Id;");
             }
 
             return sqlbuilder.ToString();
