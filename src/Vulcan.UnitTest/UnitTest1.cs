@@ -5,6 +5,7 @@ using Dapper;
 using System.Threading.Tasks;
 using Vulcan.DataAccess.ORMapping;
 using Vulcan.DataAccess.ORMapping.MySql;
+using Vulcan.DataAccess;
 
 namespace Vulcan.UnitTest
 {
@@ -13,37 +14,47 @@ namespace Vulcan.UnitTest
         [Fact]
         public async Task Test1()
         {
-            var conn = new MySqlConnection("server=10.240.17.228;port=3306;database=chuyin;uid=cyuser;pwd=cypwd@2017;charset=utf8;Connection Timeout=18000;SslMode=none;");
+            var conn = new MySqlConnection("server=127.0.0.1;port=3306;database=test;uid=root;pwd=Welcome@123;charset=utf8;Connection Timeout=18000;SslMode=none;");
 
-            string sql = @"INSERT INTO `activity_simplevote` (`activity_id`,`user_id`,`title`,`content`,`pic_urls`,`voice_url`,`voice_duration`,`status`) " +
-             "VALUES (@ActivityId,@UserId,@Title,@Content,@PicUrls,@VoiceUrl,@VoiceDuration,@Status);";
+            string sql = @"INSERT INTO `tbtest1` (`name`) " +
+             "VALUES (@Name);SELECT CAST(LAST_INSERT_ID() AS SIGNED) as Id;";
 
-            string sqlLastId = "SELECT CAST(LAST_INSERT_ID() AS SIGNED) as Id;";
-
+          
             long id = 0;
 
-            var svitem = new ActivitySimplevote()
+            var svitem = new TbTest()
             {
-                ActivityId = 4,
-                UserId = "101024",
-                Title = "test1111",
-                Content = "teste111",
-                PicUrls = "{}",
-                VoiceUrl = "",
-                VoiceDuration = 0,
-                Status = 1
+                Name = "111",              
             };
 
-            await conn.OpenAsync();
+            for(var i =0; i< 100; i++)
+            {
+                await conn.OpenAsync();
 
-            await conn.ExecuteAsync(sql, svitem);
+                id = await conn.QueryFirstOrDefaultAsync<long>(sql, svitem);
+                Console.WriteLine(id);
 
-            id = await conn.QueryFirstOrDefaultAsync<long>(sqlLastId);
+                await conn.CloseAsync();
 
-            await conn.CloseAsync();
-
-            Assert.True(id > 0);
+                Assert.True(id > 0);
+            }
+          
         }
+   
+    }
+
+    public class TbTestRepository : MySqlRepository
+    {
+        public TbTestRepository(IConnectionManagerFactory cmFactory, string constr) : base(cmFactory, constr)
+        {
+        }
+    }
+
+    public class TbTest
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
     }
 
     [TableName("activity_simplevote")]

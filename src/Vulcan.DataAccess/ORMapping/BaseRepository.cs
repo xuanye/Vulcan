@@ -24,13 +24,12 @@ namespace Vulcan.DataAccess.ORMapping
         private readonly IConnectionFactory _dbFactory;
         private readonly string _conStr;
         private readonly IConnectionManagerFactory _mgr;
-
         /// <summary>
         /// 如果主键是自增返回插入主键 否则返回0
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual long Insert(AbstractBaseEntity entity)
+        public long Insert(AbstractBaseEntity entity)
         {
             long ret;
             using (ConnectionManager mgr = GetConnection())
@@ -38,24 +37,10 @@ namespace Vulcan.DataAccess.ORMapping
                 using (ISQLMetrics metrics = CreateSQLMetrics())
                 {
                     string sql = entity.GetInsertSQL();
-
-                    var reader = mgr.Connection.QueryMultiple(sql, entity, mgr.Transaction, null, CommandType.Text);
-
-                    using (reader)
-                    {
-                        dynamic first = reader.ReadFirstOrDefault();
-                        if (first == null || first.Id == null)
-                        {
-                            ret = 0;
-                        }
-                        else
-                        {
-                            ret = (long)first.Id;
-                        }
-                    }
-
+                    ret = mgr.Connection.QueryFirstOrDefault<long>(sql, entity, mgr.Transaction, null, CommandType.Text);
                     metrics.AddToMetrics(sql, entity);
                 }
+
             }
             return ret;
         }
@@ -65,7 +50,7 @@ namespace Vulcan.DataAccess.ORMapping
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public virtual async Task<long> InsertAsync(AbstractBaseEntity entity)
+        public async Task<long> InsertAsync(AbstractBaseEntity entity)
         {
             long ret;
             using (ConnectionManager mgr = GetConnection())
@@ -73,23 +58,12 @@ namespace Vulcan.DataAccess.ORMapping
                 using (ISQLMetrics metrics = CreateSQLMetrics())
                 {
                     var sql = entity.GetInsertSQL();
-                    var multi = await mgr.Connection.QueryMultipleAsync(sql, entity, mgr.Transaction, null, CommandType.Text).ConfigureAwait(false);
-                    using (multi)
-                    {
-                        var first = multi.ReadFirstOrDefault();
-                        if (first == null || first.Id == null)
-                        {
-                            ret = 0;
-                        }
-                        else
-                        {
-                            ret = (long)first.Id;
-                        }
-                    }
+                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(entity.GetInsertSQL(), entity, mgr.Transaction, null, CommandType.Text);
                     metrics.AddToMetrics(sql, entity);
                 }
             }
             return ret;
+
         }
 
         /// <summary>

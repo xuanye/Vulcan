@@ -16,47 +16,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
         {
         }
 
-        public override long Insert(AbstractBaseEntity entity)
-        {
-            long ret;
-            using (ConnectionManager mgr = GetConnection())
-            {
-                using (ISQLMetrics metrics = CreateSQLMetrics())
-                {
-                    string sql = entity.GetInsertSQL();
-
-                    string[] splitSqL = sql.Split(';');
-
-                    mgr.Connection.Execute(splitSqL[0], entity);
-
-                    ret = mgr.Connection.QueryFirstOrDefault<long>(splitSqL[1]);
-
-                    metrics.AddToMetrics(sql, entity);
-                }
-            }
-            return ret;
-        }
-
-        public override async Task<long> InsertAsync(AbstractBaseEntity entity)
-        {
-            long ret;
-            using (ConnectionManager mgr = GetConnection())
-            {
-                using (ISQLMetrics metrics = CreateSQLMetrics())
-                {
-                    string sql = entity.GetInsertSQL();
-
-                    string[] splitSqL = sql.Split(';');
-
-                    await mgr.Connection.ExecuteAsync(splitSqL[0], entity);
-
-                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(splitSqL[1]);
-
-                    metrics.AddToMetrics(sql, entity);
-                }
-            }
-            return ret;
-        }
+       
 
         /// <summary>
         /// 分页查询列表
