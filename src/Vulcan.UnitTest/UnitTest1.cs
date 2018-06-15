@@ -14,39 +14,33 @@ namespace Vulcan.UnitTest
         [Fact]
         public async Task Test1()
         {
-            var conn = new MySqlConnection("server=127.0.0.1;port=3306;database=test;uid=root;pwd=Welcome@123;charset=utf8;Connection Timeout=18000;SslMode=none;");
-
-            string sql = @"INSERT INTO `tbtest1` (`name`) " +
-             "VALUES (@Name);SELECT CAST(LAST_INSERT_ID() AS SIGNED) as Id;";
-
-          
+            //var conn = new MySqlConnection("server=10.240.17.228;port=3306;database=chuyin;uid=cyuser;pwd=cypwd@2017;charset=utf8;Connection Timeout=18000;SslMode=none;");
+            var conn = new MySqlConnection("server=10.240.17.228;port=3307;database=cy_order;uid=nuanyin;pwd=nuanyinnuanyi@123;charset=utf8;Connection Timeout=18000;SslMode=none;");
             long id = 0;
 
-            var svitem = new TbTest()
+            var svitem = new ActivitySimplevote()
             {
-                Name = "111",              
+                ActivityId = 5,
+                UserId = "111111",
+                PicUrls = "http://pics.sdoprofile.com/group1/M00/65/DA/CqwNB1seFb6APQQUABEYNLBKWxc777_original.jpg?size=1079x1079",
+                Title = "测试内容",
+                Content = "测试详情",
+                Category = 1,
+                VoiceUrl = "http://pics.sdoprofile.com/group1/M00/65/DA/CqwNB1seFaeAaGMmAAT6GkV3t7Q352.m4a"
             };
 
-            for(var i =0; i< 100; i++)
+            for (var i = 0; i < 100; i++)
             {
                 await conn.OpenAsync();
 
-                id = await conn.QueryFirstOrDefaultAsync<long>(sql, svitem);
+                string sql = "/**mycat:db_type=master*/ " + svitem.GetInsertSQL();
+                id = await conn.QueryFirstOrDefaultAsync<long>(svitem.GetInsertSQL(), svitem);
                 Console.WriteLine(id);
 
                 await conn.CloseAsync();
 
                 Assert.True(id > 0);
             }
-          
-        }
-   
-    }
-
-    public class TbTestRepository : MySqlRepository
-    {
-        public TbTestRepository(IConnectionManagerFactory cmFactory, string constr) : base(cmFactory, constr)
-        {
         }
     }
 
@@ -129,6 +123,16 @@ namespace Vulcan.UnitTest
         [MapField("voice_url"), Nullable]
         public string VoiceUrl
         { get { return _VoiceUrl; } set { _VoiceUrl = value; OnPropertyChanged("voice_url"); } }
+
+        private int _Category;
+
+        /// <summary>
+        /// 总票数 总票数 0
+        ///  int(10)
+        /// </summary>
+        [MapField("category")]
+        public int Category
+        { get { return _Category; } set { _Category = value; OnPropertyChanged("_Category"); } }
 
         private int _VoteCount;
 
