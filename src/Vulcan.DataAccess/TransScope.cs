@@ -6,7 +6,7 @@ namespace Vulcan.DataAccess
     /// <summary>
     /// 事务管理
     /// </summary>
-    public class TransScope : IDisposable
+    public class TransScope : IScope
     {
         private readonly TransScopeOption _option;
 
@@ -68,7 +68,9 @@ namespace Vulcan.DataAccess
             if (_beginTransactionIsInCurrentTransScope)
             {
                 _tran?.Rollback();
+                _completed = true;
             }
+
         }
 
         /// <summary>
@@ -84,13 +86,17 @@ namespace Vulcan.DataAccess
             _connectionManager.Dispose();
         }
 
-        #region IDisposable 成员
+      
 
         public void Dispose()
         {
             Close();
         }
 
-        #endregion IDisposable 成员
+        public void Commit()
+        {
+            this.Complete();
+        }
+
     }
 }

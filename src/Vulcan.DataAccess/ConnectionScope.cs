@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Vulcan.DataAccess
 {
-    public class ConnectionScope:IDisposable
+    public class ConnectionScope: IScope
     {
 
         private string _conStr;
@@ -25,8 +25,11 @@ namespace Vulcan.DataAccess
                : mgr.GetConnectionManager(factory, constr);
             //this._dbFactory = factory;
         }
-  
 
+        public void Commit()
+        {
+            //throw new NotImplementedException();
+        }
 
         public void Dispose()
         {
@@ -34,6 +37,11 @@ namespace Vulcan.DataAccess
             _conStr = null;
             _connectionManager = null;
             //_dbFactory = null;
+        }
+
+        public void Rollback()
+        {
+            //throw new NotImplementedException();
         }
     }
 }
