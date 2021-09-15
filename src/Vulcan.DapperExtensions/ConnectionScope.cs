@@ -1,4 +1,4 @@
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     public class ConnectionScope: IScope
     {

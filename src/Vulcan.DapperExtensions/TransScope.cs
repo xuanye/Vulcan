@@ -1,6 +1,6 @@
 using System.Data;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     /// <summary>
     /// 事务管理

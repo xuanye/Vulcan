@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     public class ThreadLocalStorage : IRuntimeContextStorage
     {

@@ -1,106 +1,95 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Vulcan.DataAccess.ORMapping
+namespace Vulcan.DapperExtensions.ORMapping
 {
     public static class EntityReflect
     {
-        private static readonly Dictionary<Type, EntityMeta> _cache = new Dictionary<Type, EntityMeta>();
-        private static readonly object lockobject = new object();
+        private static readonly ConcurrentDictionary<Type, EntityMeta> Cache = new ConcurrentDictionary<Type, EntityMeta>();
 
         public static EntityMeta GetDefineInfoFromType(Type type)
         {
-            EntityMeta tdefine = null;
-            lock (lockobject)
+            if (Cache.TryGetValue(type,out var entityMeta))
             {
-                if (_cache.ContainsKey(type))
-                {
-                    tdefine = _cache[type];
-                }
+                return entityMeta;
             }
-            if (tdefine != null)
-            {
-                return tdefine;
-            }
-            else
-            {
-                tdefine = new EntityMeta();
-            }
+
+
+            entityMeta = new EntityMeta();
+
 
             var typeInfo = type.GetTypeInfo();
 
             var tableAttribute = typeInfo.GetCustomAttribute<TableNameAttribute>();
-          
-            tdefine.TableName = tableAttribute != null ? tableAttribute.TableName : type.FullName.Split('.').Last();
+
+            entityMeta.TableName = tableAttribute != null ? tableAttribute.TableName : type.FullName?.Split('.').Last();
 
             foreach (var p in type.GetProperties( BindingFlags.Public | BindingFlags.Instance))
             {
-               
+
                 var attrs = p.GetCustomAttributes();
 
 
-                var ecmeta = new EntityColumnMeta {ColumnName = p.Name};
-
-                ecmeta.PropertyName = p.Name;
-
-                foreach (var cusattr in attrs)
+                var ecMeta = new EntityColumnMeta
                 {
-                    if (cusattr is IgnoreAttribute)
+                    ColumnName = p.Name,
+                    PropertyName = p.Name
+                };
+
+                foreach (var cusAttr in attrs)
+                {
+                    if (cusAttr is IgnoreAttribute)
                     {
-                        ecmeta = null;
+                        ecMeta = null;
                         break;
                     }
-                    if (cusattr is PrimaryKeyAttribute)
+                    switch (cusAttr)
                     {
-                        ecmeta.PrimaryKey = true;
-                    }
-                    if (cusattr is MapFieldAttribute)
-                    {
-                        ecmeta.ColumnName = ((MapFieldAttribute)cusattr).MapFieldName;
-                    }
-                    if (cusattr is IdentityAttribute)
-                    {
-                        ecmeta.Identity = true;
-                    }
-                    if (cusattr is NullableAttribute)
-                    {
-                        ecmeta.Nullable = true;
+                        case PrimaryKeyAttribute _:
+                            ecMeta.PrimaryKey = true;
+                            break;
+                        case MapFieldAttribute mfAttr:
+                            ecMeta.ColumnName = mfAttr.MapFieldName;
+                            break;
+                        case IdentityAttribute _:
+                            ecMeta.Identity = true;
+                            break;
+                        case NullableAttribute _:
+                            ecMeta.Nullable = true;
+                            break;
                     }
                 }
-                if (ecmeta != null)
+                if (ecMeta != null)
                 {
-                    tdefine.Columns.Add(ecmeta);
+                    entityMeta.Columns.Add(ecMeta);
                 }
             }
-            lock (lockobject)
-            {
-                if (!_cache.ContainsKey(type))
-                {
-                    _cache.Add(type, tdefine);
-                }
-            }
-            return tdefine;
+
+            Cache.TryAdd(type, entityMeta);
+
+            return entityMeta;
         }
     }
 
     public class EntityMeta
     {
         public string TableName { get; set; }
-
-        private List<EntityColumnMeta> _Columns;
-
-        public List<EntityColumnMeta> Columns
-        {
-            get { return _Columns ?? (_Columns = new List<EntityColumnMeta>()); }
-        }
+        public List<EntityColumnMeta> Columns { get; } = new List<EntityColumnMeta>();
     }
 
     public class EntityColumnMeta
     {
+        /// <summary>
+        /// column's name in db
+        /// </summary>
         public string ColumnName { get; set; }
 
+        /// <summary>
+        /// PropertyName in csharp class
+        /// </summary>
         public string PropertyName { get; set;}
 
         public bool PrimaryKey { get; set; }

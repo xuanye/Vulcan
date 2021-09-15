@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace Vulcan.DataAccess.ORMapping.MySql
+namespace Vulcan.DapperExtensions.ORMapping.MySql
 {
     public class MySqlEntity : AbstractBaseEntity
     {

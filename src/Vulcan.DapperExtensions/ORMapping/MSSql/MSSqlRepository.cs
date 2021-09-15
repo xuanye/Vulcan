@@ -1,21 +1,16 @@
 
 
-namespace Vulcan.DataAccess.ORMapping.MSSql
+namespace Vulcan.DapperExtensions.ORMapping.MSSql
 {
     public class MSSqlRepository : BaseRepository
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MSSqlRepository"/> class.
         /// </summary>
-        /// <param name="connectionManagerFactory"></param>
-        /// <param name="connectionString">The constr.</param>
-        public MSSqlRepository(IConnectionManagerFactory connectionManagerFactory, string connectionString)
-            : base(connectionManagerFactory,connectionString)
-        {
-        }
-
-        protected MSSqlRepository(IConnectionManagerFactory connectionManagerFactory,IConnectionFactory factory, string constr)
-            :base(connectionManagerFactory,factory, constr)
+        /// <param name="connectionManagerFactory">connectionManagerFactory</param>
+        /// <param name="connectionString">The Connection String.</param>
+        /// <param name="factory"> Connection Factory</param>
+        protected MSSqlRepository(IConnectionManagerFactory connectionManagerFactory, string connectionString, IConnectionFactory factory = null) : base(connectionManagerFactory, connectionString, factory)
         {
 
         }

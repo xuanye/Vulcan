@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     public static class ConnectionFactoryHelper
     {

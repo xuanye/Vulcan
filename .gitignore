@@ -28,6 +28,6 @@ project.lock.json
 .vs/
 .vscode/
 *.bak
-
+.idea/
 *.Production.json
 *.Development.json

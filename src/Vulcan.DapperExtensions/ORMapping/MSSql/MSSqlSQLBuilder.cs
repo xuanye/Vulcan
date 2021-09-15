@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Vulcan.DataAccess.ORMapping.MSSql
+namespace Vulcan.DapperExtensions.ORMapping.MSSql
 {
     public class MSSqlSQLBuilder : ISQLBuilder
     {

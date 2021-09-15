@@ -1,6 +1,6 @@
 using System;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     public interface IConnectionManagerFactory
     {

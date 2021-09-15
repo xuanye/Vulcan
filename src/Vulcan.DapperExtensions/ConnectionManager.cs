@@ -1,7 +1,7 @@
 using System;
 using System.Data;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     /// <summary>
     /// wrapper connection manager

@@ -1,4 +1,4 @@
-﻿namespace Vulcan.DataAccess.ORMapping.MSSql
+﻿namespace Vulcan.DapperExtensions.ORMapping.MSSql
 {
     public class MSSqlEntity : AbstractBaseEntity
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Vulcan.DataAccess.ORMapping
+namespace Vulcan.DapperExtensions.ORMapping
 {
     public abstract class AbstractBaseEntity
     {

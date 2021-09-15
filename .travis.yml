@@ -1,8 +1,0 @@
-language: csharp
-mono: none
-dotnet: 2.1.4
-dist: trusty
-solution: ./src/Vulcan.DataAccess.sln
-script:
-  - bash ./scripts/build_package.sh
-

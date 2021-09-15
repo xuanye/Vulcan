@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vulcan.DataAccess.ORMapping
+namespace Vulcan.DapperExtensions.ORMapping
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class MapFieldAttribute : Attribute

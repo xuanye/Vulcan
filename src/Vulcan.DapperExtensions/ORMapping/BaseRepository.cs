@@ -5,25 +5,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace Vulcan.DataAccess.ORMapping
+namespace Vulcan.DapperExtensions.ORMapping
 {
     public abstract class BaseRepository
     {
-        protected BaseRepository(IConnectionManagerFactory mgr, string constr)
-            : this(mgr, null, constr)
-        {
-        }
 
-        protected BaseRepository(IConnectionManagerFactory mgr, IConnectionFactory factory, string constr)
+        private readonly IConnectionFactory _dbFactory;
+        private readonly string _conStr;
+        private readonly IConnectionManagerFactory _mgr;
+
+        protected BaseRepository(IConnectionManagerFactory mgr, string constr,IConnectionFactory factory =null)
         {
+
             this._conStr = constr;
             this._dbFactory = factory;
             this._mgr = mgr;
         }
 
-        private readonly IConnectionFactory _dbFactory;
-        private readonly string _conStr;
-        private readonly IConnectionManagerFactory _mgr;
         /// <summary>
         /// 如果主键是自增返回插入主键 否则返回0
         /// </summary>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     public class PageView
     {
@@ -28,7 +28,7 @@ namespace Vulcan.DataAccess
         public string GetSqlOrder()
         {
             if (!string.IsNullOrEmpty(SortName) && !string.IsNullOrEmpty(SortOrder))
-                return string.Format("ORDER BY {0} {1} ", SortName, SortOrder);
+                return $"ORDER BY {SortName} {SortOrder} ";
             return string.Empty;
         }
     }

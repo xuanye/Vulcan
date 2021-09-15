@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Vulcan.DataAccess.ORMapping
+namespace Vulcan.DapperExtensions.ORMapping
 {
     [AttributeUsage(AttributeTargets.Class)]
     public class TableNameAttribute : Attribute
@@ -10,6 +10,6 @@ namespace Vulcan.DataAccess.ORMapping
             this.TableName = tableName;
         }
 
-        public string TableName { get; private set; }
+        public string TableName { get; }
     }
 }

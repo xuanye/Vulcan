@@ -1,17 +1,20 @@
-﻿namespace Vulcan.DataAccess
+﻿namespace Vulcan.DapperExtensions
 {
     /// <summary>
-    /// 该范围需要一个事务。如果已经存在环境事务，则使用该环境事务。否则，在进入范围之前创建新的事务。这是默认值。
+    /// Transaction Option
     /// </summary>
     public enum TransScopeOption
     {
         /// <summary>
-        /// 该范围需要一个事务。如果已经存在环境事务，则使用该环境事务。否则，在进入范围之前创建新的事务。这是默认值。
+        /// The scope requires a transaction.
+        /// If a transaction is already exists in this scope,use that transaction.
+        /// Otherwise, create a new transaction before entering the scope.
+        /// This is the default value.
         /// </summary>
         Required,
 
         /// <summary>
-        /// 始终创建新事务
+        /// always create a new transaction
         /// </summary>
         RequiresNew
     }

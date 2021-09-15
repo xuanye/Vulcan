@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     public class PagedList<T>
     {

@@ -2,20 +2,15 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
 
-namespace Vulcan.DataAccess.ORMapping.MySql
+namespace Vulcan.DapperExtensions.ORMapping.MySql
 {
     public class MySqlRepository : BaseRepository
     {
-        public MySqlRepository(IConnectionManagerFactory cmFactory, string constr)
-            : base(cmFactory, constr)
-        {
-        }
 
-        protected MySqlRepository(IConnectionManagerFactory cmFactory, IConnectionFactory factory, string constr)
-            : base(cmFactory, factory, constr)
+        protected MySqlRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null) : base(mgr, constr, factory)
         {
-        }
 
+        }
 
 
         /// <summary>
@@ -111,5 +106,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
 
             return base.ExecuteAsync(sql, entity);
         }
+
+
     }
 }

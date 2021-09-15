@@ -1,11 +1,8 @@
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Vulcan.DataAccess
+namespace Vulcan.DapperExtensions
 {
     public interface ISQLMetrics : IDisposable
     {
@@ -16,12 +13,12 @@ namespace Vulcan.DataAccess
     {
         public void AddToMetrics(string sql, object param)
         {
-          
+
         }
 
         public void Dispose()
         {
-           
+
         }
     }
 
