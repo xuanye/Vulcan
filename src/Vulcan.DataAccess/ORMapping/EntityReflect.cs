@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -35,8 +35,7 @@ namespace Vulcan.DataAccess.ORMapping
           
             tdefine.TableName = tableAttribute != null ? tableAttribute.TableName : type.FullName.Split('.').Last();
 
-            PropertyInfo[] pinfos = type.GetProperties();
-            foreach (PropertyInfo p in pinfos)
+            foreach (PropertyInfo p in type.GetProperties( BindingFlags.Public | BindingFlags.Instance))
             {
                
                 var attrs = p.GetCustomAttributes();
