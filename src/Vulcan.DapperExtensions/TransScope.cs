@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 
 namespace Vulcan.DataAccess
@@ -8,24 +7,21 @@ namespace Vulcan.DataAccess
     /// </summary>
     public class TransScope : IScope
     {
-        private readonly TransScopeOption _option;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="TransScope"/> class.
         /// </summary>
+        /// <param name="mgr"></param>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="option">The option.</param>
         public TransScope(IConnectionManagerFactory mgr,string connectionString, TransScopeOption option = TransScopeOption.Required)
             :this(mgr, null, connectionString, option)
         {
-            _option = option;
+
         }
 
         public TransScope(IConnectionManagerFactory mgr, IConnectionFactory factory,string connectionString, TransScopeOption option = TransScopeOption.Required)
         {
-            _connectionManager = factory == null ?
-                mgr.GetConnectionManager(connectionString) 
-                : mgr.GetConnectionManager(factory, connectionString);
+            _connectionManager = mgr.GetConnectionManager(connectionString, factory);
 
             if (!_connectionManager.IsExistDbTransaction() || option == TransScopeOption.RequiresNew)
             {
@@ -44,20 +40,19 @@ namespace Vulcan.DataAccess
         /// <summary>
         /// 是否是该对象开启的事务(哪个对象负责开启则哪个对象负责提交)
         /// </summary>
-        private readonly bool _beginTransactionIsInCurrentTransScope = false;
+        private readonly bool _beginTransactionIsInCurrentTransScope;
 
-        private bool _completed = false;
+        private bool _completed;
 
         /// <summary>
         /// Commit Transaction
         /// </summary>
         public void Complete()
         {
-            if (_beginTransactionIsInCurrentTransScope && _tran != null)
-            {
-                _tran.Commit();
-                _completed = true;
-            }
+            if (!_beginTransactionIsInCurrentTransScope || _tran == null) return;
+
+            _tran.Commit();
+            _completed = true;
         }
 
         /// <summary>
@@ -65,11 +60,10 @@ namespace Vulcan.DataAccess
         /// </summary>
         public void Rollback()
         {
-            if (_beginTransactionIsInCurrentTransScope)
-            {
-                _tran?.Rollback();
-                _completed = true;
-            }
+            if (!_beginTransactionIsInCurrentTransScope) return;
+
+            _tran?.Rollback();
+            _completed = true;
 
         }
 
@@ -86,7 +80,7 @@ namespace Vulcan.DataAccess
             _connectionManager.Dispose();
         }
 
-      
+
 
         public void Dispose()
         {

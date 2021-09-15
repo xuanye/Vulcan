@@ -5,8 +5,7 @@
     <Copyright>Xuanye @ 2016</Copyright>
     <Authors>Xuanye</Authors>
     <AssemblyTitle>Vulcan 基于Dapper.NET的数据库链接托管类库</AssemblyTitle>
-    <AssemblyName>Vulcan.DataAccess</AssemblyName>
-    <PackageId>Vulcan.DataAccess</PackageId>
+    <PackageId>Vulcan.DapperExtensions</PackageId>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Version>$(VersionSuffix)</Version>
     <NeutralLanguage>zh-CN</NeutralLanguage>
@@ -19,6 +18,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/xuanye/Vulcan</RepositoryUrl>
+    <RootNamespace>Vulcan.DataAccess</RootNamespace>
 
 
   </PropertyGroup>

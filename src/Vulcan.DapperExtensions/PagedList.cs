@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Vulcan.DataAccess
 {
@@ -11,8 +8,8 @@ namespace Vulcan.DataAccess
 
         public List<T> DataList
         {
-            get { return _dataList ?? (_dataList = new List<T>()); }
-            set { _dataList = value; }
+            get => _dataList ?? (_dataList = new List<T>());
+            set => _dataList = value;
         }
 
         public int PageSize { get; set; }

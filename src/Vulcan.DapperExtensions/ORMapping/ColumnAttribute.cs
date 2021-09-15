@@ -10,7 +10,7 @@ namespace Vulcan.DataAccess.ORMapping
             this.MapFieldName = mapField;
         }
 
-        public string MapFieldName { get; set; }
+        public string MapFieldName { get; }
     }
 
     [AttributeUsage(AttributeTargets.Property)]
@@ -36,7 +36,7 @@ namespace Vulcan.DataAccess.ORMapping
             this.PKIndex = pkIndex;
         }
 
-        public int PKIndex { get; set; }
+        public int PKIndex { get; }
     }
 
     public class IgnoreAttribute : Attribute

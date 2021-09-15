@@ -79,11 +79,11 @@ namespace Vulcan.DataAccess.ORMapping
 
         private string GetInsertFullSql()
         {
-            Type t = this.GetType();
+            var t = this.GetType();
             if (!_InsertSqlCache.ContainsKey(t))
             {
-                EntityMeta metadeta = EntityReflect.GetDefineInfoFromType(t);
-                string sql = SQLBuilder.BuildInsertSql(metadeta);
+                var metadeta = EntityReflect.GetDefineInfoFromType(t);
+                var sql = SQLBuilder.BuildInsertSql(metadeta);
                 lock (lockobject)
                 {
                     if (!_InsertSqlCache.ContainsKey(t))
@@ -97,11 +97,11 @@ namespace Vulcan.DataAccess.ORMapping
 
         private string GetUpdateFullSql()
         {
-            Type t = this.GetType();
+            var t = this.GetType();
             if (!_UpdateSqlCache.ContainsKey(t))
             {
-                EntityMeta metadeta = EntityReflect.GetDefineInfoFromType(t);
-                string sql = SQLBuilder.BuildUpdateSql(metadeta);
+                var metadeta = EntityReflect.GetDefineInfoFromType(t);
+                var sql = SQLBuilder.BuildUpdateSql(metadeta);
                 lock (lockobject)
                 {
                     if (!_UpdateSqlCache.ContainsKey(t))
@@ -115,13 +115,13 @@ namespace Vulcan.DataAccess.ORMapping
 
         private string GetInsertChangeColumnsSql()
         {
-            EntityMeta metadeta = EntityReflect.GetDefineInfoFromType(this.GetType());
+            var metadeta = EntityReflect.GetDefineInfoFromType(this.GetType());
             return SQLBuilder.BuildInsertSql(metadeta, this._PropertyChangedList);
         }
 
         private string GetUpdateChangeColumnsSql()
         {
-            EntityMeta metadeta = EntityReflect.GetDefineInfoFromType(this.GetType());
+            var metadeta = EntityReflect.GetDefineInfoFromType(this.GetType());
             return SQLBuilder.BuildUpdateSql(metadeta, this._PropertyChangedList);
         }
 

@@ -16,7 +16,7 @@ namespace Vulcan.DataAccess.ORMapping.MySql
         {
         }
 
-       
+
 
         /// <summary>
         /// 分页查询列表
@@ -32,11 +32,11 @@ namespace Vulcan.DataAccess.ORMapping.MySql
         /// <returns>返回分页信息，当查询为第一页时 返回总记录数</returns>
         public PagedList<T> PagedQuery<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition, object param, string sqlPk, string sqlOrder)
         {
-            PagedList<T> pList = new PagedList<T>();
+            var pList = new PagedList<T>();
             long totalCount = -1;
             if (view.PageIndex == 0)
             {
-                string totalSql = string.Format(" select count(1) from {0} where 1=1 {1} ;", sqlTable, sqlCondition);
+                var totalSql = $" select count(1) from {sqlTable} where 1=1 {sqlCondition} ;";
                 totalCount = Get<long>(totalSql, param);
                 if (totalCount == 0)
                 {
@@ -52,9 +52,10 @@ namespace Vulcan.DataAccess.ORMapping.MySql
             {
                 sqlOrder = " ORDER BY " + sqlPk;
             }
-            int pageStartIndex = view.PageSize * view.PageIndex;
-            int currentPageCount = view.PageSize;
-            string sql = string.Format(" select {0} from {1} where 1=1  {2} {3} limit {4},{5} ;", sqlColumns, sqlTable, sqlCondition, sqlOrder, pageStartIndex, currentPageCount);
+            var pageStartIndex = view.PageSize * view.PageIndex;
+            var currentPageCount = view.PageSize;
+            var sql =
+                $" select {sqlColumns} from {sqlTable} where 1=1  {sqlCondition} {sqlOrder} limit {pageStartIndex},{currentPageCount} ;";
 
             pList.DataList = Query<T>(sql, param);
             pList.Total = (int)totalCount;
@@ -65,11 +66,11 @@ namespace Vulcan.DataAccess.ORMapping.MySql
 
         public async Task<PagedList<T>> PagedQueryAsync<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition, object param, string sqlPk, string sqlOrder)
         {
-            PagedList<T> pList = new PagedList<T>();
+            var pList = new PagedList<T>();
             long totalCount = -1;
             if (view.PageIndex == 0)
             {
-                string totalSql = string.Format(" select count(1) from {0} where 1=1 {1} ;", sqlTable, sqlCondition);
+                var totalSql = $" select count(1) from {sqlTable} where 1=1 {sqlCondition} ;";
                 totalCount = await GetAsync<long>(totalSql, param);
                 if (totalCount == 0)
                 {
@@ -85,9 +86,10 @@ namespace Vulcan.DataAccess.ORMapping.MySql
             {
                 sqlOrder = " ORDER BY " + sqlPk;
             }
-            int pageStartIndex = view.PageSize * view.PageIndex;
-            int currentPageCount = view.PageSize;
-            string sql = string.Format(" select {0} from {1} where 1=1  {2} {3} limit {4},{5} ;", sqlColumns, sqlTable, sqlCondition, sqlOrder, pageStartIndex, currentPageCount);
+            var pageStartIndex = view.PageSize * view.PageIndex;
+            var currentPageCount = view.PageSize;
+            var sql =
+                $" select {sqlColumns} from {sqlTable} where 1=1  {sqlCondition} {sqlOrder} limit {pageStartIndex},{currentPageCount} ;";
 
             pList.DataList = await QueryAsync<T>(sql, param);
             pList.Total = (int)totalCount;
@@ -98,16 +100,16 @@ namespace Vulcan.DataAccess.ORMapping.MySql
 
         public void ReplaceInto(MySqlEntity entity)
         {
-            string sql = entity.GetReplaceInsertSQL();
+            var sql = entity.GetReplaceInsertSQL();
 
-            base.Excute(sql, entity);
+            base.Execute(sql, entity);
         }
 
         public Task ReplaceIntoAsync(MySqlEntity entity)
         {
-            string sql = entity.GetReplaceInsertSQL();
+            var sql = entity.GetReplaceInsertSQL();
 
-            return base.ExcuteAsync(sql, entity);
+            return base.ExecuteAsync(sql, entity);
         }
     }
 }

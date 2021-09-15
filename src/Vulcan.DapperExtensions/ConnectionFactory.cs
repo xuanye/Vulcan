@@ -6,16 +6,16 @@ namespace Vulcan.DataAccess
 {
     public static class ConnectionFactoryHelper
     {
-        private static IConnectionFactory _default;
+        private static IConnectionFactory _Default;
         public static void Configure(IConnectionFactory factory)
         {
-            _default = factory;
+            _Default = factory;
         }
         public static IDbConnection CreateDefaultDbConnection(string connectionString)
         {
-            if(_default != null)
+            if(_Default != null)
             {
-                return _default.CreateDbConnection(connectionString);
+                return _Default.CreateDbConnection(connectionString);
             }
 
             throw new NullReferenceException("默认的IConnectionFactory没有设置，请在应用程序启动时设置");

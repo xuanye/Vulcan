@@ -35,17 +35,17 @@ namespace Vulcan.DataAccess.ORMapping
           
             tdefine.TableName = tableAttribute != null ? tableAttribute.TableName : type.FullName.Split('.').Last();
 
-            foreach (PropertyInfo p in type.GetProperties( BindingFlags.Public | BindingFlags.Instance))
+            foreach (var p in type.GetProperties( BindingFlags.Public | BindingFlags.Instance))
             {
                
                 var attrs = p.GetCustomAttributes();
 
 
-                EntityColumnMeta ecmeta = new EntityColumnMeta {ColumnName = p.Name};
+                var ecmeta = new EntityColumnMeta {ColumnName = p.Name};
 
                 ecmeta.PropertyName = p.Name;
 
-                foreach (Attribute cusattr in attrs)
+                foreach (var cusattr in attrs)
                 {
                     if (cusattr is IgnoreAttribute)
                     {

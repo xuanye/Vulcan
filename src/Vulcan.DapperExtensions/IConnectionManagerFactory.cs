@@ -1,45 +1,39 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Vulcan.DataAccess
 {
     public interface IConnectionManagerFactory
     {
-        ConnectionManager GetConnectionManager(IConnectionFactory factory, string constr);
-
-        ConnectionManager GetConnectionManager(string constr);
-
+        ConnectionManager GetConnectionManager( string constr,IConnectionFactory factory);
     }
 
     public class ConnectionManagerFactory : IConnectionManagerFactory
     {
 
-        private static object _lock = new object();
+        private static readonly object LockObject = new object();
 
         private readonly IRuntimeContextStorage _ctxStorage;
-        private readonly IConnectionFactory _defautFactory;
+        private readonly IConnectionFactory _defaultFactory;
         public ConnectionManagerFactory(IRuntimeContextStorage ctxStorage, IConnectionFactory factory)
         {
             _ctxStorage = ctxStorage ?? throw new ArgumentNullException(nameof(ctxStorage));
-            _defautFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-
+            _defaultFactory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-
-        public ConnectionManager GetConnectionManager(IConnectionFactory factory, string constr)
+        public ConnectionManager GetConnectionManager(string constr,IConnectionFactory factory=null)
         {
             ConnectionManager mgr = null;
+            // if not exists
             if (!_ctxStorage.ContainsKey(constr))
             {
-                lock (_lock)
+                lock (LockObject)
                 {
                     if (!_ctxStorage.ContainsKey(constr))
                     {
-                        // 创建一个新的连接 并缓存起来
-                        mgr = new ConnectionManager(factory?? _defautFactory, constr, _ctxStorage);
+                        // create a new db connection and cache it;
+                        mgr = new ConnectionManager(factory?? _defaultFactory, constr, _ctxStorage);
                         _ctxStorage.Set(constr, mgr);
-                    }                    
+                    }
                 }
                 if(mgr != null)
                 {
@@ -47,16 +41,11 @@ namespace Vulcan.DataAccess
                     return mgr;
                 }
             }
-
+            //else
             mgr = (ConnectionManager)_ctxStorage.Get(constr);
             mgr.AddRef();
             return mgr;
 
-        }
-
-        public ConnectionManager GetConnectionManager(string constr)
-        {
-           return GetConnectionManager(null, constr);
         }
     }
 }
