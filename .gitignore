@@ -31,3 +31,5 @@ project.lock.json
 .idea/
 *.Production.json
 *.Development.json
+
+**/.idea/
