@@ -22,7 +22,7 @@ namespace Vulcan.DapperExtensionsUnitTests
         public ConnectionScopeTests()
         {
             //for unit test only ,in asp.net core should use httpContext storage ,
-            //or other asynchronous application maybe implement by AsyncLocal<> 
+            //or other asynchronous application maybe implement by AsyncLocal<>
             _threadLocalStorage = new ThreadLocalStorage();
 
             _connectionFactory = new SqlConnectionFactory();
@@ -33,29 +33,27 @@ namespace Vulcan.DapperExtensionsUnitTests
         [Fact]
         public void TestConnectionScope_IsSameConnection_WithUsingScope()
         {
-            using( var scope = new ConnectionScope(_factory, MsSQLConstants.CONNECTION_STRING))
+            using var scope = new ConnectionScope(_factory, MsSQLConstants.CONNECTION_STRING);
+            //ref +1
+            IDbConnection connection;
+            using(var connect1 = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING))//ref +1
             {
-                //ref +1
-                IDbConnection connection;
-                using(var connect1 = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING))//ref +1
-                {
-                    connection = connect1.Connection;
-                    Assert.Equal(2, connect1.RefCount);
-                }//ref -1
+                connection = connect1.Connection;
+                Assert.Equal(2, connect1.RefCount);
+            }//ref -1
 
-                using (var connect2 = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING))//ref +1
-                {
-                    Assert.Equal(connection, connect2.Connection);
-                    Assert.Equal(2, connect2.RefCount);
-                }//ref -1
-            }//ref -1 and ref ==0
+            using (var connect2 = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING))//ref +1
+            {
+                Assert.Equal(connection, connect2.Connection);
+                Assert.Equal(2, connect2.RefCount);
+            }//ref -1
         }
 
 
         [Fact]
         public void TestConnectionScope_IsNotSameConnection_WithoutUsingScope()
         {
-           
+
                 IDbConnection connection;
                 using (var connect1 = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING))
                 {
@@ -68,7 +66,7 @@ namespace Vulcan.DapperExtensionsUnitTests
                     Assert.NotEqual(connection, connect2.Connection);
                     Assert.Equal(1, connect2.RefCount);
                 }
-            
+
         }
 
         public void Dispose()
