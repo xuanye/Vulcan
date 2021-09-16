@@ -1,8 +1,8 @@
 set -ex
 
-cd $(dirname $0)/../src/
+cd $(dirname $0)/../
 
-artifactsFolder="../artifacts"
+artifactsFolder="./artifacts"
 
 if [ -d $artifactsFolder ]; then
   rm -R $artifactsFolder
@@ -10,13 +10,11 @@ fi
 
 mkdir -p $artifactsFolder
 
-dotnet restore ./Vulcan.DataAccess.sln
+dotnet restore ./Vulcan.sln
 
 
-dotnet build ./Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release
+dotnet build ./src/Vulcan.DapperExtensions/Vulcan.DapperExtensions.csproj -c Release
 
-versionNumber="2.1.2"
+versionNumber="2.1.3"
 
-dotnet pack ./Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release -o ../$artifactsFolder --version-suffix=$versionNumber
-
-pwd
+dotnet pack ./src/Vulcan.DataAccess/Vulcan.DapperExtensions.csproj -c Release -o $artifactsFolder --version-suffix=$versionNumber

@@ -5,7 +5,7 @@ namespace Vulcan.DapperExtensions
 {
     public class ThreadLocalStorage : IRuntimeContextStorage
     {
-        private static readonly ThreadLocal<Dictionary<string,object>> Local = new ThreadLocal<Dictionary<string,object>>();
+        private static readonly ThreadLocal<Dictionary<string,object>> Local = new ThreadLocal<Dictionary<string,object>>( ()=> new Dictionary<string, object>());
 
         public bool ContainsKey(string key)
         {

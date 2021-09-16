@@ -10,17 +10,16 @@ fi
 
 mkdir -p $artifactsFolder
 
-dotnet restore ./src/Vulcan.DataAccess.sln
+dotnet restore ./Vulcan.sln
 
 
-dotnet build ./src/Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release
+dotnet build ./src/Vulcan.DapperExtensions/Vulcan.DapperExtensions.csproj -c Release
 
 versionNumber="2.1.3"
 
-dotnet pack ./src/Vulcan.DataAccess/Vulcan.DataAccess.csproj -c Release -o $artifactsFolder --version-suffix=$versionNumber
-
-pwd
+dotnet pack ./src/Vulcan.DataAccess/Vulcan.DapperExtensions.csproj -c Release -o $artifactsFolder --version-suffix=$versionNumber
 
 
-dotnet nuget push $artifactsFolder/Vulcan.DataAccess.${versionNumber}.nupkg -k $NUGET_KEY -s https://www.nuget.org
+
+dotnet nuget push $artifactsFolder/Vulcan.DapperExtensions.${versionNumber}.nupkg -k $NUGET_KEY -s https://www.nuget.org
 
