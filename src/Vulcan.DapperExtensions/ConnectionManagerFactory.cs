@@ -5,7 +5,6 @@ namespace Vulcan.DapperExtensions
 {
     public class ConnectionManagerFactory : IConnectionManagerFactory
     {
-
         private static readonly object LockObject = new object();
 
         private readonly IRuntimeContextStorage _ctxStorage;
@@ -16,7 +15,7 @@ namespace Vulcan.DapperExtensions
             _defaultFactory = factory ?? throw new ArgumentNullException(nameof(factory));
         }
 
-        public ConnectionManager GetConnectionManager(string constr,IConnectionFactory factory=null)
+        public ConnectionManager GetConnectionManager(string constr, IConnectionFactory factory = null)
         {
             ConnectionManager mgr = null;
             // if not exists
@@ -27,11 +26,11 @@ namespace Vulcan.DapperExtensions
                     if (!_ctxStorage.ContainsKey(constr))
                     {
                         // create a new db connection and cache it;
-                        mgr = new ConnectionManager(factory?? _defaultFactory, constr, _ctxStorage);
+                        mgr = new ConnectionManager(factory ?? _defaultFactory, constr, _ctxStorage);
                         _ctxStorage.Set(constr, mgr);
                     }
                 }
-                if(mgr != null)
+                if (mgr != null)
                 {
                     mgr.AddRef();
                     return mgr;

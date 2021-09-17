@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Vulcan.DapperExtensionsUnitTests.MsSql
 {
-    public static class MsSQLConstants
+    public static class MSSQLConstants
     {
         /// <summary>
         /// MsSQL Local TestDb

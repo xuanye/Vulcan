@@ -1,4 +1,4 @@
-﻿namespace Vulcan.DapperExtensions.Contract
+namespace Vulcan.DapperExtensions.Contract
 {
     public interface IRuntimeContextStorage
     {
