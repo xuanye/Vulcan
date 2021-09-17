@@ -1,4 +1,5 @@
 using System.Data;
+using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensions
 {

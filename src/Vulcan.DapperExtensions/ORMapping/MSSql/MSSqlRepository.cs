@@ -1,5 +1,7 @@
 
 
+using Vulcan.DapperExtensions.Contract;
+
 namespace Vulcan.DapperExtensions.ORMapping.MSSql
 {
     public class MSSqlRepository : BaseRepository

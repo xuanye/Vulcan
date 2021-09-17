@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dapper;
+using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensions.ORMapping.MySql
 {

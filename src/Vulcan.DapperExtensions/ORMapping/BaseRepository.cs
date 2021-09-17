@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Dapper;
+using Vulcan.DapperExtensions.Contract;
+using Vulcan.DapperExtensions.Internal;
 
 namespace Vulcan.DapperExtensions.ORMapping
 {
