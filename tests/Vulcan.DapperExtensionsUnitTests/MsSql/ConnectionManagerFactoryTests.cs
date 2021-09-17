@@ -17,35 +17,35 @@ namespace Vulcan.DapperExtensionsUnitTests
         private SqlConnectionFactory _connectionFactory;
 
         //NOTE:TestDb Should be exists;
-      
+
 
         public ConnectionManagerFactoryTests()
         {
             //for unit test only ,in asp.net core should use httpContext storage ,
-            //or other asynchronous application maybe implement by AsyncLocal<> 
+            //or other asynchronous application maybe implement by AsyncLocal<>
             _threadLocalStorage = new ThreadLocalStorage();
-            
+
             _connectionFactory = new SqlConnectionFactory();
 
             _factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
         }
 
-  
+
         [Fact]
         public void GetConnectionManager_IsNotNull_WithSimpleCall()
         {
             //arrange
-            
+
 
             //act
-            using var connectionManager = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING);
+            using var connectionManager = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
 
 
             //assert
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(MsSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
+            Assert.Equal(MSSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
 
             Assert.Equal(1, connectionManager.RefCount);
 
@@ -60,20 +60,20 @@ namespace Vulcan.DapperExtensionsUnitTests
 
 
             //act
-            using var connectionManager = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING);
+            using var connectionManager = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
 
 
             //assert
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(MsSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
+            Assert.Equal(MSSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
 
             Assert.Equal(1, connectionManager.RefCount);
 
             Assert.Equal(System.Data.ConnectionState.Open, connectionManager.Connection.State);
 
-            using var connectionManager2 = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING);
+            using var connectionManager2 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
 
             Assert.NotNull(connectionManager2);
             Assert.NotNull(connectionManager2.Connection);
@@ -91,14 +91,14 @@ namespace Vulcan.DapperExtensionsUnitTests
 
 
             //act
-            var connectionManager = _factory.GetConnectionManager(MsSQLConstants.CONNECTION_STRING);
+            var connectionManager = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
 
 
             //assert
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(MsSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
+            Assert.Equal(MSSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
 
             Assert.Equal(1, connectionManager.RefCount);
 
@@ -114,7 +114,7 @@ namespace Vulcan.DapperExtensionsUnitTests
 
         public void Dispose()
         {
-            _threadLocalStorage.Remove(MsSQLConstants.CONNECTION_STRING);
+            _threadLocalStorage.Remove(MSSQLConstants.CONNECTION_STRING);
             _threadLocalStorage = null;
             _factory = null;
             _connectionFactory = null;
