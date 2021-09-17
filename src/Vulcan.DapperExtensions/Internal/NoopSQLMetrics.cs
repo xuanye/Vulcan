@@ -2,7 +2,7 @@ using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensions.Internal
 {
-    internal class NullSQLMetrics : ISQLMetrics
+    internal class NoopSQLMetrics : ISQLMetrics
     {
         public void AddToMetrics(string sql, object param)
         {

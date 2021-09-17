@@ -1,3 +1,5 @@
+using Vulcan.DapperExtensions.Contract;
+
 namespace Vulcan.DapperExtensions
 {
     public class ConnectionScope: IScope

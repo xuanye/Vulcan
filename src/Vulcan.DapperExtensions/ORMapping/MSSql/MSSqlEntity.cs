@@ -4,9 +4,6 @@
     {
         private static readonly MSSqlSQLBuilder _builder = new MSSqlSQLBuilder();
 
-        protected override ISQLBuilder SQLBuilder
-        {
-            get { return _builder; }
-        }
+        protected override ISQLBuilder SQLBuilder => _builder;
     }
 }

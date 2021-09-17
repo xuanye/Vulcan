@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Vulcan.DapperExtensions
+namespace Vulcan.DapperExtensions.Contract
 {
     public interface IScope:IDisposable
     {

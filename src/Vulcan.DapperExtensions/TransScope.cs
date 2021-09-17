@@ -1,9 +1,10 @@
 using System.Data;
+using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensions
 {
     /// <summary>
-    /// 事务管理
+    /// Transaction Management
     /// </summary>
     public class TransScope : IScope
     {
@@ -38,7 +39,8 @@ namespace Vulcan.DapperExtensions
         private readonly IDbTransaction _tran;
 
         /// <summary>
-        /// 是否是该对象开启的事务(哪个对象负责开启则哪个对象负责提交)
+        /// Whether the transaction is started by this instance
+        /// (which instance is responsible for starting and which object is responsible for committing)
         /// </summary>
         private readonly bool _beginTransactionIsInCurrentTransScope;
 

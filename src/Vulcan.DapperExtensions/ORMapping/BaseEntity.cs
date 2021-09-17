@@ -1,46 +1,39 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Vulcan.DapperExtensions.ORMapping
 {
     public abstract class AbstractBaseEntity
     {
-        private static Dictionary<Type, string> _InsertSqlCache = new Dictionary<Type, string>();
-        private static Dictionary<Type, string> _UpdateSqlCache = new Dictionary<Type, string>();
+        private static readonly ConcurrentDictionary<Type, string> _InsertSqlCache = new ConcurrentDictionary<Type, string>();
+        private static readonly ConcurrentDictionary<Type, string> _UpdateSqlCache = new ConcurrentDictionary<Type, string>();
 
-        private static object lockobject = new object();
-        private List<string> _PropertyChangedList = new List<string>();
+        private static readonly object _LockObject = new object();
+        private readonly List<string> _PropertyChangedList = new List<string>();
 
-        #region 属性
+        #region Properties
 
         [Ignore]
         public bool FullUpdate { get; set; }
 
-        #endregion 属性
+        #endregion
 
-        #region 公开方法
+        #region Public Methods
 
         public string GetInsertSQL()
         {
-            if (FullUpdate)
-            {
-                return GetInsertFullSql();
-            }
-            return GetInsertChangeColumnsSql();
+            return FullUpdate ? GetInsertFullSql() : GetInsertChangeColumnsSql();
         }
 
         public string GetUpdateSQL()
         {
-            if (FullUpdate)
-            {
-                return GetUpdateFullSql();
-            }
-            return GetUpdateChangeColumnsSql();
+            return FullUpdate ? GetUpdateFullSql() : GetUpdateChangeColumnsSql();
         }
 
         public void RemoveUpdateColumn(string ColumnName)
         {
-            lock (lockobject)
+            lock (_LockObject)
             {
                 if (_PropertyChangedList.Contains(ColumnName))
                 {
@@ -49,7 +42,7 @@ namespace Vulcan.DapperExtensions.ORMapping
             }
         }
 
-        #endregion 公开方法
+        #endregion
 
         protected abstract ISQLBuilder SQLBuilder
         {
@@ -58,7 +51,7 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         protected void Clear()
         {
-            lock (lockobject)
+            lock (_LockObject)
             {
                 _PropertyChangedList.Clear();
             }
@@ -66,7 +59,7 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         protected void OnPropertyChanged(string pName)
         {
-            lock (lockobject)
+            lock (_LockObject)
             {
                 if (!_PropertyChangedList.Contains(pName))
                 {
@@ -75,56 +68,55 @@ namespace Vulcan.DapperExtensions.ORMapping
             }
         }
 
-        #region 私有方法
+        #region Private Methods
 
         private string GetInsertFullSql()
         {
             var t = this.GetType();
-            if (!_InsertSqlCache.ContainsKey(t))
+            if(_InsertSqlCache.TryGetValue(t,out var sql))
             {
-                var metadeta = EntityReflect.GetDefineInfoFromType(t);
-                var sql = SQLBuilder.BuildInsertSql(metadeta);
-                lock (lockobject)
-                {
-                    if (!_InsertSqlCache.ContainsKey(t))
-                    {
-                        _InsertSqlCache.Add(t, sql);
-                    }
-                }
+                return sql;
             }
+            var metaData = EntityReflect.GetDefineInfoFromType(t);
+            sql = SQLBuilder.BuildInsertSql(metaData);
+
+            _InsertSqlCache.TryAdd(t, sql);
+
             return _InsertSqlCache[t];
         }
 
         private string GetUpdateFullSql()
         {
             var t = this.GetType();
-            if (!_UpdateSqlCache.ContainsKey(t))
+            if (_UpdateSqlCache.TryGetValue(t, out var sql))
             {
-                var metadeta = EntityReflect.GetDefineInfoFromType(t);
-                var sql = SQLBuilder.BuildUpdateSql(metadeta);
-                lock (lockobject)
-                {
-                    if (!_UpdateSqlCache.ContainsKey(t))
-                    {
-                        _UpdateSqlCache.Add(t, sql);
-                    }
-                }
+                return sql;
             }
+
+            var metaData = EntityReflect.GetDefineInfoFromType(t);
+            sql = SQLBuilder.BuildUpdateSql(metaData);
+            _UpdateSqlCache.TryAdd(t, sql);
             return _UpdateSqlCache[t];
         }
 
         private string GetInsertChangeColumnsSql()
         {
-            var metadeta = EntityReflect.GetDefineInfoFromType(this.GetType());
-            return SQLBuilder.BuildInsertSql(metadeta, this._PropertyChangedList);
+            var metaData = EntityReflect.GetDefineInfoFromType(this.GetType());
+            lock (_LockObject)
+            {
+                return SQLBuilder.BuildInsertSql(metaData, this._PropertyChangedList);
+            }
         }
 
         private string GetUpdateChangeColumnsSql()
         {
-            var metadeta = EntityReflect.GetDefineInfoFromType(this.GetType());
-            return SQLBuilder.BuildUpdateSql(metadeta, this._PropertyChangedList);
+            var metaData = EntityReflect.GetDefineInfoFromType(this.GetType());
+            lock (_LockObject)
+            {
+                return SQLBuilder.BuildUpdateSql(metaData, this._PropertyChangedList);
+            }
         }
 
-        #endregion 私有方法
+        #endregion
     }
 }

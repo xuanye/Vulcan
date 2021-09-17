@@ -6,7 +6,6 @@ namespace Vulcan.DapperExtensionsUnitTests.MsSql
 {
     public static class MsSQLConstants
     {
-       
         /// <summary>
         /// MsSQL Local TestDb
         /// NOTE:TestDb Should be exists;

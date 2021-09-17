@@ -61,15 +61,14 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
 
             for (int i = 0, j = 0; i < meta.Columns.Count; i++)
             {
-                if (!meta.Columns[i].PrimaryKey)
+                if (meta.Columns[i].PrimaryKey) continue;
+
+                if (j > 0)
                 {
-                    if (j > 0)
-                    {
-                        sqlbuilder.Append(",");
-                    }
-                    j++;
-                    sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]=@" + meta.Columns[i].PropertyName + "");
+                    sqlbuilder.Append(",");
                 }
+                j++;
+                sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]=@" + meta.Columns[i].PropertyName + "");
             }
             sqlbuilder.Append(" WHERE ");
             for (var i = 0; i < keys.Count; i++)
@@ -120,16 +119,10 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
             }
             sqlbuilder.Append(");");
 
-            if (meta.Columns.Exists(x => x.Identity))
-            {
-                sqlbuilder.Append(" SELECT CAST(SCOPE_IDENTITY() as bigint) as Id;"); //sqlbuilder.Append("SELECT SCOPE_IDENTITY();");
-
-            }
-            else
-            {
-                sqlbuilder.Append(" SELECT  CAST(0 as bigint) as Id;");
-
-            }
+            var exists = meta.Columns.Exists(x => x.Identity);
+            sqlbuilder.Append(exists
+                ? " SELECT CAST(SCOPE_IDENTITY() as bigint) as Id;"
+                : " SELECT CAST(0 as bigint) as Id;");
 
             return sqlbuilder.ToString();
         }
@@ -146,15 +139,14 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
 
             for (int i = 0, j = 0; i < meta.Columns.Count; i++)
             {
-                if (!meta.Columns[i].PrimaryKey && list.Contains(meta.Columns[i].ColumnName))
+                if (meta.Columns[i].PrimaryKey || !list.Contains(meta.Columns[i].ColumnName)) continue;
+
+                if (j > 0)
                 {
-                    if (j > 0)
-                    {
-                        sqlbuilder.Append(",");
-                    }
-                    j++;
-                    sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]=@" + meta.Columns[i].PropertyName + "");
+                    sqlbuilder.Append(",");
                 }
+                j++;
+                sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]=@" + meta.Columns[i].PropertyName + "");
             }
             sqlbuilder.Append(" WHERE ");
             for (var i = 0; i < keys.Count; i++)
