@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Vulcan.DapperExtensionsUnitTests.MsSql
+namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 {
     public static class MSSQLConstants
     {

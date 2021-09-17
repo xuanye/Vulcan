@@ -1,10 +1,9 @@
 using System;
 using System.Data;
 using Vulcan.DapperExtensions;
-using Vulcan.DapperExtensionsUnitTests.MsSql;
 using Xunit;
 
-namespace Vulcan.DapperExtensionsUnitTests
+namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 {
     /// <summary>
     /// share same connection in a scope
@@ -45,6 +44,10 @@ namespace Vulcan.DapperExtensionsUnitTests
                 Assert.Equal(connection, connect2.Connection);
                 Assert.Equal(2, connect2.RefCount);
             }//ref -1
+
+            //do nothing
+            scope.Commit();
+            scope.Rollback();
         }
 
 

@@ -1,11 +1,8 @@
-using Moq.AutoMock;
 using System;
-using System.Threading.Tasks;
 using Vulcan.DapperExtensions;
-using Vulcan.DapperExtensionsUnitTests.MsSql;
 using Xunit;
 
-namespace Vulcan.DapperExtensionsUnitTests
+namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 {
     /// <summary>
     /// ConnectionManagerTests
@@ -16,9 +13,7 @@ namespace Vulcan.DapperExtensionsUnitTests
         private ThreadLocalStorage _threadLocalStorage;
         private SqlConnectionFactory _connectionFactory;
 
-        //NOTE:TestDb Should be exists;
-
-
+    
         public ConnectionManagerFactoryTests()
         {
             //for unit test only ,in asp.net core should use httpContext storage ,
@@ -30,6 +25,13 @@ namespace Vulcan.DapperExtensionsUnitTests
             _factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
         }
 
+        [Fact]
+        public void Constructor_ShouldThrowException_IfPassNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => { var factory = new ConnectionManagerFactory(_threadLocalStorage, null); });          
+            Assert.Throws<ArgumentNullException>(() => { var factory = new ConnectionManagerFactory(null, _connectionFactory); });
+            Assert.Throws<ArgumentNullException>(() => { var factory = new ConnectionManagerFactory(null, null); });
+        }
 
         [Fact]
         public void GetConnectionManager_IsNotNull_WithSimpleCall()

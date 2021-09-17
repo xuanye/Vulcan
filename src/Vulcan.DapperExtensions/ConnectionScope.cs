@@ -19,7 +19,7 @@ namespace Vulcan.DapperExtensions
         }
 
         public void Dispose()
-        {
+        {           
             _connectionManager.Dispose();
             _connectionString = null;
             _connectionManager = null;

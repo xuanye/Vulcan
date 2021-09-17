@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Vulcan.DapperExtensionsUnitTests.MsSql
+namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 {
-    public class MsSqlDatabaseFixture : IDisposable
+    public class MSSQLDatabaseFixture : IDisposable
     {
-        public MsSqlDatabaseFixture()
+        public MSSQLDatabaseFixture()
         {
             //Db = new SqlConnection("MyConnectionString");
 

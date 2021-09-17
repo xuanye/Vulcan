@@ -22,4 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Vulcan.DapperExtensions\Vulcan.DapperExtensions.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MySQL\" />
+  </ItemGroup>
  </Project>
