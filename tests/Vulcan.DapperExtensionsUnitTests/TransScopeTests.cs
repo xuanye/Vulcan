@@ -36,35 +36,35 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
             var connectionString = TestResourceManager.GetConnectionString();
             //act
             using var scope = new TransScope(_factory, connectionString); //ref +1
-            using var connect1 = _factory.GetConnectionManager(connectionString);
-            using var connect2 = _factory.GetConnectionManager(connectionString);
+            using var connect1 = _factory.GetConnectionManager(connectionString);//ref +1
+            using var connect2 = _factory.GetConnectionManager(connectionString);//ref +1
             //assert
             Assert.NotNull(connect1.Transaction);
 
-            Assert.Equal(connect1,connect2);
-            Assert.Equal(connect1.Transaction,connect2.Transaction);
-            Assert.Equal(2, connect1.RefCount);
+            Assert.Equal(connect1, connect2);
+            Assert.Equal(connect1.Transaction, connect2.Transaction);
+            Assert.Equal(3, connect1.RefCount);
         }
 
         [Fact]
-        public void CreateTransScope_ShouldBeDifferentTransaction_WithNestedScope()
+        public void CreateTransScope_ShouldBeSameTransaction_WithNestedScope()
         {
             //arrange
             var connectionString = TestResourceManager.GetConnectionString();
 
             //act
             using var scope1 = new TransScope(_factory, connectionString); //ref +1
-            using var connect1 = _factory.GetConnectionManager(connectionString);
-            using var scope2 = new TransScope(_factory, connectionString, TransScopeOption.RequiresNew); //ref +1
-            using var connect2 = _factory.GetConnectionManager(connectionString);
+            using var connect1 = _factory.GetConnectionManager(connectionString);//ref +1
+            using var scope2 = new TransScope(_factory, connectionString); //ref +1
+            using var connect2 = _factory.GetConnectionManager(connectionString);//ref +1
 
             //assert
             Assert.NotNull(connect1.Transaction);
             Assert.NotNull(connect2.Transaction);
 
-            Assert.Equal(connect1,connect2);
-            Assert.NotEqual(connect1.Transaction,connect2.Transaction);
-            Assert.Equal(2, connect1.RefCount);
+            Assert.Equal(connect1, connect2);
+            Assert.Equal(connect1.Transaction, connect2.Transaction);
+            Assert.Equal(4, connect1.RefCount);
         }
 
 

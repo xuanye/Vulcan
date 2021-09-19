@@ -20,6 +20,13 @@ namespace Vulcan.DapperExtensions
 
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TransScope"/> class.
+        /// </summary>
+        /// <param name="mgr"></param>
+        /// <param name="factory"></param>
+        /// <param name="connectionString"></param>
+        /// <param name="option">notice: sql server don't support nested transaction </param>
         public TransScope(IConnectionManagerFactory mgr, IConnectionFactory factory,string connectionString, TransScopeOption option = TransScopeOption.Required)
         {
             _connectionManager = mgr.GetConnectionManager(connectionString, factory);
@@ -47,17 +54,6 @@ namespace Vulcan.DapperExtensions
         private bool _completed;
 
         /// <summary>
-        /// Commit Transaction
-        /// </summary>
-        public void Complete()
-        {
-            if (!_beginTransactionIsInCurrentTransScope || _tran == null) return;
-
-            _tran.Commit();
-            _completed = true;
-        }
-
-        /// <summary>
         /// rollback  transaction
         /// </summary>
         public void Rollback()
@@ -69,10 +65,8 @@ namespace Vulcan.DapperExtensions
 
         }
 
-        /// <summary>
-        /// close connection and rollback transaction
-        /// </summary>
-        public void Close()
+
+        public void Dispose()
         {
             if (!_completed)
             {
@@ -82,16 +76,12 @@ namespace Vulcan.DapperExtensions
             _connectionManager.Dispose();
         }
 
-
-
-        public void Dispose()
-        {
-            Close();
-        }
-
         public void Commit()
         {
-            this.Complete();
+            if (!_beginTransactionIsInCurrentTransScope || _tran == null) return;
+
+            _tran.Commit();
+            _completed = true;
         }
 
     }

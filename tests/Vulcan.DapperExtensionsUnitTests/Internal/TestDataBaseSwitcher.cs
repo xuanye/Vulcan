@@ -2,7 +2,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
     internal static class TestDataBaseSwitcher
     {
-        public static DataBaseType DataBaseType = DataBaseType.MySQL;
+        public static DataBaseType DataBaseType = DataBaseType.MSSQL;
     }
 
     internal enum DataBaseType

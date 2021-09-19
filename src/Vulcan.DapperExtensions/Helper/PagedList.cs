@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Vulcan.DapperExtensions
 {
+    [ExcludeFromCodeCoverage]
     public class PagedList<T>
     {
         private List<T> _dataList;
