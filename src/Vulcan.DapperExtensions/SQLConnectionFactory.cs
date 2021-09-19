@@ -1,17 +1,10 @@
-using System;
 using System.Data;
 using System.Data.SqlClient;
+using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensions
 {
-   
-
-    public interface IConnectionFactory
-    {
-        IDbConnection CreateDbConnection(string connectionString);
-    }
-
-    public class SqlConnectionFactory : IConnectionFactory
+    public class SQLConnectionFactory : IConnectionFactory
     {
         public IDbConnection CreateDbConnection(string connectionString)
         {
