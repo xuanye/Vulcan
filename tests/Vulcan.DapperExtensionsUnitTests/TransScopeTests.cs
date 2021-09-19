@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using Vulcan.DapperExtensions;
+using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests.MSSQL
@@ -32,11 +33,11 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         public void CreateTransScope_ShouldBeOk()
         {
             //arrange
-
+            var connectionString = TestResourceManager.GetConnectionString();
             //act
-            using var scope = new TransScope(_factory, MSSQLConstants.CONNECTION_STRING); //ref +1
-            using var connect1 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
-            using var connect2 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
+            using var scope = new TransScope(_factory, connectionString); //ref +1
+            using var connect1 = _factory.GetConnectionManager(connectionString);
+            using var connect2 = _factory.GetConnectionManager(connectionString);
             //assert
             Assert.NotNull(connect1.Transaction);
 
@@ -49,12 +50,13 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         public void CreateTransScope_ShouldBeDifferentTransaction_WithNestedScope()
         {
             //arrange
+            var connectionString = TestResourceManager.GetConnectionString();
 
             //act
-            using var scope1 = new TransScope(_factory, MSSQLConstants.CONNECTION_STRING); //ref +1
-            using var connect1 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
-            using var scope2 = new TransScope(_factory, MSSQLConstants.CONNECTION_STRING, TransScopeOption.RequiresNew); //ref +1
-            using var connect2 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
+            using var scope1 = new TransScope(_factory, connectionString); //ref +1
+            using var connect1 = _factory.GetConnectionManager(connectionString);
+            using var scope2 = new TransScope(_factory, connectionString, TransScopeOption.RequiresNew); //ref +1
+            using var connect2 = _factory.GetConnectionManager(connectionString);
 
             //assert
             Assert.NotNull(connect1.Transaction);
@@ -92,7 +94,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 
         public void Dispose()
         {
-            _threadLocalStorage.Remove(MSSQLConstants.CONNECTION_STRING);
+            _threadLocalStorage.Remove(TestResourceManager.GetConnectionString());
             _threadLocalStorage = null;
             _factory = null;
             _connectionFactory = null;

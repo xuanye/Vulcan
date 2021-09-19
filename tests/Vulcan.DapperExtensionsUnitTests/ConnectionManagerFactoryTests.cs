@@ -1,8 +1,10 @@
 using System;
 using Vulcan.DapperExtensions;
+using Vulcan.DapperExtensions.Contract;
+using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
-namespace Vulcan.DapperExtensionsUnitTests.MSSQL
+namespace Vulcan.DapperExtensionsUnitTests
 {
     /// <summary>
     /// ConnectionManagerTests
@@ -11,7 +13,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
     {
         private ConnectionManagerFactory _factory;
         private ThreadLocalStorage _threadLocalStorage;
-        private SQLConnectionFactory _connectionFactory;
+        private IConnectionFactory _connectionFactory;
 
 
         public ConnectionManagerFactoryTests()
@@ -20,7 +22,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
             //or other asynchronous application maybe implement by AsyncLocal<>
             _threadLocalStorage = new ThreadLocalStorage();
 
-            _connectionFactory = new SQLConnectionFactory();
+            _connectionFactory = TestResourceManager.GetConnectionFactory();
 
             _factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
         }
@@ -40,14 +42,14 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 
 
             //act
-            using var connectionManager = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
+            using var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
 
             //assert
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(MSSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
+            Assert.Equal(TestResourceManager.GetConnectionString(), connectionManager.Connection.ConnectionString);
 
             Assert.Equal(1, connectionManager.RefCount);
 
@@ -62,20 +64,20 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 
 
             //act
-            using var connectionManager = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
+            using var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
 
             //assert
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(MSSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
+            Assert.Equal(TestResourceManager.GetConnectionString(), connectionManager.Connection.ConnectionString);
 
             Assert.Equal(1, connectionManager.RefCount);
 
             Assert.Equal(System.Data.ConnectionState.Open, connectionManager.Connection.State);
 
-            using var connectionManager2 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
+            using var connectionManager2 = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
             Assert.NotNull(connectionManager2);
             Assert.NotNull(connectionManager2.Connection);
@@ -93,14 +95,14 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 
 
             //act
-            var connectionManager = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
+            var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
 
             //assert
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(MSSQLConstants.CONNECTION_STRING, connectionManager.Connection.ConnectionString);
+            Assert.Equal(TestResourceManager.GetConnectionString(), connectionManager.Connection.ConnectionString);
 
             Assert.Equal(1, connectionManager.RefCount);
 
@@ -116,7 +118,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 
         public void Dispose()
         {
-            _threadLocalStorage.Remove(MSSQLConstants.CONNECTION_STRING);
+            _threadLocalStorage.Remove(TestResourceManager.GetConnectionString());
             _threadLocalStorage = null;
             _factory = null;
             _connectionFactory = null;

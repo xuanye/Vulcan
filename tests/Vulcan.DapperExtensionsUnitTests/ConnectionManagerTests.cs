@@ -1,8 +1,9 @@
 using System;
 using Vulcan.DapperExtensions;
+using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
-namespace Vulcan.DapperExtensionsUnitTests.MSSQL
+namespace Vulcan.DapperExtensionsUnitTests
 {
     public class ConnectionManagerTests : IDisposable
     {
@@ -25,7 +26,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         public void BeginTransaction_ShouldBeOk()
         {
             //arrange
-            using var connectionManager = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING);
+            using var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
             //act
             var trans = connectionManager.BeginTransaction();
@@ -38,7 +39,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         }
         public void Dispose()
         {
-            _threadLocalStorage.Remove(MSSQLConstants.CONNECTION_STRING);
+            _threadLocalStorage.Remove(TestResourceManager.GetConnectionString());
             _threadLocalStorage = null;
             _factory = null;
             _connectionFactory = null;

@@ -1,6 +1,7 @@
 using System;
 using System.Data;
 using Vulcan.DapperExtensions;
+using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests.MSSQL
@@ -30,16 +31,16 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         [Fact]
         public void TestConnectionScope_IsSameConnection_WithUsingScope()
         {
-            using var scope = new ConnectionScope(_factory, MSSQLConstants.CONNECTION_STRING);
+            using var scope = new ConnectionScope(_factory,TestResourceManager.GetConnectionString());
             //ref +1
             IDbConnection connection;
-            using(var connect1 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING))//ref +1
+            using(var connect1 = _factory.GetConnectionManager(TestResourceManager.GetConnectionString()))//ref +1
             {
                 connection = connect1.Connection;
                 Assert.Equal(2, connect1.RefCount);
             }//ref -1
 
-            using (var connect2 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING))//ref +1
+            using (var connect2 = _factory.GetConnectionManager(TestResourceManager.GetConnectionString()))//ref +1
             {
                 Assert.Equal(connection, connect2.Connection);
                 Assert.Equal(2, connect2.RefCount);
@@ -56,13 +57,13 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         {
 
                 IDbConnection connection;
-                using (var connect1 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING))
+                using (var connect1 = _factory.GetConnectionManager(TestResourceManager.GetConnectionString()))
                 {
                     connection = connect1.Connection;
                     Assert.Equal(1, connect1.RefCount);
                 }
 
-                using (var connect2 = _factory.GetConnectionManager(MSSQLConstants.CONNECTION_STRING))
+                using (var connect2 = _factory.GetConnectionManager(TestResourceManager.GetConnectionString()))
                 {
                     Assert.NotEqual(connection, connect2.Connection);
                     Assert.Equal(1, connect2.RefCount);
@@ -72,7 +73,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 
         public void Dispose()
         {
-            _threadLocalStorage.Remove(MSSQLConstants.CONNECTION_STRING);
+            _threadLocalStorage.Remove(TestResourceManager.GetConnectionString());
             _threadLocalStorage = null;
             _factory = null;
             _connectionFactory = null;

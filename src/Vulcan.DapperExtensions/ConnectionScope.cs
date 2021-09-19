@@ -8,7 +8,8 @@ namespace Vulcan.DapperExtensions
         private string _connectionString;
         private ConnectionManager _connectionManager;
 
-        public ConnectionScope(IConnectionManagerFactory mgr, string connectionString, IConnectionFactory factory = null)
+        public ConnectionScope(IConnectionManagerFactory mgr, string connectionString,
+            IConnectionFactory factory = null)
         {
             this._connectionString = connectionString;
             _connectionManager = mgr.GetConnectionManager(_connectionString, factory);
@@ -19,7 +20,7 @@ namespace Vulcan.DapperExtensions
         }
 
         public void Dispose()
-        {           
+        {
             _connectionManager.Dispose();
             _connectionString = null;
             _connectionManager = null;

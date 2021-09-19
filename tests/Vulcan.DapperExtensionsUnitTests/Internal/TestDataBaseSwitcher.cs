@@ -1,4 +1,4 @@
-namespace Vulcan.DapperExtensionsUnitTests
+namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
     internal static class TestDataBaseSwitcher
     {
