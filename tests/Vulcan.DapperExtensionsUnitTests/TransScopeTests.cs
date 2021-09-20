@@ -9,7 +9,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
     /// test scope transaction
     /// </summary>
     public class TransScopeTests : SharedDatabaseTest
-    {   
+    {
 
         public TransScopeTests(SharedDatabaseFixture fixture) : base(fixture)
         {
@@ -27,30 +27,32 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
             //assert
             Assert.NotNull(connect1.Transaction);
 
-            Assert.Equal(connect1,connect2);
-            Assert.Equal(connect1.Transaction,connect2.Transaction);
-            Assert.Equal(2, connect1.RefCount);
+            Assert.Equal(connect1, connect2);
+            Assert.Equal(connect1.Transaction, connect2.Transaction);
+            Assert.Equal(3, connect1.RefCount);
         }
 
         [Fact]
-        public void CreateTransScope_ShouldBeDifferentTransaction_WithNestedScope()
+        public void CreateTransScope_ShouldBeSameTransaction_WithNestedScope()
         {
             //arrange
             var connectionString = Fixture.ConnectionString;
 
             //act
+
             using var scope1 = new TransScope(Fixture.ConnectionManagerFactory, connectionString); //ref +1
-            using var connect1 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);
-            using var scope2 = new TransScope(Fixture.ConnectionManagerFactory, connectionString, TransScopeOption.RequiresNew); //ref +1
-            using var connect2 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);
+            using var connect1 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);//ref +1
+            using var scope2 = new TransScope(Fixture.ConnectionManagerFactory, connectionString); //ref +1
+            using var connect2 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);//ref +1
+
 
             //assert
             Assert.NotNull(connect1.Transaction);
             Assert.NotNull(connect2.Transaction);
 
-            Assert.Equal(connect1,connect2);
-            Assert.NotEqual(connect1.Transaction,connect2.Transaction);
-            Assert.Equal(2, connect1.RefCount);
+            Assert.Equal(connect1, connect2);
+            Assert.Equal(connect1.Transaction, connect2.Transaction);
+            Assert.Equal(4, connect1.RefCount);
         }
 
 
@@ -75,6 +77,6 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
             //act
 
             //assert
-        }      
+        }
     }
 }
