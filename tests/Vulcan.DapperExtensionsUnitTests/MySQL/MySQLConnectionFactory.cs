@@ -8,7 +8,7 @@ namespace Vulcan.DapperExtensionsUnitTests.MySQL
     {
         public IDbConnection CreateDbConnection(string connectionString)
         {
-            return new MySqlConnection();
+            return new MySqlConnection(connectionString);
         }
     }
 }

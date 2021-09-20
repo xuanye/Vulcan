@@ -10,7 +10,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         /// Maybe use Compiler Switch？
         /// </summary>
         public static DataBaseType DataBaseType = (RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) ? DataBaseType.MySQL : DataBaseType.MSSQL;
+                || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)) ? DataBaseType.MySQL : DataBaseType.MySQL;
     }
 
     internal enum DataBaseType
