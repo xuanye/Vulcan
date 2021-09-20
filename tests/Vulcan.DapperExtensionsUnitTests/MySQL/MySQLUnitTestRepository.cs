@@ -1,21 +1,18 @@
-using System.Threading.Tasks;
 using Vulcan.DapperExtensions.Contract;
-using Vulcan.DapperExtensions.ORMapping.MySql;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 
 namespace Vulcan.DapperExtensionsUnitTests.MySQL
 {
-    public class UnitTestRepository:MySqlRepository,IRepository
+    public class UnitTestRepository : TestRepository
     {
         public UnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
             : base(mgr, constr, factory)
         {
-
         }
 
-        public Task InitialTestDb()
+        protected override string GetInitialSQL()
         {
-            const string sql = @"
+            return  @"
 -- ----------------------------
 -- Table structure for test_item_table
 -- ----------------------------
@@ -33,12 +30,6 @@ create table  `test_item_table`
        modifier_id       VARCHAR(50) not null,
        modify_time       TIMESTAMP default current_timestamp not null
 );";
-
-            return base.ExecuteAsync(sql, null);
         }
-
-
-
-
     }
 }
