@@ -1,11 +1,17 @@
+using AutoFixture;
 using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
-    public class SharedDatabaseTest: IClassFixture<SharedDatabaseFixture>
+    public class SharedDatabaseTest : IClassFixture<SharedDatabaseFixture>
     {
-        public SharedDatabaseTest(SharedDatabaseFixture fixture) => Fixture = fixture;
+        protected SharedDatabaseTest(SharedDatabaseFixture dbFixture)
+        {
+            SharedDatabaseFixture = dbFixture;
+            AutoFixture = new Fixture();
+        }
 
-        public SharedDatabaseFixture Fixture { get; }
+        protected Fixture AutoFixture { get; }
+        protected SharedDatabaseFixture SharedDatabaseFixture { get; }
     }
 }

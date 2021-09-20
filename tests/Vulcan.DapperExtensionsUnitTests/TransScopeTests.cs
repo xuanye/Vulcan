@@ -1,16 +1,16 @@
+using System.Threading.Tasks;
+using AutoFixture;
 using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 {
-
     /// <summary>
-    /// test scope transaction
+    ///     test scope transaction
     /// </summary>
     public class TransScopeTests : SharedDatabaseTest
     {
-
         public TransScopeTests(SharedDatabaseFixture fixture) : base(fixture)
         {
         }
@@ -19,11 +19,11 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         public void CreateTransScope_ShouldBeOk()
         {
             //arrange
-            var connectionString = Fixture.ConnectionString;
+            var connectionString = SharedDatabaseFixture.ConnectionString;
             //act
-            using var scope = new TransScope(Fixture.ConnectionManagerFactory, connectionString); //ref +1
-            using var connect1 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);
-            using var connect2 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);
+            using var scope = new TransScope(SharedDatabaseFixture.ConnectionManagerFactory, connectionString); //ref +1
+            using var connect1 = SharedDatabaseFixture.ConnectionManagerFactory.GetConnectionManager(connectionString);
+            using var connect2 = SharedDatabaseFixture.ConnectionManagerFactory.GetConnectionManager(connectionString);
             //assert
             Assert.NotNull(connect1.Transaction);
 
@@ -36,14 +36,14 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
         public void CreateTransScope_ShouldBeSameTransaction_WithNestedScope()
         {
             //arrange
-            var connectionString = Fixture.ConnectionString;
+            var connectionString = SharedDatabaseFixture.ConnectionString;
 
             //act
 
-            using var scope1 = new TransScope(Fixture.ConnectionManagerFactory, connectionString); //ref +1
-            using var connect1 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);//ref +1
-            using var scope2 = new TransScope(Fixture.ConnectionManagerFactory, connectionString); //ref +1
-            using var connect2 = Fixture.ConnectionManagerFactory.GetConnectionManager(connectionString);//ref +1
+            using var scope1 = new TransScope(SharedDatabaseFixture.ConnectionManagerFactory, connectionString); //ref +1
+            using var connect1 = SharedDatabaseFixture.ConnectionManagerFactory.GetConnectionManager(connectionString); //ref +1
+            using var scope2 = new TransScope(SharedDatabaseFixture.ConnectionManagerFactory, connectionString); //ref +1
+            using var connect2 = SharedDatabaseFixture.ConnectionManagerFactory.GetConnectionManager(connectionString); //ref +1
 
 
             //assert
@@ -57,26 +57,52 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 
 
         [Fact]
-        public void CreateTransScope_DataExists_CommitScope()
+        public async Task CreateTransScope_ShouldBeSuccess_Commit()
         {
             //arrange
-
+            var repository = SharedDatabaseFixture.Repository ;
+            long newId;
+            var testItem = AutoFixture.Create<TestItem>();
             //act
 
-            //assert
+            using (var scope = repository.CreateScope())
+            {
 
+                newId = await repository.InsertAsync(testItem);
+                scope.Commit();
+            }
+            var dbItem= await repository.GetTestItemAsync((int)newId);
+            //assert
+            Assert.True(newId>0);
+            Assert.NotNull(dbItem);
+
+            Assert.Equal(testItem.Name,dbItem.Name);
+            Assert.Equal(testItem.Address,dbItem.Address);
 
         }
 
 
         [Fact]
-        public void CreateTransScope_DataExists_RollbackScope()
+        public async Task CreateTransScope_ShouldBeOk_Rollback()
         {
             //arrange
-
+            long newId;
+            var repository = SharedDatabaseFixture.Repository ;
+            var testItem = AutoFixture.Create<TestItem>();
             //act
 
+
+            using (repository.CreateScope())
+            {
+
+                newId = await repository.InsertAsync(testItem);
+                //don't commit
+                //scope.Commit();
+            }
+            var dbItem= await repository.GetTestItemAsync((int)newId);
             //assert
+            Assert.True(newId>0);
+            Assert.Null(dbItem);
         }
     }
 }

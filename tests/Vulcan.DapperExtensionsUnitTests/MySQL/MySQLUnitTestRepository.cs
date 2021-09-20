@@ -3,9 +3,9 @@ using Vulcan.DapperExtensionsUnitTests.Internal;
 
 namespace Vulcan.DapperExtensionsUnitTests.MySQL
 {
-    public class UnitTestRepository : TestRepository
+    public class MySQLUnitTestRepository : TestRepository
     {
-        public UnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
+        public MySQLUnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
             : base(mgr, constr, factory)
         {
         }

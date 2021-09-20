@@ -1,11 +1,10 @@
 using System;
 using Vulcan.DapperExtensions.ORMapping;
-using Vulcan.DapperExtensionsUnitTests.Internal;
 
-namespace Vulcan.DapperExtensionsUnitTests.MySQL
+namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
     [TableName("test_item_table")]
-    public class MySQLTestItem : BaseEntityClass
+    public class TestItem : BaseEntityClass
     {
         private string _Address;
 

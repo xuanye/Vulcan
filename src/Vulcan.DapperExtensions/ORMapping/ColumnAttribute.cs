@@ -7,7 +7,7 @@ namespace Vulcan.DapperExtensions.ORMapping
     {
         public MapFieldAttribute(string mapField)
         {
-            this.MapFieldName = mapField;
+            MapFieldName = mapField;
         }
 
         public string MapFieldName { get; }
@@ -33,7 +33,7 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         public PrimaryKeyAttribute(int pkIndex)
         {
-            this.PKIndex = pkIndex;
+            PKIndex = pkIndex;
         }
 
         public int PKIndex { get; }

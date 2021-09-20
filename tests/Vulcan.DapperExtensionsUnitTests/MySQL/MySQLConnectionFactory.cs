@@ -4,7 +4,7 @@ using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensionsUnitTests.MySQL
 {
-    public class MySQLConnectionFactory:IConnectionFactory
+    public class MySQLConnectionFactory : IConnectionFactory
     {
         public IDbConnection CreateDbConnection(string connectionString)
         {

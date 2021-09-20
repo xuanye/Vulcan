@@ -1,13 +1,10 @@
-using System;
-using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests
 {
-    public class ConnectionManagerTests :SharedDatabaseTest
+    public class ConnectionManagerTests : SharedDatabaseTest
     {
-
         public ConnectionManagerTests(SharedDatabaseFixture fixture) : base(fixture)
         {
         }
@@ -16,7 +13,8 @@ namespace Vulcan.DapperExtensionsUnitTests
         public void BeginTransaction_ShouldBeOk()
         {
             //arrange
-            using var connectionManager = Fixture.ConnectionManagerFactory.GetConnectionManager(TestResourceManager.GetConnectionString());
+            using var connectionManager =
+                SharedDatabaseFixture.ConnectionManagerFactory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
             //act
             var trans = connectionManager.BeginTransaction();
@@ -24,10 +22,6 @@ namespace Vulcan.DapperExtensionsUnitTests
             //assert
             Assert.NotNull(trans);
             Assert.True(connectionManager.IsExistDbTransaction());
-
-
         }
-
-
     }
 }

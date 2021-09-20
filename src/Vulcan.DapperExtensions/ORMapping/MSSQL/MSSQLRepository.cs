@@ -1,22 +1,22 @@
-
-
 using Vulcan.DapperExtensions.Contract;
 
-namespace Vulcan.DapperExtensions.ORMapping.MSSql
+namespace Vulcan.DapperExtensions.ORMapping.MSSQL
 {
-    public class MSSqlRepository : BaseRepository
+    public class MSSQLRepository : BaseRepository
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MSSqlRepository"/> class.
+        ///     Initializes a new instance of the <see cref="MSSQLRepository" /> class.
         /// </summary>
         /// <param name="connectionManagerFactory">connectionManagerFactory</param>
         /// <param name="connectionString">The Connection String.</param>
         /// <param name="factory"> Connection Factory</param>
-        protected MSSqlRepository(IConnectionManagerFactory connectionManagerFactory, string connectionString, IConnectionFactory factory = null) : base(connectionManagerFactory, connectionString, factory)
+        protected MSSQLRepository(IConnectionManagerFactory connectionManagerFactory, string connectionString,
+            IConnectionFactory factory = null) : base(connectionManagerFactory, connectionString, factory)
         {
-
         }
-        public PagedList<T> PagedQuery<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition, object param, string sqlPk, string sqlOrder)
+
+        public PagedList<T> PagedQuery<T>(PageView view, string sqlColumns, string sqlTable, string sqlCondition,
+            object param, string sqlPk, string sqlOrder)
         {
             var pList = new PagedList<T>();
             long totalCount = -1;
@@ -26,10 +26,7 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
                 totalCount = Get<int>(totalSql, param);
             }
 
-            if (string.IsNullOrEmpty(sqlOrder))
-            {
-                sqlOrder = " ORDER BY " + sqlPk;
-            }
+            if (string.IsNullOrEmpty(sqlOrder)) sqlOrder = " ORDER BY " + sqlPk;
             var pageStartIndex = view.PageSize * view.PageIndex + 1;
             var pageEndIndex = view.PageSize * (view.PageIndex + 1);
             var sql =
@@ -37,7 +34,7 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
             var pageSql =
                 $" select * from ({sql}) as PagedTable where RowNumber >={pageStartIndex}  and RowNumber<= {pageEndIndex}  ";
             pList.DataList = Query<T>(pageSql, param);
-            pList.Total = (int)totalCount;
+            pList.Total = (int) totalCount;
             pList.PageIndex = view.PageIndex;
             pList.PageSize = view.PageSize;
             return pList;

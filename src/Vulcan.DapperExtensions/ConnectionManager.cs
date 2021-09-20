@@ -5,22 +5,29 @@ using Vulcan.DapperExtensions.Contract;
 namespace Vulcan.DapperExtensions
 {
     /// <summary>
-    /// wrapper connection manager
+    ///     wrapper connection manager
     /// </summary>
     public class ConnectionManager : IDisposable
     {
-        internal ConnectionManager(IConnectionFactory factory, string connectionString, IRuntimeContextStorage ctxStorage)
+        internal ConnectionManager(IConnectionFactory factory, string connectionString,
+            IRuntimeContextStorage ctxStorage)
         {
             _dbConnectionString = connectionString;
             _ctxStorage = ctxStorage;
 
             Connection = factory.CreateDbConnection(connectionString);
 
-            if (Connection.State != ConnectionState.Open)
-            {
-                Connection.Open();
-            }
+            if (Connection.State != ConnectionState.Open) Connection.Open();
         }
+
+        #region IDisposable
+
+        public void Dispose()
+        {
+            DeRef();
+        }
+
+        #endregion IDisposable
 
         #region Fields
 
@@ -28,13 +35,14 @@ namespace Vulcan.DapperExtensions
         private readonly string _dbConnectionString;
 
         private readonly IRuntimeContextStorage _ctxStorage;
+
         #endregion
 
         #region Properties
+
         public IDbConnection Connection { get; }
 
         public IDbTransaction Transaction { get; private set; }
-
 
         #endregion
 
@@ -43,7 +51,7 @@ namespace Vulcan.DapperExtensions
 
         public IDbTransaction BeginTransaction()
         {
-            Transaction = this.Connection.BeginTransaction();
+            Transaction = Connection.BeginTransaction();
             return Transaction;
         }
 
@@ -71,21 +79,12 @@ namespace Vulcan.DapperExtensions
                 if (RefCount != 0) return;
 
                 if (Connection != null && Connection.State != ConnectionState.Closed)
-                    Connection.Close();//Dispose
+                    Connection.Close(); //Dispose
 
                 _ctxStorage.Remove(_dbConnectionString);
             }
         }
 
         #endregion
-
-        #region IDisposable
-
-        public void Dispose()
-        {
-            DeRef();
-        }
-
-        #endregion IDisposable
     }
 }

@@ -1,23 +1,18 @@
-using System.Linq;
-using System.Threading.Tasks;
-using AutoFixture;
-using Dapper;
 using Vulcan.DapperExtensions.Contract;
-using Vulcan.DapperExtensions.ORMapping.MSSQL;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 
 namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 {
-    public class UnitTestRepository : MSSQLRepository, IRepository
+    public class MSSQLUnitTestRepository : TestRepository
     {
-        public UnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
+        public MSSQLUnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
             : base(mgr, constr, factory)
         {
         }
 
-        public async Task InitialTestDb()
+        protected override string GetInitialSQL()
         {
-            const string sql = @"
+            return  @"
 -- ----------------------------
 -- Table structure for test_item_table
 -- ----------------------------
@@ -43,13 +38,8 @@ EXEC sp_addextendedproperty 'MS_Description', 'mobile phone', 'user', dbo, 'tabl
 EXEC sp_addextendedproperty 'MS_Description', 'link address', 'user', dbo, 'table', test_item_table, 'column', address;
 EXEC sp_addextendedproperty 'MS_Description', 'test fo bool', 'user', dbo, 'table', test_item_table, 'column', is_default;
 EXEC sp_addextendedproperty 'MS_Description', 'test for enum 0= initial status 99=deleted', 'user', dbo, 'table', test_item_table, 'column', [status];";
-
-            await ExecuteAsync(sql, null);
-
-            var fixture = new Fixture();
-            var testItems = fixture.CreateMany<TestItem>().ToList();
-
-            await base.BatchInsertAsync(testItems);
         }
+
+
     }
 }

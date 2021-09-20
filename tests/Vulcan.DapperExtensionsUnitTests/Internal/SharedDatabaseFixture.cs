@@ -3,15 +3,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensions.Contract;
+using Vulcan.DapperExtensionsUnitTests.MSSQL;
+using Vulcan.DapperExtensionsUnitTests.MySQL;
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
-    public class SharedDatabaseFixture: IDisposable
+    public class SharedDatabaseFixture : IDisposable
     {
-        private static readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1,1);
+        private static readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
         private static bool _databaseInitialized;
-
-
 
 
         private ThreadLocalStorage _threadLocalStorage;
@@ -19,7 +19,6 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
         public SharedDatabaseFixture()
         {
-
             //for unit test only ,in asp.net core should use httpContext storage ,
             //or other asynchronous application maybe implement by AsyncLocal<>
             _threadLocalStorage = new ThreadLocalStorage();
@@ -31,48 +30,26 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
             Repository = TestDataBaseSwitcher.DataBaseType switch
             {
-                DataBaseType.MySQL => new MySQL.UnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.MySQL => new MySQLUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
-                DataBaseType.MSSQL => new MSSQL.UnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.MSSQL => new MSSQLUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
                 _ => throw new NotSupportedException()
             };
 
+            //user_id -> UserId
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
             SeedAsync().GetAwaiter().GetResult();
         }
 
         public IConnectionFactory ConnectionFactory { get; private set; }
 
-        public  string ConnectionString { get; private set;}
+        public string ConnectionString { get; private set; }
 
-        public  ConnectionManagerFactory ConnectionManagerFactory { get;private set; }
+        public ConnectionManagerFactory ConnectionManagerFactory { get; private set; }
 
 
-        public IRepository Repository { get; }
-
-        private async Task SeedAsync()
-        {
-            await semaphoreSlim.WaitAsync();
-            try
-            {
-
-                if (_databaseInitialized)
-                {
-                    return;
-                }
-
-                //Initial database
-                await Repository.InitialTestDb();
-
-                _databaseInitialized = true;
-            }
-            finally
-            {
-                //When the task is ready, release the semaphore. It is vital to ALWAYS release the semaphore when we are ready, or else we will end up with a Semaphore that is forever locked.
-                //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
-                semaphoreSlim.Release();
-            }
-        }
+        public TestRepository Repository { get; }
 
 
         public void Dispose()
@@ -82,6 +59,24 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
             ConnectionManagerFactory = null;
             ConnectionFactory = null;
             ConnectionString = null;
+        }
+
+        private async Task SeedAsync()
+        {
+            await semaphoreSlim.WaitAsync();
+            try
+            {
+                if (_databaseInitialized) return;
+                //Initial database
+                await Repository.InitialTestDb();
+                _databaseInitialized = true;
+            }
+            finally
+            {
+                //When the task is ready, release the semaphore. It is vital to ALWAYS release the semaphore when we are ready, or else we will end up with a Semaphore that is forever locked.
+                //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
+                semaphoreSlim.Release();
+            }
         }
     }
 }

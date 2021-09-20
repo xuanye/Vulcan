@@ -1,4 +1,5 @@
 using System;
+using System.Data;
 using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensions.Contract;
 using Vulcan.DapperExtensionsUnitTests.Internal;
@@ -7,12 +8,12 @@ using Xunit;
 namespace Vulcan.DapperExtensionsUnitTests
 {
     /// <summary>
-    /// ConnectionManagerTests
+    ///     ConnectionManagerTests
     /// </summary>
-    public class ConnectionManagerFactoryTests: IDisposable
+    public class ConnectionManagerFactoryTests : IDisposable
     {
-        private ThreadLocalStorage _threadLocalStorage;
         private IConnectionFactory _connectionFactory;
+        private ThreadLocalStorage _threadLocalStorage;
 
 
         public ConnectionManagerFactoryTests()
@@ -22,16 +23,30 @@ namespace Vulcan.DapperExtensionsUnitTests
             _threadLocalStorage = new ThreadLocalStorage();
 
             _connectionFactory = TestResourceManager.GetConnectionFactory();
+        }
 
 
+        public void Dispose()
+        {
+            _threadLocalStorage = null;
+            _connectionFactory = null;
         }
 
         [Fact]
         public void Constructor_ShouldThrowException_IfPassNull()
         {
-            Assert.Throws<ArgumentNullException>(() => { var _ = new ConnectionManagerFactory(_threadLocalStorage, null); });
-            Assert.Throws<ArgumentNullException>(() => { var _ = new ConnectionManagerFactory(null, _connectionFactory); });
-            Assert.Throws<ArgumentNullException>(() => { var _ = new ConnectionManagerFactory(null, null); });
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var _ = new ConnectionManagerFactory(_threadLocalStorage, null);
+            });
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var _ = new ConnectionManagerFactory(null, _connectionFactory);
+            });
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                var _ = new ConnectionManagerFactory(null, null);
+            });
         }
 
         [Fact]
@@ -49,12 +64,9 @@ namespace Vulcan.DapperExtensionsUnitTests
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(connectString, connectionManager.Connection.ConnectionString);
-
             Assert.Equal(1, connectionManager.RefCount);
 
-            Assert.Equal(System.Data.ConnectionState.Open, connectionManager.Connection.State);
-
+            Assert.Equal(ConnectionState.Open, connectionManager.Connection.State);
         }
 
         [Fact]
@@ -72,11 +84,9 @@ namespace Vulcan.DapperExtensionsUnitTests
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(connectString, connectionManager.Connection.ConnectionString);
-
             Assert.Equal(1, connectionManager.RefCount);
 
-            Assert.Equal(System.Data.ConnectionState.Open, connectionManager.Connection.State);
+            Assert.Equal(ConnectionState.Open, connectionManager.Connection.State);
 
             using var connectionManager2 = factory.GetConnectionManager(connectString);
 
@@ -86,7 +96,6 @@ namespace Vulcan.DapperExtensionsUnitTests
             Assert.Equal(connectionManager, connectionManager2);
 
             Assert.Equal(2, connectionManager.RefCount);
-
         }
 
         [Fact]
@@ -104,25 +113,14 @@ namespace Vulcan.DapperExtensionsUnitTests
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(connectString, connectionManager.Connection.ConnectionString);
-
             Assert.Equal(1, connectionManager.RefCount);
 
-            Assert.Equal(System.Data.ConnectionState.Open, connectionManager.Connection.State);
+            Assert.Equal(ConnectionState.Open, connectionManager.Connection.State);
 
             connectionManager.Dispose();
 
             Assert.Equal(0, connectionManager.RefCount);
-            Assert.Equal(System.Data.ConnectionState.Closed, connectionManager.Connection.State);
-
-        }
-
-
-        public void Dispose()
-        {        
-            _threadLocalStorage = null;
-            _connectionFactory = null;
-
+            Assert.Equal(ConnectionState.Closed, connectionManager.Connection.State);
         }
     }
 }

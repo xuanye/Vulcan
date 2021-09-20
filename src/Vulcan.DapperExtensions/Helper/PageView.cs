@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Vulcan.DapperExtensions
 {
@@ -13,12 +9,10 @@ namespace Vulcan.DapperExtensions
         {
         }
 
-        public PageView(int pageIndex,int pageSize)
+        public PageView(int pageIndex, int pageSize)
         {
-            this.PageIndex = pageIndex - 1;
-            this.PageSize = pageSize;
-
-
+            PageIndex = pageIndex - 1;
+            PageSize = pageSize;
         }
 
         public int PageIndex { get; set; }

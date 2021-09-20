@@ -7,7 +7,7 @@ namespace Vulcan.DapperExtensions.ORMapping
     {
         public TableNameAttribute(string tableName)
         {
-            this.TableName = tableName;
+            TableName = tableName;
         }
 
         public string TableName { get; }

@@ -4,30 +4,42 @@ using Vulcan.DapperExtensions.Contract;
 namespace Vulcan.DapperExtensions
 {
     /// <summary>
-    /// Transaction Management
+    ///     Transaction Management
     /// </summary>
     public class TransScope : IScope
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransScope"/> class.
+        ///     Whether the transaction is started by this instance
+        ///     (which instance is responsible for starting and which object is responsible for committing)
+        /// </summary>
+        private readonly bool _beginTransactionIsInCurrentTransScope;
+
+        private readonly ConnectionManager _connectionManager;
+        private readonly IDbTransaction _tran;
+
+        private bool _completed;
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="TransScope" /> class.
         /// </summary>
         /// <param name="mgr"></param>
         /// <param name="connectionString">The connection string.</param>
         /// <param name="option">The option.</param>
-        public TransScope(IConnectionManagerFactory mgr,string connectionString, TransScopeOption option = TransScopeOption.Required)
-            :this(mgr, null, connectionString, option)
+        public TransScope(IConnectionManagerFactory mgr, string connectionString,
+            TransScopeOption option = TransScopeOption.Required)
+            : this(mgr, null, connectionString, option)
         {
-
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TransScope"/> class.
+        ///     Initializes a new instance of the <see cref="TransScope" /> class.
         /// </summary>
         /// <param name="mgr"></param>
         /// <param name="factory"></param>
         /// <param name="connectionString"></param>
         /// <param name="option">notice: sql server don't support nested transaction </param>
-        public TransScope(IConnectionManagerFactory mgr, IConnectionFactory factory,string connectionString, TransScopeOption option = TransScopeOption.Required)
+        public TransScope(IConnectionManagerFactory mgr, IConnectionFactory factory, string connectionString,
+            TransScopeOption option = TransScopeOption.Required)
         {
             _connectionManager = mgr.GetConnectionManager(connectionString, factory);
 
@@ -42,19 +54,8 @@ namespace Vulcan.DapperExtensions
             }
         }
 
-        private readonly ConnectionManager _connectionManager;
-        private readonly IDbTransaction _tran;
-
         /// <summary>
-        /// Whether the transaction is started by this instance
-        /// (which instance is responsible for starting and which object is responsible for committing)
-        /// </summary>
-        private readonly bool _beginTransactionIsInCurrentTransScope;
-
-        private bool _completed;
-
-        /// <summary>
-        /// rollback  transaction
+        ///     rollback  transaction
         /// </summary>
         public void Rollback()
         {
@@ -62,16 +63,12 @@ namespace Vulcan.DapperExtensions
 
             _tran?.Rollback();
             _completed = true;
-
         }
 
 
         public void Dispose()
         {
-            if (!_completed)
-            {
-                Rollback();
-            }
+            if (!_completed) Rollback();
 
             _connectionManager.Dispose();
         }
@@ -83,6 +80,5 @@ namespace Vulcan.DapperExtensions
             _tran.Commit();
             _completed = true;
         }
-
     }
 }

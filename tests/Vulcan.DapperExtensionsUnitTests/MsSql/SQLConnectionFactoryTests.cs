@@ -1,8 +1,7 @@
-using Vulcan.DapperExtensions;
-using Xunit;
-using System.Data;
 using System.Data.SqlClient;
+using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
+using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests.MSSQL
 {
@@ -19,7 +18,6 @@ namespace Vulcan.DapperExtensionsUnitTests.MSSQL
             //act
             Assert.NotNull(connection);
             Assert.IsAssignableFrom<SqlConnection>(connection);
-
         }
     }
 }

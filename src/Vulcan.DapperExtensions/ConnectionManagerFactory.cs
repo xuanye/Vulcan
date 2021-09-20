@@ -9,6 +9,7 @@ namespace Vulcan.DapperExtensions
 
         private readonly IRuntimeContextStorage _ctxStorage;
         private readonly IConnectionFactory _defaultFactory;
+
         public ConnectionManagerFactory(IRuntimeContextStorage ctxStorage, IConnectionFactory factory)
         {
             _ctxStorage = ctxStorage ?? throw new ArgumentNullException(nameof(ctxStorage));
@@ -30,17 +31,18 @@ namespace Vulcan.DapperExtensions
                         _ctxStorage.Set(constr, mgr);
                     }
                 }
+
                 if (mgr != null)
                 {
                     mgr.AddRef();
                     return mgr;
                 }
             }
+
             //else
-            mgr = (ConnectionManager)_ctxStorage.Get(constr);
+            mgr = (ConnectionManager) _ctxStorage.Get(constr);
             mgr.AddRef();
             return mgr;
-
         }
     }
 }

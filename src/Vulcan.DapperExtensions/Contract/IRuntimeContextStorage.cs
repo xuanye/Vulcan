@@ -11,5 +11,4 @@ namespace Vulcan.DapperExtensions.Contract
 
         bool ContainsKey(string key);
     }
-
 }

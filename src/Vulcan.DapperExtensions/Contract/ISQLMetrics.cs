@@ -6,9 +6,4 @@ namespace Vulcan.DapperExtensions.Contract
     {
         void AddToMetrics(string sql, object param);
     }
-
-
-
-
-
 }

@@ -2,16 +2,16 @@ using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensions
 {
-    public class ConnectionScope: IScope
+    public class ConnectionScope : IScope
     {
+        private ConnectionManager _connectionManager;
 
         private string _connectionString;
-        private ConnectionManager _connectionManager;
 
         public ConnectionScope(IConnectionManagerFactory mgr, string connectionString,
             IConnectionFactory factory = null)
         {
-            this._connectionString = connectionString;
+            _connectionString = connectionString;
             _connectionManager = mgr.GetConnectionManager(_connectionString, factory);
         }
 

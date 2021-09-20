@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Vulcan.DapperExtensions.ORMapping.MSSql
+namespace Vulcan.DapperExtensions.ORMapping.MSSQL
 {
-    public class MSSqlSQLBuilder : ISQLBuilder
+    public class MSSQLSQLBuilder : ISQLBuilder
     {
         public string BuildInsertSql(EntityMeta meta)
         {
@@ -14,31 +14,21 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
             sqlbuilder.AppendFormat("INSERT INTO [{0}] (", meta.TableName);
             for (int i = 0, j = 0; i < meta.Columns.Count; i++)
             {
-                if (meta.Columns[i].Identity)
-                {
-                    continue;
-                }
-                if (j > 0)
-                {
-                    sqlbuilder.Append(",");
-                }
+                if (meta.Columns[i].Identity) continue;
+                if (j > 0) sqlbuilder.Append(",");
                 sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]");
                 j++;
             }
+
             sqlbuilder.Append(") VALUES (");
             for (int i = 0, j = 0; i < meta.Columns.Count; i++)
             {
-                if (meta.Columns[i].Identity)
-                {
-                    continue;
-                }
-                if (j > 0)
-                {
-                    sqlbuilder.Append(",");
-                }
+                if (meta.Columns[i].Identity) continue;
+                if (j > 0) sqlbuilder.Append(",");
                 sqlbuilder.Append("@" + meta.Columns[i].PropertyName + "");
                 j++;
             }
+
             sqlbuilder.Append(");");
             var existsIdentity = meta.Columns.Exists(x => x.Identity);
 
@@ -63,20 +53,15 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
             {
                 if (meta.Columns[i].PrimaryKey) continue;
 
-                if (j > 0)
-                {
-                    sqlbuilder.Append(",");
-                }
+                if (j > 0) sqlbuilder.Append(",");
                 j++;
                 sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]=@" + meta.Columns[i].PropertyName + "");
             }
+
             sqlbuilder.Append(" WHERE ");
             for (var i = 0; i < keys.Count; i++)
             {
-                if (i > 0)
-                {
-                    sqlbuilder.Append(" AND ");
-                }
+                if (i > 0) sqlbuilder.Append(" AND ");
                 sqlbuilder.Append("[" + keys[i].ColumnName + "]=@" + keys[i].PropertyName);
             }
 
@@ -92,31 +77,21 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
             sqlbuilder.AppendFormat("INSERT INTO [{0}] (", meta.TableName);
             for (int i = 0, j = 0; i < meta.Columns.Count; i++)
             {
-                if (meta.Columns[i].Identity || !list.Contains(meta.Columns[i].ColumnName))
-                {
-                    continue;
-                }
-                if (j > 0)
-                {
-                    sqlbuilder.Append(",");
-                }
+                if (meta.Columns[i].Identity || !list.Contains(meta.Columns[i].ColumnName)) continue;
+                if (j > 0) sqlbuilder.Append(",");
                 sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]");
                 j++;
             }
+
             sqlbuilder.Append(") VALUES (");
             for (int i = 0, j = 0; i < meta.Columns.Count; i++)
             {
-                if (meta.Columns[i].Identity || !list.Contains(meta.Columns[i].ColumnName))
-                {
-                    continue;
-                }
-                if (j > 0)
-                {
-                    sqlbuilder.Append(",");
-                }
+                if (meta.Columns[i].Identity || !list.Contains(meta.Columns[i].ColumnName)) continue;
+                if (j > 0) sqlbuilder.Append(",");
                 sqlbuilder.Append("@" + meta.Columns[i].PropertyName + "");
                 j++;
             }
+
             sqlbuilder.Append(");");
 
             var exists = meta.Columns.Exists(x => x.Identity);
@@ -141,20 +116,15 @@ namespace Vulcan.DapperExtensions.ORMapping.MSSql
             {
                 if (meta.Columns[i].PrimaryKey || !list.Contains(meta.Columns[i].ColumnName)) continue;
 
-                if (j > 0)
-                {
-                    sqlbuilder.Append(",");
-                }
+                if (j > 0) sqlbuilder.Append(",");
                 j++;
                 sqlbuilder.Append("[" + meta.Columns[i].ColumnName + "]=@" + meta.Columns[i].PropertyName + "");
             }
+
             sqlbuilder.Append(" WHERE ");
             for (var i = 0; i < keys.Count; i++)
             {
-                if (i > 0)
-                {
-                    sqlbuilder.Append(" AND ");
-                }
+                if (i > 0) sqlbuilder.Append(" AND ");
                 sqlbuilder.Append("[" + keys[i].ColumnName + "]=@" + keys[i].PropertyName);
             }
 

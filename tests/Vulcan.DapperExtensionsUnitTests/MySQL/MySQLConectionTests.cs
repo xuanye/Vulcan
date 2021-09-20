@@ -1,7 +1,4 @@
 using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
@@ -16,7 +13,6 @@ namespace Vulcan.DapperExtensionsUnitTests.MySQL
             connection.Open();
             Assert.NotNull(connection);
             connection.Close();
-
         }
     }
 }

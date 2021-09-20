@@ -8,12 +8,10 @@ namespace Vulcan.DapperExtensions.Internal
     {
         public void AddToMetrics(string sql, object param)
         {
-
         }
 
         public void Dispose()
         {
-
         }
     }
 }

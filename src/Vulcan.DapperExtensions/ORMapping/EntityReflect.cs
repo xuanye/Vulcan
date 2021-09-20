@@ -8,14 +8,12 @@ namespace Vulcan.DapperExtensions.ORMapping
 {
     public static class EntityReflect
     {
-        private static readonly ConcurrentDictionary<Type, EntityMeta> Cache = new ConcurrentDictionary<Type, EntityMeta>();
+        private static readonly ConcurrentDictionary<Type, EntityMeta> Cache =
+            new ConcurrentDictionary<Type, EntityMeta>();
 
         public static EntityMeta GetDefineInfoFromType(Type type)
         {
-            if (Cache.TryGetValue(type,out var entityMeta))
-            {
-                return entityMeta;
-            }
+            if (Cache.TryGetValue(type, out var entityMeta)) return entityMeta;
 
 
             entityMeta = new EntityMeta();
@@ -27,9 +25,8 @@ namespace Vulcan.DapperExtensions.ORMapping
 
             entityMeta.TableName = tableAttribute != null ? tableAttribute.TableName : type.FullName?.Split('.').Last();
 
-            foreach (var p in type.GetProperties( BindingFlags.Public | BindingFlags.Instance))
+            foreach (var p in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
             {
-
                 var attrs = p.GetCustomAttributes();
 
 
@@ -46,6 +43,7 @@ namespace Vulcan.DapperExtensions.ORMapping
                         ecMeta = null;
                         break;
                     }
+
                     switch (cusAttr)
                     {
                         case PrimaryKeyAttribute _:
@@ -62,10 +60,8 @@ namespace Vulcan.DapperExtensions.ORMapping
                             break;
                     }
                 }
-                if (ecMeta != null)
-                {
-                    entityMeta.Columns.Add(ecMeta);
-                }
+
+                if (ecMeta != null) entityMeta.Columns.Add(ecMeta);
             }
 
             Cache.TryAdd(type, entityMeta);
@@ -83,14 +79,14 @@ namespace Vulcan.DapperExtensions.ORMapping
     public class EntityColumnMeta
     {
         /// <summary>
-        /// column's name in db
+        ///     column's name in db
         /// </summary>
         public string ColumnName { get; set; }
 
         /// <summary>
-        /// PropertyName in csharp class
+        ///     PropertyName in csharp class
         /// </summary>
-        public string PropertyName { get; set;}
+        public string PropertyName { get; set; }
 
         public bool PrimaryKey { get; set; }
 
