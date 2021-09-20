@@ -22,10 +22,11 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
             return TestDataBaseSwitcher.DataBaseType switch
             {
-                DataBaseType.MySQL => new SQLConnectionFactory(),
-                DataBaseType.MSSQL => new MySQLConnectionFactory(),
+                DataBaseType.MySQL => new MySQLConnectionFactory(),
+                DataBaseType.MSSQL => new SQLConnectionFactory(),
                 _ => throw new NotImplementedException()
             };
         }
+
     }
 }

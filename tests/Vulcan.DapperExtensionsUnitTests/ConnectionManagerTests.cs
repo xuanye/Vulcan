@@ -5,28 +5,18 @@ using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests
 {
-    public class ConnectionManagerTests : IDisposable
+    public class ConnectionManagerTests :SharedDatabaseTest
     {
-        private ConnectionManagerFactory _factory;
-        private ThreadLocalStorage _threadLocalStorage;
-        private SQLConnectionFactory _connectionFactory;
 
-        public ConnectionManagerTests()
+        public ConnectionManagerTests(SharedDatabaseFixture fixture) : base(fixture)
         {
-            //for unit test only ,in asp.net core should use httpContext storage ,
-            //or other asynchronous application maybe implement by AsyncLocal<>
-            _threadLocalStorage = new ThreadLocalStorage();
-
-            _connectionFactory = new SQLConnectionFactory();
-
-            _factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
         }
 
         [Fact]
         public void BeginTransaction_ShouldBeOk()
         {
             //arrange
-            using var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
+            using var connectionManager = Fixture.ConnectionManagerFactory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
             //act
             var trans = connectionManager.BeginTransaction();
@@ -37,13 +27,7 @@ namespace Vulcan.DapperExtensionsUnitTests
 
 
         }
-        public void Dispose()
-        {
-            _threadLocalStorage.Remove(TestResourceManager.GetConnectionString());
-            _threadLocalStorage = null;
-            _factory = null;
-            _connectionFactory = null;
-            //throw new NotImplementedException();
-        }
+
+
     }
 }

@@ -11,7 +11,6 @@ namespace Vulcan.DapperExtensionsUnitTests
     /// </summary>
     public class ConnectionManagerFactoryTests: IDisposable
     {
-        private ConnectionManagerFactory _factory;
         private ThreadLocalStorage _threadLocalStorage;
         private IConnectionFactory _connectionFactory;
 
@@ -24,7 +23,7 @@ namespace Vulcan.DapperExtensionsUnitTests
 
             _connectionFactory = TestResourceManager.GetConnectionFactory();
 
-            _factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
+
         }
 
         [Fact]
@@ -39,17 +38,18 @@ namespace Vulcan.DapperExtensionsUnitTests
         public void GetConnectionManager_IsNotNull_WithSimpleCall()
         {
             //arrange
-
+            var factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
+            var connectString = TestResourceManager.GetConnectionString();
 
             //act
-            using var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
+            using var connectionManager = factory.GetConnectionManager(connectString);
 
 
             //assert
             Assert.NotNull(connectionManager);
             Assert.NotNull(connectionManager.Connection);
 
-            Assert.Equal(TestResourceManager.GetConnectionString(), connectionManager.Connection.ConnectionString);
+            Assert.Equal(connectString, connectionManager.Connection.ConnectionString);
 
             Assert.Equal(1, connectionManager.RefCount);
 
@@ -58,13 +58,13 @@ namespace Vulcan.DapperExtensionsUnitTests
         }
 
         [Fact]
-        public void GetConnectionManager_CheckRefCountEqualToTwo_GetTowice()
+        public void GetConnectionManager_CheckRefCountEqualToTwo_GetTwice()
         {
             //arrange
-
+            var factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
 
             //act
-            using var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
+            using var connectionManager = factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
 
             //assert
@@ -77,7 +77,7 @@ namespace Vulcan.DapperExtensionsUnitTests
 
             Assert.Equal(System.Data.ConnectionState.Open, connectionManager.Connection.State);
 
-            using var connectionManager2 = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
+            using var connectionManager2 = factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
             Assert.NotNull(connectionManager2);
             Assert.NotNull(connectionManager2.Connection);
@@ -92,10 +92,10 @@ namespace Vulcan.DapperExtensionsUnitTests
         public void GetConnectionManager_CheckRefCount0_AfterDispose()
         {
             //arrange
-
+            var factory = new ConnectionManagerFactory(_threadLocalStorage, _connectionFactory);
 
             //act
-            var connectionManager = _factory.GetConnectionManager(TestResourceManager.GetConnectionString());
+            var connectionManager = factory.GetConnectionManager(TestResourceManager.GetConnectionString());
 
 
             //assert
@@ -120,7 +120,6 @@ namespace Vulcan.DapperExtensionsUnitTests
         {
             _threadLocalStorage.Remove(TestResourceManager.GetConnectionString());
             _threadLocalStorage = null;
-            _factory = null;
             _connectionFactory = null;
 
         }

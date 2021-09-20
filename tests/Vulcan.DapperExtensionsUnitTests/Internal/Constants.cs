@@ -12,6 +12,6 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         /// MySQL
         /// NOTE:TestDb Should be exists;
         /// </summary>
-        public const string MYSQL_CONNECTION_STRING = @"server=192.168.102.108;port=3306;database=testdb;uid=develop;pwd=K@^23O12NAGb;charset=utf8mb4;Connection Timeout=18000;SslMode=none;";
+        public const string MYSQL_CONNECTION_STRING = @"Server=192.168.1.30;Port=3306;Database=northwind;Uid=develop;Pwd=M3YvLTd8iUni;";
     }
 }
