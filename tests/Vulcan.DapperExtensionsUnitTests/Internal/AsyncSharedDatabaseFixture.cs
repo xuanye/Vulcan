@@ -5,28 +5,28 @@ using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensions.Contract;
 using Vulcan.DapperExtensionsUnitTests.MSSQL;
 using Vulcan.DapperExtensionsUnitTests.MySQL;
+using Vulcan.DataAccess.Helper;
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
-    public class SharedDatabaseFixture : IDisposable
+    public class AsyncSharedDatabaseFixture : IDisposable
     {
-        private static readonly object LockObject = new object();
+        private static readonly SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
         private static bool _databaseInitialized;
 
 
-        private ThreadLocalStorage _threadLocalStorage;
+        private AsyncLocalStorage _localStorage;
 
 
-        public SharedDatabaseFixture()
+        public AsyncSharedDatabaseFixture()
         {
             //for unit test only ,in asp.net core should use httpContext storage ,
             //or other asynchronous application maybe implement by AsyncLocal<>
-            _threadLocalStorage = new ThreadLocalStorage();
-
+            _localStorage = new AsyncLocalStorage();           
 
             ConnectionString = TestResourceManager.GetConnectionString();
             ConnectionFactory = TestResourceManager.GetConnectionFactory();
-            ConnectionManagerFactory = new ConnectionManagerFactory(_threadLocalStorage, ConnectionFactory);
+            ConnectionManagerFactory = new ConnectionManagerFactory(_localStorage, ConnectionFactory);
 
             Repository = TestDataBaseSwitcher.DataBaseType switch
             {
@@ -39,7 +39,8 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
             //user_id -> UserId
             Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
-            Seed();
+
+            SeedAsync().GetAwaiter().GetResult();
         }
 
         public IConnectionFactory ConnectionFactory { get; private set; }
@@ -54,22 +55,29 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
         public void Dispose()
         {
-            _threadLocalStorage.Remove(ConnectionString);
-            _threadLocalStorage = null;
+            _localStorage = null;
             ConnectionManagerFactory = null;
             ConnectionFactory = null;
             ConnectionString = null;
         }
 
-        private void Seed()
+        public async Task SeedAsync()
         {
-            lock (LockObject)
+            AsyncLocalStorage.LocalValue = new System.Collections.Generic.Dictionary<string, object>();
+            await semaphoreSlim.WaitAsync();
+            try
             {
-
                 if (_databaseInitialized) return;
                 //Initial database
-                Repository.InitialTestDb();
+                await Repository.InitialTestDbAsync();
                 _databaseInitialized = true;
+            }
+            finally
+            {
+                AsyncLocalStorage.LocalValue = null;
+                //When the task is ready, release the semaphore. It is vital to ALWAYS release the semaphore when we are ready, or else we will end up with a Semaphore that is forever locked.
+                //This is why it is important to do the Release within a try...finally clause; program execution may crash or take a different path, this way you are guaranteed execution
+                semaphoreSlim.Release();
             }
         }
     }

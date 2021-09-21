@@ -9,10 +9,13 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         ///     Windows use SQLSERVER
         ///     Maybe use Compiler Switch？
         /// </summary>
-        public static DataBaseType DataBaseType = RuntimeInformation.IsOSPlatform(OSPlatform.Linux)
-                                                  || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)
-            ? DataBaseType.MySQL
-            : DataBaseType.MySQL;
+
+#if MySQLDebug
+        public static DataBaseType DataBaseType = DataBaseType.MySQL;
+#else
+        public static DataBaseType DataBaseType = DataBaseType.MSSQL;
+#endif
+
     }
 
     internal enum DataBaseType

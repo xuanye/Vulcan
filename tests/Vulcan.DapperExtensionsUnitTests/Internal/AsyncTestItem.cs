@@ -3,8 +3,8 @@ using Vulcan.DapperExtensions.ORMapping;
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
-    [TableName("test_item")]
-    public class TestItem : BaseEntityClass
+    [TableName("async_test_item")]
+    public class AsyncTestItem : BaseEntityClass
     {
         private string _Address;
 

@@ -3,11 +3,15 @@ using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests
 {
-    public class ConnectionManagerTests : SharedDatabaseTest
+    [Collection("Database collection")]
+    public class ConnectionManagerTests
     {
-        public ConnectionManagerTests(SharedDatabaseFixture fixture) : base(fixture)
+        public ConnectionManagerTests(SharedDatabaseFixture fixture)
         {
+            SharedDatabaseFixture = fixture;
         }
+
+        public SharedDatabaseFixture SharedDatabaseFixture { get; }
 
         [Fact]
         public void BeginTransaction_ShouldBeOk()

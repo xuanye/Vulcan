@@ -21,7 +21,8 @@ namespace Vulcan.DapperExtensions
 
         public void Remove(string key)
         {
-            if (ContainsKey(key)) Local.Value.Remove(key);
+            if (ContainsKey(key))
+                Local.Value.Remove(key);
         }
 
         public void Set(string key, object item)

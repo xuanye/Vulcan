@@ -19,14 +19,15 @@
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/xuanye/Vulcan</RepositoryUrl>
         <RootNamespace>Vulcan.DataAccess</RootNamespace>
+        <Configurations>Debug;Release;MySQLDebug</Configurations>
 
 
     </PropertyGroup>
 
 
     <ItemGroup>
-        <PackageReference Include="Dapper" Version="1.50.5"/>
-        <PackageReference Include="Microsoft.CSharp" Version="4.5.0"/>
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0"/>
+        <PackageReference Include="Dapper" Version="1.50.5" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="2.0.0" />
     </ItemGroup>
 </Project>

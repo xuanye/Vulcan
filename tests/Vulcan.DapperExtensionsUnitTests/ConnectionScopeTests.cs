@@ -3,16 +3,20 @@ using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
-namespace Vulcan.DapperExtensionsUnitTests.MSSQL
+namespace Vulcan.DapperExtensionsUnitTests
 {
     /// <summary>
     ///     share same connection in a scope
     /// </summary>
-    public class ConnectionScopeTests : SharedDatabaseTest
+    [Collection("Database collection")]
+    public class ConnectionScopeTests
     {
-        public ConnectionScopeTests(SharedDatabaseFixture fixture) : base(fixture)
+        public ConnectionScopeTests(SharedDatabaseFixture fixture)
         {
+            SharedDatabaseFixture = fixture;
         }
+
+        public SharedDatabaseFixture SharedDatabaseFixture { get; }
 
         [Fact]
         public void TestConnectionScope_IsSameConnection_WithUsingScope()

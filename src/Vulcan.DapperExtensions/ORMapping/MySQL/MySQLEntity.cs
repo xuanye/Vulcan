@@ -1,8 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Vulcan.DapperExtensions.ORMapping.MySQL
 {
+    [ExcludeFromCodeCoverage]
     public class MySQLEntity : AbstractBaseEntity
     {
         private static readonly ConcurrentDictionary<Type, string> ReplaceSqlCache =
