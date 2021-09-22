@@ -17,7 +17,7 @@ dotnet build ./src/Vulcan.DapperExtensions/Vulcan.DapperExtensions.csproj -c Rel
 
 versionNumber="2.1.4"
 
-dotnet pack ./src/Vulcan.DataAccess/Vulcan.DapperExtensions.csproj -c Release -o $artifactsFolder --version-suffix=$versionNumber
+dotnet pack ./src/Vulcan.DapperExtensions/Vulcan.DapperExtensions.csproj -c Release -o $artifactsFolder --version-suffix=$versionNumber
 
 
 
