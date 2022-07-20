@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <Description>Vulcan 基于Dapper.NET的数据库链接托管类库，支持数据库链接管理透明化，支持事务包装，内置支持Mysql和MSSQL数据库，可扩展支持其他数据库，只要Dapper支持即可</Description>
@@ -18,7 +18,7 @@
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/xuanye/Vulcan</RepositoryUrl>
-        <RootNamespace>Vulcan.DataAccess</RootNamespace>
+        <RootNamespace>Vulcan.DapperExtensions</RootNamespace>
         <Configurations>Debug;Release;MySQLDebug</Configurations>
 
 

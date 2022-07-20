@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
@@ -17,7 +17,8 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         #region Properties
 
-        [Ignore] public bool FullUpdate { get; set; }
+        [Ignore]
+        public bool FullUpdate { get; set; }
 
         #endregion
 
