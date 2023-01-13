@@ -17,16 +17,16 @@ namespace Vulcan.DapperExtensions.Contract
         IUnitOfWork CreateUnitOfWork(bool isTrans = false);
 
 
-        Task<TEntity> FindAsync<TEntity>(int id) where TEntity : AbstractBaseEntity;
+        Task<TEntity> FindAsync<TEntity>(int id) where TEntity : BaseEntity;
 
-        Task<List<TEntity>> FindAllAsync<TEntity>() where TEntity : AbstractBaseEntity;
+        Task<List<TEntity>> FindAllAsync<TEntity>() where TEntity : BaseEntity;
 
-        Task<List<TEntity>> FindByConditionAsync<TEntity>(IDictionary<string, string> conditions) where TEntity : AbstractBaseEntity;
+        Task<List<TEntity>> FindByConditionAsync<TEntity>(IDictionary<string, string> conditions) where TEntity : BaseEntity;
 
 
-        Task<int> InsertAsync<TEntity>(TEntity entity) where TEntity : AbstractBaseEntity;
+        Task<int> InsertAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
-        Task<int> UpdateAsync<TEntity>(TEntity entity) where TEntity : AbstractBaseEntity;
+        Task<int> UpdateAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
 
 
         Task RemoveByConditionAsync<TEntity>(Dictionary<string, string> conditions);
