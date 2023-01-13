@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <Import Project="../../build/version.props" />
     <Import Project="../../build/releasenotes.props" />
+
     <PropertyGroup>
         <Description>Vulcan 基于Dapper.NET的数据库链接托管类库，支持数据库链接管理透明化，支持事务包装，内置支持Mysql和MSSQL数据库，可扩展支持其他数据库，只要Dapper支持即可</Description>
         <Copyright>Xuanye @ 2016-2022</Copyright>

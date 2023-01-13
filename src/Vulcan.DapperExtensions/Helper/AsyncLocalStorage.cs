@@ -4,18 +4,18 @@ using System.Text;
 using System.Threading;
 using Vulcan.DapperExtensions.Contract;
 
-namespace Vulcan.DataAccess.Helper
+namespace Vulcan.DapperExtensions
 {
     public class AsyncLocalStorage : IRuntimeContextStorage
     {
-       
+
 
         public static Dictionary<string, object> LocalValue
         {
             get => Local.Value;
             set => Local.Value = value;
         }
-        
+
         private static readonly AsyncLocal<Dictionary<string, object>> Local =
             new AsyncLocal<Dictionary<string, object>>();
 
@@ -42,7 +42,7 @@ namespace Vulcan.DataAccess.Helper
             else
                 LocalValue.Add(key, item);
         }
-       
+
     }
-   
+
 }

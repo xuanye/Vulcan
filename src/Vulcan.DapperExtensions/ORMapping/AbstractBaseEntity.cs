@@ -17,7 +17,8 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         #region Properties
 
-        [Ignore] public bool FullUpdate { get; set; }
+        [Ignore]
+        public bool FullUpdate { get; set; }
 
         #endregion
 
