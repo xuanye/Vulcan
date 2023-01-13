@@ -4,7 +4,7 @@ using Vulcan.DapperExtensions.ORMapping;
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
     [TableName("test_item")]
-    public class TestItem : BaseEntityClass
+    public class TestItem : BaseEntity
     {
         private string _Address;
 

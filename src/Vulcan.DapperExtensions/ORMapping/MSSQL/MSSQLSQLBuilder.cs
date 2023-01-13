@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Vulcan.DapperExtensions.ORMapping.MSSQL
 {
     public class MSSQLSQLBuilder : ISQLBuilder
     {
+        public static MSSQLSQLBuilder Instance = new MSSQLSQLBuilder();
+
         public string BuildInsertSql(EntityMeta meta)
         {
             if (meta.Columns == null || meta.Columns.Count == 0)

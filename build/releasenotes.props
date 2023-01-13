@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project> 
+  <PropertyGroup> 
+    <DapperPackageNotes>
+    1. 将实体中的ISQLBuilder转移到IConnectionFactory中，方便多数据库版本的开发
+    </DapperPackageNotes>  
+  </PropertyGroup> 
+</Project>

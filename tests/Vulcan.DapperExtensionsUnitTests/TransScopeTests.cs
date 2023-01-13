@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-using AutoFixture;
 using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;

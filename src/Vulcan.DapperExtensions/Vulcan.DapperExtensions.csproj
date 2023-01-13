@@ -1,27 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="../../build/version.props" />
+    <Import Project="../../build/releasenotes.props" />
     <PropertyGroup>
         <Description>Vulcan 基于Dapper.NET的数据库链接托管类库，支持数据库链接管理透明化，支持事务包装，内置支持Mysql和MSSQL数据库，可扩展支持其他数据库，只要Dapper支持即可</Description>
-        <Copyright>Xuanye @ 2016</Copyright>
+        <Copyright>Xuanye @ 2016-2022</Copyright>
         <Authors>Xuanye</Authors>
         <AssemblyTitle>Vulcan 基于Dapper.NET的数据库链接托管类库</AssemblyTitle>
         <PackageId>Vulcan.DapperExtensions</PackageId>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <Version>$(VersionSuffix)</Version>
+        <Version>$(DapperPackageVersion)</Version>
         <NeutralLanguage>zh-CN</NeutralLanguage>
-
-
-        <PackageTags>Dapper,DAO,连接托管</PackageTags>
-        <PackageReleaseNotes>Vulcan 基于Dapper.NET的数据库链接托管类库</PackageReleaseNotes>
+        <PackageTags>Dapper,DAO,ConnectionManager</PackageTags>
+        <PackageReleaseNotes>
+            $(DapperPackageNotes)
+        </PackageReleaseNotes>
         <PackageProjectUrl>https://github.com/xuanye/Vulcan</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/xuanye/Vulcan/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageLicense>https://github.com/xuanye/Vulcan/blob/master/LICENSE</PackageLicense>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/xuanye/Vulcan</RepositoryUrl>
-        <RootNamespace>Vulcan.DataAccess</RootNamespace>
+        <RootNamespace>Vulcan.DapperExtensions</RootNamespace>
         <Configurations>Debug;Release;MySQLDebug</Configurations>
-
-
     </PropertyGroup>
 
 

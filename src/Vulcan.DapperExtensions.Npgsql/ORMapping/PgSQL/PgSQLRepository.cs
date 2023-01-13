@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Vulcan.DapperExtensions.Contract;
 
-namespace Vulcan.DapperExtensions.ORMapping.MySQL
+namespace Vulcan.DapperExtensions.ORMapping.PgSQL
 {
-    public class MySQLRepository : BaseRepository
+    public class PgSQLRepository : BaseRepository
     {
-        protected MySQLRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null) :
+        protected PgSQLRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null) :
             base(mgr, constr, factory)
         {
         }
@@ -47,10 +47,10 @@ namespace Vulcan.DapperExtensions.ORMapping.MySQL
             var pageStartIndex = view.PageSize * view.PageIndex;
             var currentPageCount = view.PageSize;
             var sql =
-                $" select {sqlColumns} from {sqlTable} where 1=1  {sqlCondition} {sqlOrder} limit {pageStartIndex},{currentPageCount} ;";
+                $" select {sqlColumns} from {sqlTable} where 1=1  {sqlCondition} {sqlOrder} limit {currentPageCount}  offset {pageStartIndex} ;";
 
             pList.DataList = Query<T>(sql, param);
-            pList.Total = (int) totalCount;
+            pList.Total = (int)totalCount;
             pList.PageIndex = view.PageIndex;
             pList.PageSize = view.PageSize;
             return pList;
@@ -79,27 +79,14 @@ namespace Vulcan.DapperExtensions.ORMapping.MySQL
             var pageStartIndex = view.PageSize * view.PageIndex;
             var currentPageCount = view.PageSize;
             var sql =
-                $" select {sqlColumns} from {sqlTable} where 1=1  {sqlCondition} {sqlOrder} limit {pageStartIndex},{currentPageCount} ;";
+                $" select {sqlColumns} from {sqlTable} where 1=1  {sqlCondition} {sqlOrder} limit {currentPageCount}  offet {pageStartIndex} ;";
 
             pList.DataList = await QueryAsync<T>(sql, param);
-            pList.Total = (int) totalCount;
+            pList.Total = (int)totalCount;
             pList.PageIndex = view.PageIndex;
             pList.PageSize = view.PageSize;
             return pList;
         }
 
-        public void ReplaceInto(MySQLEntity entity)
-        {
-            var sql = entity.GetReplaceInsertSQL();
-
-            Execute(sql, entity);
-        }
-
-        public Task ReplaceIntoAsync(MySQLEntity entity)
-        {
-            var sql = entity.GetReplaceInsertSQL();
-
-            return ExecuteAsync(sql, entity);
-        }
     }
 }

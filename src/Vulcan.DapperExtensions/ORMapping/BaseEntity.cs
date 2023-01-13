@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 namespace Vulcan.DapperExtensions.ORMapping
 {
-    public abstract class AbstractBaseEntity
+    public abstract class BaseEntity
     {
         private static readonly ConcurrentDictionary<Type, string> _InsertSqlCache =
             new ConcurrentDictionary<Type, string>();
@@ -20,8 +20,6 @@ namespace Vulcan.DapperExtensions.ORMapping
         [Ignore] public bool FullUpdate { get; set; }
 
         #endregion
-
-        protected abstract ISQLBuilder SQLBuilder { get; }
 
         protected void Clear()
         {
@@ -41,14 +39,14 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         #region Public Methods
 
-        public string GetInsertSQL()
+        public string GetInsertSQL(ISQLBuilder sqlBuilder)
         {
-            return FullUpdate ? GetInsertFullSql() : GetInsertChangeColumnsSql();
+            return FullUpdate ? GetInsertFullSql(sqlBuilder) : GetInsertChangeColumnsSql(sqlBuilder);
         }
 
-        public string GetUpdateSQL()
+        public string GetUpdateSQL(ISQLBuilder sqlBuilder)
         {
-            return FullUpdate ? GetUpdateFullSql() : GetUpdateChangeColumnsSql();
+            return FullUpdate ? GetUpdateFullSql(sqlBuilder) : GetUpdateChangeColumnsSql(sqlBuilder);
         }
 
         public void RemoveUpdateColumn(string ColumnName)
@@ -63,44 +61,44 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         #region Private Methods
 
-        private string GetInsertFullSql()
+        private string GetInsertFullSql(ISQLBuilder sqlBuilder)
         {
             var t = GetType();
             if (_InsertSqlCache.TryGetValue(t, out var sql)) return sql;
             var metaData = EntityReflect.GetDefineInfoFromType(t);
-            sql = SQLBuilder.BuildInsertSql(metaData);
+            sql = sqlBuilder.BuildInsertSql(metaData);
 
             _InsertSqlCache.TryAdd(t, sql);
 
             return _InsertSqlCache[t];
         }
 
-        private string GetUpdateFullSql()
+        private string GetUpdateFullSql(ISQLBuilder sqlBuilder)
         {
             var t = GetType();
             if (_UpdateSqlCache.TryGetValue(t, out var sql)) return sql;
 
             var metaData = EntityReflect.GetDefineInfoFromType(t);
-            sql = SQLBuilder.BuildUpdateSql(metaData);
+            sql = sqlBuilder.BuildUpdateSql(metaData);
             _UpdateSqlCache.TryAdd(t, sql);
             return _UpdateSqlCache[t];
         }
 
-        private string GetInsertChangeColumnsSql()
+        private string GetInsertChangeColumnsSql(ISQLBuilder sqlBuilder)
         {
             var metaData = EntityReflect.GetDefineInfoFromType(GetType());
             lock (_LockObject)
             {
-                return SQLBuilder.BuildInsertSql(metaData, _PropertyChangedList);
+                return sqlBuilder.BuildInsertSql(metaData, _PropertyChangedList);
             }
         }
 
-        private string GetUpdateChangeColumnsSql()
+        private string GetUpdateChangeColumnsSql(ISQLBuilder sqlBuilder)
         {
             var metaData = EntityReflect.GetDefineInfoFromType(GetType());
             lock (_LockObject)
             {
-                return SQLBuilder.BuildUpdateSql(metaData, _PropertyChangedList);
+                return sqlBuilder.BuildUpdateSql(metaData, _PropertyChangedList);
             }
         }
 

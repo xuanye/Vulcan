@@ -1,9 +1,9 @@
+using Dapper;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
 using Vulcan.DapperExtensions.Contract;
 using Vulcan.DapperExtensions.Internal;
 
@@ -15,6 +15,8 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         private readonly IConnectionFactory _dbFactory;
         private readonly IConnectionManagerFactory _mgr;
+
+
 
         protected BaseRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
         {
@@ -31,14 +33,14 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public long Insert(AbstractBaseEntity entity)
+        public long Insert(BaseEntity entity)
         {
             long ret;
             using (var mgr = GetConnection())
             {
                 using (var metrics = CreateSQLMetrics())
                 {
-                    var sql = entity.GetInsertSQL();
+                    var sql = entity.GetInsertSQL(_dbFactory.SQLBuilder);
                     ret = mgr.Connection.QueryFirstOrDefault<long>(sql, entity, mgr.Transaction, null,
                         CommandType.Text);
                     metrics.AddToMetrics(sql, entity);
@@ -54,15 +56,15 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<long> InsertAsync(AbstractBaseEntity entity)
+        public async Task<long> InsertAsync(BaseEntity entity)
         {
             long ret;
             using (var mgr = GetConnection())
             {
                 using (var metrics = CreateSQLMetrics())
                 {
-                    var sql = entity.GetInsertSQL();
-                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(entity.GetInsertSQL(), entity,
+                    var sql = entity.GetInsertSQL(_dbFactory.SQLBuilder);
+                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(entity.GetInsertSQL(_dbFactory.SQLBuilder), entity,
                         mgr.Transaction, null, CommandType.Text);
                     metrics.AddToMetrics(sql, entity);
                 }
@@ -77,12 +79,12 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public int BatchInsert<T>(List<T> list) where T : AbstractBaseEntity
+        public int BatchInsert<T>(List<T> list, int batchSize = 100) where T : BaseEntity
         {
             var ret = -1;
             if (list == null || list.Count <= 0) return ret;
 
-            var sql = list[0].GetInsertSQL();
+            var sql = list[0].GetInsertSQL(_dbFactory.SQLBuilder);
             ret = Execute(sql, list);
             return ret;
         }
@@ -93,11 +95,11 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <param name="list"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public Task<int> BatchInsertAsync<T>(List<T> list) where T : AbstractBaseEntity
+        public Task<int> BatchInsertAsync<T>(List<T> list) where T : BaseEntity
         {
             if (list == null || list.Count <= 0) return Task.FromResult(-1);
 
-            var sql = list[0].GetInsertSQL();
+            var sql = list[0].GetInsertSQL(_dbFactory.SQLBuilder);
             return ExecuteAsync(sql, list);
 
         }
@@ -107,9 +109,9 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public int Update(AbstractBaseEntity model)
+        public int Update(BaseEntity model)
         {
-            return Execute(model.GetUpdateSQL(), model);
+            return Execute(model.GetUpdateSQL(_dbFactory.SQLBuilder), model);
         }
 
         /// <summary>
@@ -117,9 +119,9 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public Task<int> UpdateAsync(AbstractBaseEntity model)
+        public Task<int> UpdateAsync(BaseEntity model)
         {
-            return ExecuteAsync(model.GetUpdateSQL(), model);
+            return ExecuteAsync(model.GetUpdateSQL(_dbFactory.SQLBuilder), model);
         }
 
         /// <summary>
@@ -128,12 +130,12 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public int BatchUpdate<T>(List<T> list) where T : AbstractBaseEntity
+        public int BatchUpdate<T>(List<T> list) where T : BaseEntity
         {
             var ret = -1;
             if (list == null || list.Count <= 0) return ret;
 
-            var sql = list[0].GetUpdateSQL();
+            var sql = list[0].GetUpdateSQL(_dbFactory.SQLBuilder);
             ret = Execute(sql, list);
             return ret;
         }
@@ -144,12 +146,12 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <param name="list"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public async Task<int> BatchUpdateAsync<T>(List<T> list) where T : AbstractBaseEntity
+        public async Task<int> BatchUpdateAsync<T>(List<T> list) where T : BaseEntity
         {
             var ret = -1;
             if (list == null || list.Count <= 0) return ret;
 
-            var sql = list[0].GetUpdateSQL();
+            var sql = list[0].GetUpdateSQL(_dbFactory.SQLBuilder);
             ret = await ExecuteAsync(sql, list);
             return ret;
         }

@@ -3,10 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Vulcan.DapperExtensions.ORMapping.MSSQL
 {
     [ExcludeFromCodeCoverage]
-    public class MSSQLEntity : AbstractBaseEntity
+    public class MSSQLEntity : BaseEntity
     {
-        private static readonly MSSQLSQLBuilder _builder = new MSSQLSQLBuilder();
-
-        protected override ISQLBuilder SQLBuilder => _builder;
     }
 }
