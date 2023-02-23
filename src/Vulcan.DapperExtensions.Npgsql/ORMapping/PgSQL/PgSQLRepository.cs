@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Vulcan.DapperExtensions.Contract;
 
-namespace Vulcan.DapperExtensions.ORMapping.PgSQL
+namespace Vulcan.DapperExtensions.ORMapping.Pgsql
 {
-    public class PgSQLRepository : BaseRepository
+    public class PgsqlRepository : BaseRepository
     {
-        protected PgSQLRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null) :
+        protected PgsqlRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null) :
             base(mgr, constr, factory)
         {
         }

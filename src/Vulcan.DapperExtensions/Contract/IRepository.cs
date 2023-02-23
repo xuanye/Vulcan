@@ -6,32 +6,21 @@ using Vulcan.DapperExtensions.ORMapping;
 
 namespace Vulcan.DapperExtensions.Contract
 {
-
     public interface IRepository
     {
         /// <summary>
-        /// create unit of work 
+        /// create unit of work
         /// </summary>
         /// <param name="isTrans">is db transaction</param>
         /// <returns></returns>
         IUnitOfWork CreateUnitOfWork(bool isTrans = false);
 
+        Task<TEntity> GetAsync<TEntity, TKeyType>(TKeyType id) where TEntity : BaseEntity;
 
-        Task<TEntity> FindAsync<TEntity>(int id) where TEntity : BaseEntity;
+        Task<TKeyType> AddAsync<TEntity, TKeyType>(TEntity entity) where TEntity : BaseEntity;
 
-        Task<List<TEntity>> FindAllAsync<TEntity>() where TEntity : BaseEntity;
+        Task<TKeyType> UpdateAsync<TEntity, TKeyType>(TEntity entity) where TEntity : BaseEntity;
 
-        Task<List<TEntity>> FindByConditionAsync<TEntity>(IDictionary<string, string> conditions) where TEntity : BaseEntity;
-
-
-        Task<int> InsertAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
-
-        Task<int> UpdateAsync<TEntity>(TEntity entity) where TEntity : BaseEntity;
-
-
-        Task RemoveByConditionAsync<TEntity>(Dictionary<string, string> conditions);
-
-        Task RemoveByIdAsync<TEntity>(int id);
-
+        Task<int> RemoveByIdAsync<TEntity, TKeyType>(TKeyType id) where TEntity : BaseEntity;
     }
 }

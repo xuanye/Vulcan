@@ -16,16 +16,12 @@ namespace Vulcan.DapperExtensions.ORMapping
         private readonly IConnectionFactory _dbFactory;
         private readonly IConnectionManagerFactory _mgr;
 
-
-
         protected BaseRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
         {
             _conStr = constr;
             _dbFactory = factory;
             _mgr = mgr;
         }
-
-
 
         /// <summary>
         ///     insert entity value to db
@@ -79,14 +75,13 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
-        public int BatchInsert<T>(List<T> list, int batchSize = 100) where T : BaseEntity
+        [Obsolete("Cyclic insertion, recommended only when the data volume is small")]
+        public int BatchInsert<T>(List<T> list) where T : BaseEntity
         {
-            var ret = -1;
-            if (list == null || list.Count <= 0) return ret;
+            if (list == null || list.Count == 0) return -1;
 
             var sql = list[0].GetInsertSQL(_dbFactory.SQLBuilder);
-            ret = Execute(sql, list);
-            return ret;
+            return Execute(sql, list);
         }
 
         /// <summary>
@@ -95,13 +90,13 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <param name="list"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [Obsolete("Cyclic insertion, recommended only when the data volume is small")]
         public Task<int> BatchInsertAsync<T>(List<T> list) where T : BaseEntity
         {
             if (list == null || list.Count <= 0) return Task.FromResult(-1);
 
             var sql = list[0].GetInsertSQL(_dbFactory.SQLBuilder);
             return ExecuteAsync(sql, list);
-
         }
 
         /// <summary>
@@ -130,14 +125,13 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <typeparam name="T"></typeparam>
         /// <param name="list"></param>
         /// <returns></returns>
+        [Obsolete("Cyclic insertion, recommended only when the data volume is small")]
         public int BatchUpdate<T>(List<T> list) where T : BaseEntity
         {
-            var ret = -1;
-            if (list == null || list.Count <= 0) return ret;
+            if (list == null || list.Count == 0) return -1;
 
             var sql = list[0].GetUpdateSQL(_dbFactory.SQLBuilder);
-            ret = Execute(sql, list);
-            return ret;
+            return Execute(sql, list);
         }
 
         /// <summary>
@@ -146,14 +140,13 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <param name="list"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
+        [Obsolete("Cyclic insertion, recommended only when the data volume is small")]
         public async Task<int> BatchUpdateAsync<T>(List<T> list) where T : BaseEntity
         {
-            var ret = -1;
-            if (list == null || list.Count <= 0) return ret;
+            if (list == null || list.Count == 0) return -1;
 
             var sql = list[0].GetUpdateSQL(_dbFactory.SQLBuilder);
-            ret = await ExecuteAsync(sql, list);
-            return ret;
+            return await ExecuteAsync(sql, list);
         }
 
         /// <summary>
@@ -219,7 +212,7 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        ///     Execute parameterized SQL Asynchronous
+        /// Execute parameterized SQL Asynchronous
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="paras"></param>
@@ -240,7 +233,7 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        ///     Execute parameterized SQL Asynchronous
+        /// Execute parameterized SQL Asynchronous
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="timeOut">number of timeout seconds</param>
@@ -262,7 +255,7 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        ///     get first or default result
+        ///  get first or default result
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="paras"></param>
@@ -274,7 +267,7 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        ///     get first or default result
+        /// get first or default result
         /// </summary>
         /// <param name="sql"></param>
         /// <param name="paras"></param>
