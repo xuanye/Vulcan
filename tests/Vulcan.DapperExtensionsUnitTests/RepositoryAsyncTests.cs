@@ -1,17 +1,17 @@
+using AutoFixture;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoFixture;
+using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
-using Vulcan.DataAccess.Helper;
 using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests
 {
     [Collection("Async Database collection")]
     public class RepositoryAsyncTests : IDisposable
-    {      
+    {
         public AsyncSharedDatabaseFixture SharedDatabaseFixture { get; }
         public Fixture AutoFixture { get; }
 
@@ -22,7 +22,7 @@ namespace Vulcan.DapperExtensionsUnitTests
             AutoFixture = new Fixture();
         }
 
-     
+
 
         #region  asynchronous
         [Fact]
@@ -36,14 +36,14 @@ namespace Vulcan.DapperExtensionsUnitTests
             var newId = await repository.InsertAsync(testItem);
             var dbItem = await repository.GetTestItemAsync((int)newId);
 
-           
-           //assert
-           Assert.NotNull(dbItem);
+
+            //assert
+            Assert.NotNull(dbItem);
 
             Assert.Equal(testItem.Name, dbItem.Name);
             Assert.Equal(testItem.Address, dbItem.Address);
 
-           
+
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Vulcan.DapperExtensionsUnitTests
             //arrange
             var repository = SharedDatabaseFixture.Repository;
             //act           
-           
+
             var list = await repository.QueryTestItemListAsync();
 
             //assert
@@ -106,7 +106,7 @@ namespace Vulcan.DapperExtensionsUnitTests
             var affectRow = await repository.UpdateAsync(dbItem);
             var dbItem2 = await repository.GetTestItemAsync(id);
 
-            var affectRows2 = await repository.DeleteAsync(id,600);
+            var affectRows2 = await repository.DeleteAsync(id, 600);
             var dbItem3 = await repository.GetTestItemAsync(id);
 
             //assert
@@ -154,7 +154,7 @@ namespace Vulcan.DapperExtensionsUnitTests
             var repository = SharedDatabaseFixture.Repository;
             //act           
             var newId = await repository.InsertAsync(testItemList[0]);
-            var list1 = await repository.QueryTestItemListByGreaterThanIdAsync((int)newId,600);
+            var list1 = await repository.QueryTestItemListByGreaterThanIdAsync((int)newId, 600);
 
             var newList = new List<AsyncTestItem>();
             for (var i = 1; i < testItemList.Count; i++)
@@ -164,7 +164,7 @@ namespace Vulcan.DapperExtensionsUnitTests
 
             await repository.BatchInsertAsync(newList);
 
-            var list2 = await repository.QueryTestItemListByGreaterThanIdAsync((int)newId,600);
+            var list2 = await repository.QueryTestItemListByGreaterThanIdAsync((int)newId, 600);
             //assert
             Assert.NotNull(list1);
             Assert.Empty(list1);
@@ -184,7 +184,7 @@ namespace Vulcan.DapperExtensionsUnitTests
 
             using (var scope = repository.CreateScope())
             {
-                newId =await repository.InsertAsync(testItem);
+                newId = await repository.InsertAsync(testItem);
                 scope.Commit();
             }
             var dbItem = await repository.GetTestItemAsync((int)newId);

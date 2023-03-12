@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
     internal static class TestDataBaseSwitcher
@@ -11,7 +9,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         /// </summary>
 
 #if MySqlDebug
-        public static DataBaseType DataBaseType = DataBaseType.MySql;
+        public static DataBaseType DataBaseType = DataBaseType.Mysql;
 #else
         public static DataBaseType DataBaseType = DataBaseType.MSSql;
 #endif
@@ -20,7 +18,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
     internal enum DataBaseType
     {
-        MSSql = 1,
-        MySql = 2
+        Mssql = 1,
+        Mysql = 2
     }
 }

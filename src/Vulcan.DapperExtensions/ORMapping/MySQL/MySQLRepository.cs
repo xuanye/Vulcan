@@ -6,7 +6,7 @@ namespace Vulcan.DapperExtensions.ORMapping.Mysql
 {
     public class MysqlRepository : BaseRepository
     {
-        protected MysqlRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null) :
+        protected MysqlRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory) :
             base(mgr, constr, factory)
         {
         }

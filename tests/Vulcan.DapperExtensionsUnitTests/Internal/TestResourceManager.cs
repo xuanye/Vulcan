@@ -1,9 +1,6 @@
 using System;
 using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensions.Contract;
-using Vulcan.DapperExtensions.ORMapping;
-using Vulcan.DapperExtensions.ORMapping.MySql;
-using Vulcan.DapperExtensionsUnitTests.MSSql;
 using Vulcan.DapperExtensionsUnitTests.MySql;
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
@@ -14,8 +11,8 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         {
             return TestDataBaseSwitcher.DataBaseType switch
             {
-                DataBaseType.MySql => Constants.MYSql_CONNECTION_STRING,
-                DataBaseType.MSSql => Constants.MSSql_CONNECTION_STRING,
+                DataBaseType.Mysql => Constants.MYSql_CONNECTION_STRING,
+                DataBaseType.Mssql => Constants.MSSql_CONNECTION_STRING,
                 _ => throw new NotImplementedException()
             };
         }
@@ -24,8 +21,8 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         {
             return TestDataBaseSwitcher.DataBaseType switch
             {
-                DataBaseType.MySql => new MySqlConnectionFactory(),
-                DataBaseType.MSSql => new SqlConnectionFactory(),
+                DataBaseType.Mysql => new MySqlConnectionFactory(),
+                DataBaseType.Mssql => new SqlConnectionFactory(),
                 _ => throw new NotImplementedException()
             };
         }

@@ -29,9 +29,9 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
             Repository = TestDataBaseSwitcher.DataBaseType switch
             {
-                DataBaseType.MySql => new MySqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.Mysql => new MySqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
-                DataBaseType.MSSql => new MSSqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.Mssql => new MSSqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
                 _ => throw new NotSupportedException()
             };
