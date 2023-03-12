@@ -15,11 +15,11 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         {
         }
 
-        protected abstract string GetInitialSQL(int type);
+        protected abstract string GetInitialSql(int type);
         public async Task InitialTestDbAsync()
         {
-            var sql = GetInitialSQL(2);
-            await ExecuteAsync(sql, null);
+            var Sql = GetInitialSql(2);
+            await ExecuteAsync(Sql, null);
 
             var fixture = new Fixture();
             var testItems = fixture.CreateMany<AsyncTestItem>().ToList();
@@ -29,8 +29,8 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
         public void InitialTestDb()
         {
-            var sql = GetInitialSQL(1);
-            Execute(sql, null);
+            var Sql = GetInitialSql(1);
+            Execute(Sql, null);
 
             var fixture = new Fixture();
             var testItems = fixture.CreateMany<TestItem>().ToList();
@@ -50,65 +50,65 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
         public Task<AsyncTestItem> GetTestItemAsync(int Id)
         {
-            const string sql = "select * from async_test_item where id=@Id ";
-            return base.GetAsync<AsyncTestItem>(sql,new { Id});
+            const string Sql = "select * from async_test_item where id=@Id ";
+            return base.GetAsync<AsyncTestItem>(Sql,new { Id});
         }
 
 
         public TestItem GetTestItem(int Id)
         {
-            const string sql = "select * from test_item where id=@Id ";
-            return base.Get<TestItem>(sql,new { Id});
+            const string Sql = "select * from test_item where id=@Id ";
+            return base.Get<TestItem>(Sql,new { Id});
         }
 
         public List<TestItem> QueryTestItemList()
         {
-            const string sql = "select * from test_item";
-            return base.Query<TestItem>(sql, null);
+            const string Sql = "select * from test_item";
+            return base.Query<TestItem>(Sql, null);
         }
 
         public Task<List<AsyncTestItem>> QueryTestItemListAsync()
         {
-            const string sql = "select * from async_test_item";
-            return base.QueryAsync<AsyncTestItem>(sql, null);
+            const string Sql = "select * from async_test_item";
+            return base.QueryAsync<AsyncTestItem>(Sql, null);
         }
 
         public List<TestItem> QueryTestItemListByGreaterThanId(int Id,int timeout=0)
         {
-            const string sql = "select * from test_item where id>@Id";
+            const string Sql = "select * from test_item where id>@Id";
             if (timeout > 0)
             {
-                return base.Query<TestItem>(sql,timeout, new { Id });
+                return base.Query<TestItem>(Sql,timeout, new { Id });
             }
-            return base.Query<TestItem>(sql,new { Id });
+            return base.Query<TestItem>(Sql,new { Id });
         }
         public Task<List<AsyncTestItem>> QueryTestItemListByGreaterThanIdAsync(int Id,int timeout=0)
         {
-            const string sql = "select * from async_test_item where id>@Id";
+            const string Sql = "select * from async_test_item where id>@Id";
             if (timeout > 0)
             {
-                return base.QueryAsync<AsyncTestItem>(sql, timeout,new { Id });
+                return base.QueryAsync<AsyncTestItem>(Sql, timeout,new { Id });
             }
-            return base.QueryAsync<AsyncTestItem>(sql,new { Id });
+            return base.QueryAsync<AsyncTestItem>(Sql,new { Id });
         }
 
         public int Delete(int Id,int timeout=0)
         {
-            const string sql = "delete from test_item where id=@Id";
+            const string Sql = "delete from test_item where id=@Id";
             if (timeout > 0)
             {
-                return base.Execute(sql, timeout, new { Id });
+                return base.Execute(Sql, timeout, new { Id });
             }
-            return base.Execute(sql,new { Id });
+            return base.Execute(Sql,new { Id });
         }
 
         public Task<int> DeleteAsync(int Id,int timeout=0)
-        {   const string sql = "delete from async_test_item where id=@Id";
+        {   const string Sql = "delete from async_test_item where id=@Id";
             if (timeout > 0)
             {
-                return base.ExecuteAsync(sql, timeout, new { Id });
+                return base.ExecuteAsync(Sql, timeout, new { Id });
             }
-            return base.ExecuteAsync(sql,new { Id });
+            return base.ExecuteAsync(Sql,new { Id });
         }
     }
 }

@@ -2,8 +2,8 @@ using System;
 
 namespace Vulcan.DapperExtensions.Contract
 {
-    public interface ISQLMetrics : IDisposable
+    public interface ISqlMetrics : IDisposable
     {
-        void AddToMetrics(string sql, object param);
+        void AddToMetrics(string Sql, object param);
     }
 }

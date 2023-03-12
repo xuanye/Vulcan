@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Vulcan.DapperExtensions.ORMapping
 {
@@ -38,7 +38,7 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         public int PKIndex { get; }
     }
-
+    [AttributeUsage(AttributeTargets.Property)]
     public class IgnoreAttribute : Attribute
     {
     }

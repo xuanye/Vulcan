@@ -4,22 +4,22 @@ using Vulcan.DapperExtensions.Contract;
 
 namespace Vulcan.DapperExtensions
 {
-    public class DefaultSQLMetrics : ISQLMetrics
+    public class DefaultSqlMetrics : ISqlMetrics
     {
-        private readonly ILogger<DefaultSQLMetrics> _logger;
+        private readonly ILogger<DefaultSqlMetrics> _logger;
         private object _param;
-        private string _sql;
+        private string _Sql;
         private Stopwatch _sw;
 
-        public DefaultSQLMetrics(ILogger<DefaultSQLMetrics> logger)
+        public DefaultSqlMetrics(ILogger<DefaultSqlMetrics> logger)
         {
             _sw = Stopwatch.StartNew();
             _logger = logger;
         }
 
-        public void AddToMetrics(string sql, object param)
+        public void AddToMetrics(string Sql, object param)
         {
-            _sql = sql;
+            _Sql = Sql;
             _param = param;
         }
 
@@ -27,11 +27,11 @@ namespace Vulcan.DapperExtensions
         {
             _sw.Stop();
             var es = _sw.ElapsedMilliseconds;
-            _logger.LogDebug("SQL EXECUTE Finished in {0} ms,SQL={1},params = {_param}", es, _sql, _param ?? "");
+            _logger.LogDebug("Sql EXECUTE Finished in {0} ms,Sql={1},params = {_param}", es, _Sql, _param ?? "");
             if (es > 500)
-                _logger.LogWarning("SQL EXECUTE Finished in {0} ms,SQL={1},params = {_param}", es, _sql, _param ?? "");
+                _logger.LogWarning("Sql EXECUTE Finished in {0} ms,Sql={1},params = {_param}", es, _Sql, _param ?? "");
             _sw = null;
-            _sql = null;
+            _Sql = null;
             _param = null;
         }
     }

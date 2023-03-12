@@ -3,11 +3,11 @@
     <PropertyGroup>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <IsPackable>false</IsPackable>
-        <Configurations>Debug;Release;MySQLDebug</Configurations>
+        <Configurations>Debug;Release;MySqlDebug</Configurations>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MySQLDebug|AnyCPU'">
-      <DefineConstants>TRACE;MySQLDebug</DefineConstants>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MySqlDebug|AnyCPU'">
+      <DefineConstants>TRACE;MySqlDebug</DefineConstants>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="AutoFixture" Version="4.17.0" />

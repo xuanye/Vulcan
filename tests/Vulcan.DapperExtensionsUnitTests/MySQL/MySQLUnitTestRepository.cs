@@ -1,16 +1,16 @@
 using Vulcan.DapperExtensions.Contract;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 
-namespace Vulcan.DapperExtensionsUnitTests.MySQL
+namespace Vulcan.DapperExtensionsUnitTests.MySql
 {
-    public class MySQLUnitTestRepository : TestRepository
+    public class MySqlUnitTestRepository : TestRepository
     {
-        public MySQLUnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
+        public MySqlUnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
             : base(mgr, constr, factory)
         {
         }
 
-        protected override string GetInitialSQL(int type=1)
+        protected override string GetInitialSql(int type=1)
         {
             var tableName = type == 1 ? "test_item" : "async_test_item";
             return  @$"

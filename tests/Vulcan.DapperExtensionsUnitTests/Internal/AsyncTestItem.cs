@@ -23,7 +23,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
         private string _Name;
 
-#if MySQLDebug
+#if MySqlDebug
         private sbyte _Status;
 #else
         private byte _Status;
@@ -108,7 +108,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         ///     test for enum 0= initial status 99=deleted
         /// </summary>
         [MapField("status")]
-#if MySQLDebug
+#if MySqlDebug
         public sbyte Status
 #else
         public byte Status

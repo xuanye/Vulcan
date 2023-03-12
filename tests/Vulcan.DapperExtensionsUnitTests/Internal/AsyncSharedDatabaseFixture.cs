@@ -3,9 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensions.Contract;
-using Vulcan.DapperExtensionsUnitTests.MSSQL;
-using Vulcan.DapperExtensionsUnitTests.MySQL;
-using Vulcan.DataAccess.Helper;
+using Vulcan.DapperExtensionsUnitTests.MSSql;
+using Vulcan.DapperExtensionsUnitTests.MySql;
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
@@ -22,7 +21,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
         {
             //for unit test only ,in asp.net core should use httpContext storage ,
             //or other asynchronous application maybe implement by AsyncLocal<>
-            _localStorage = new AsyncLocalStorage();           
+            _localStorage = new AsyncLocalStorage();
 
             ConnectionString = TestResourceManager.GetConnectionString();
             ConnectionFactory = TestResourceManager.GetConnectionFactory();
@@ -30,9 +29,9 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
             Repository = TestDataBaseSwitcher.DataBaseType switch
             {
-                DataBaseType.MySQL => new MySQLUnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.MySql => new MySqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
-                DataBaseType.MSSQL => new MSSQLUnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.MSSql => new MSSqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
                 _ => throw new NotSupportedException()
             };

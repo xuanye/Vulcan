@@ -2,25 +2,25 @@ using System;
 using System.Collections.Concurrent;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Vulcan.DapperExtensions.ORMapping.MySQL
+namespace Vulcan.DapperExtensions.ORMapping.Mysql
 {
     [ExcludeFromCodeCoverage]
-    public class MySQLEntity : BaseEntity
+    public class MysqlEntity : BaseEntity
     {
-        private static readonly ConcurrentDictionary<Type, string> ReplaceSqlCache =
+        private static readonly ConcurrentDictionary<Type, string> _replaceSqlCache =
             new ConcurrentDictionary<Type, string>();
 
-           
-     
-        public string GetReplaceInsertSQL()
+
+
+        public string GetReplaceInsertSql()
         {
             var t = GetType();
-            if (ReplaceSqlCache.ContainsKey(t)) return ReplaceSqlCache[t];
+            if (_replaceSqlCache.ContainsKey(t)) return _replaceSqlCache[t];
 
             var metaData = EntityReflect.GetDefineInfoFromType(t);
-            var sql = MySQLSQLBuilder.Instance.BuildReplaceInsertSQL(metaData);
+            var sql = MysqlBuilder.Instance.BuildReplaceInsertSql(metaData);
 
-            ReplaceSqlCache.TryAdd(t, sql);
+            _replaceSqlCache.TryAdd(t, sql);
             return sql;
         }
     }

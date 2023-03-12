@@ -3,11 +3,11 @@ using MySql.Data.MySqlClient;
 using Vulcan.DapperExtensions.Contract;
 using Vulcan.DapperExtensions.ORMapping;
 
-namespace Vulcan.DapperExtensionsUnitTests.MySQL
+namespace Vulcan.DapperExtensionsUnitTests.MySql
 {
-    public class MySQLConnectionFactory : IConnectionFactory
+    public class MySqlConnectionFactory : IConnectionFactory
     {
-        public ISQLBuilder SQLBuilder => DapperExtensions.ORMapping.MySQL.MySQLSQLBuilder.Instance;
+        public ISqlBuilder SqlBuilder => DapperExtensions.ORMapping.MySql.MySqlBuilder.Instance;
 
         public IDbConnection CreateDbConnection(string connectionString)
         {

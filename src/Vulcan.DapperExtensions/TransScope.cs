@@ -37,7 +37,7 @@ namespace Vulcan.DapperExtensions
         /// <param name="mgr"></param>
         /// <param name="factory"></param>
         /// <param name="connectionString"></param>
-        /// <param name="option">notice: sql server don't support nested transaction </param>
+        /// <param name="option">notice: Sql server don't support nested transaction </param>
         public TransScope(IConnectionManagerFactory mgr, IConnectionFactory factory, string connectionString,
             TransScopeOption option = TransScopeOption.Required)
         {

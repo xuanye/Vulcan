@@ -1,7 +1,7 @@
 namespace Vulcan.DapperExtensions.Contract
 {
-    public interface ISQLMetricsFactory
+    public interface ISqlMetricsFactory
     {
-        ISQLMetrics Create();
+        ISqlMetrics Create();
     }
 }

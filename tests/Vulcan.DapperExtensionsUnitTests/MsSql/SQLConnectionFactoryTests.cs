@@ -3,17 +3,17 @@ using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
-namespace Vulcan.DapperExtensionsUnitTests.MSSQL
+namespace Vulcan.DapperExtensionsUnitTests.MSSql
 {
-    public class SQLConnectionFactoryTests
+    public class SqlConnectionFactoryTests
     {
         public void CreateDbConnection_ShouldBeOK()
         {
             //arrange
 
             //act
-            var factory = new SQLConnectionFactory();
-            var connection = factory.CreateDbConnection(Constants.MSSQL_CONNECTION_STRING);
+            var factory = new SqlConnectionFactory();
+            var connection = factory.CreateDbConnection(Constants.MSSql_CONNECTION_STRING);
 
             //act
             Assert.NotNull(connection);

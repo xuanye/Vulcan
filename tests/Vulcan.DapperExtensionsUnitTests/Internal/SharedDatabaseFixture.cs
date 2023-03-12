@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensions.Contract;
-using Vulcan.DapperExtensionsUnitTests.MSSQL;
-using Vulcan.DapperExtensionsUnitTests.MySQL;
+using Vulcan.DapperExtensionsUnitTests.MSSql;
+using Vulcan.DapperExtensionsUnitTests.MySql;
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {
@@ -30,9 +30,9 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 
             Repository = TestDataBaseSwitcher.DataBaseType switch
             {
-                DataBaseType.MySQL => new MySQLUnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.MySql => new MySqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
-                DataBaseType.MSSQL => new MSSQLUnitTestRepository(ConnectionManagerFactory, ConnectionString,
+                DataBaseType.MSSql => new MSSqlUnitTestRepository(ConnectionManagerFactory, ConnectionString,
                     ConnectionFactory),
                 _ => throw new NotSupportedException()
             };

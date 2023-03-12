@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests
 {
-    public class DefaultSQLMetricsTests
+    public class DefaultSqlMetricsTests
     {
         [Theory]
         [InlineData(10, false)]
@@ -20,15 +20,15 @@ namespace Vulcan.DapperExtensionsUnitTests
             //Arrange
             var autoMocker = new AutoMocker();
 
-            var metrics = autoMocker.CreateInstance<DefaultSQLMetrics>();
+            var metrics = autoMocker.CreateInstance<DefaultSqlMetrics>();
 
-            var loggerMock = autoMocker.GetMock<ILogger<DefaultSQLMetrics>>();
+            var loggerMock = autoMocker.GetMock<ILogger<DefaultSqlMetrics>>();
 
             var paras = new {a = 1};
-            var sql = "sql1";
+            var Sql = "Sql1";
 
 
-            metrics.AddToMetrics(sql, paras);
+            metrics.AddToMetrics(Sql, paras);
 
             await Task.Delay(executeMS);
 
@@ -39,7 +39,7 @@ namespace Vulcan.DapperExtensionsUnitTests
                 x => x.Log(
                     LogLevel.Debug,
                     It.IsAny<EventId>(),
-                    It.Is<It.IsAnyType>((o, t) => o.ToString().StartsWith("SQL EXECUTE Finished")),
+                    It.Is<It.IsAnyType>((o, t) => o.ToString().StartsWith("Sql EXECUTE Finished")),
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 Times.Exactly(1));
@@ -52,7 +52,7 @@ namespace Vulcan.DapperExtensionsUnitTests
                     It.Is<It.IsAnyType>((o, t) =>
                         o.ToString()
                             .StartsWith(
-                                "SQL EXECUTE Finished")), //string.Equals("Index page say hello", o.ToString(), StringComparison.InvariantCultureIgnoreCase)
+                                "Sql EXECUTE Finished")), //string.Equals("Index page say hello", o.ToString(), StringComparison.InvariantCultureIgnoreCase)
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception, string>>()),
                 loggerIt ? Times.Once() : Times.Never());

@@ -21,7 +21,7 @@ namespace Vulcan.DapperExtensions
         public string SortName { get; set; }
         public string SortOrder { get; set; }
 
-        public string GetSqlOrder()
+        public string GetOrderSql()
         {
             if (!string.IsNullOrEmpty(SortName) && !string.IsNullOrEmpty(SortOrder))
                 return $"ORDER BY {SortName} {SortOrder} ";

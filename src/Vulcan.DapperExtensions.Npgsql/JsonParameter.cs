@@ -1,12 +1,12 @@
-using Npgsql;
-using NpgsqlTypes;
+using NpgSql;
+using NpgSqlTypes;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using static Dapper.SqlMapper;
 
-namespace Vulcan.DapperExtensions.Npgsql
+namespace Vulcan.DapperExtensions.NpgSql
 {
     public class JsonParameter : ICustomQueryParameter
     {
@@ -19,7 +19,7 @@ namespace Vulcan.DapperExtensions.Npgsql
 
         public void AddParameter(IDbCommand command, string name)
         {
-            var parameter = new NpgsqlParameter(name, NpgsqlDbType.Json)
+            var parameter = new NpgSqlParameter(name, NpgSqlDbType.Json)
             {
                 Value = _value
             };

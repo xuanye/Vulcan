@@ -5,15 +5,15 @@ using Vulcan.DapperExtensions.ORMapping;
 
 namespace Vulcan.DapperExtensions
 {
-    public class SQLConnectionFactory : IConnectionFactory
+    public class SqlConnectionFactory : IConnectionFactory
     {
-        public ISQLBuilder SQLBuilder => ORMapping.MSSQL.MSSQLSQLBuilder.Instance;
+        public ISqlBuilder SqlBuilder => ORMapping.Mssql.MssqlBuilder.Instance;
 
         public IDbConnection CreateDbConnection(string connectionString)
         {
             return new SqlConnection(connectionString);
         }
 
-        
+
     }
 }

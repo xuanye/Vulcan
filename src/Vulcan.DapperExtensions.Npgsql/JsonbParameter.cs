@@ -1,9 +1,9 @@
-using Npgsql;
-using NpgsqlTypes;
+using NpgSql;
+using NpgSqlTypes;
 using System.Data;
 using static Dapper.SqlMapper;
 
-namespace Vulcan.DapperExtensions.Npgsql
+namespace Vulcan.DapperExtensions.NpgSql
 {
     public class JsonbParameter : ICustomQueryParameter
     {
@@ -16,7 +16,7 @@ namespace Vulcan.DapperExtensions.Npgsql
 
         public void AddParameter(IDbCommand command, string name)
         {
-            var parameter = new NpgsqlParameter(name, NpgsqlDbType.Jsonb)
+            var parameter = new NpgSqlParameter(name, NpgSqlDbType.Jsonb)
             {
                 Value = _value
             };

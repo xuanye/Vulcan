@@ -7,6 +7,6 @@ namespace Vulcan.DapperExtensions.Contract
     {
         IDbConnection CreateDbConnection(string connectionString);
 
-        ISQLBuilder SQLBuilder { get; }
+        ISqlBuilder SqlBuilder { get; }
     }
 }

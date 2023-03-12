@@ -34,12 +34,12 @@ namespace Vulcan.DapperExtensions.ORMapping
             long ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    var sql = entity.GetInsertSQL(_dbFactory.SQLBuilder);
-                    ret = mgr.Connection.QueryFirstOrDefault<long>(sql, entity, mgr.Transaction, null,
+                    var Sql = entity.GetInsertSql(_dbFactory.SqlBuilder);
+                    ret = mgr.Connection.QueryFirstOrDefault<long>(Sql, entity, mgr.Transaction, null,
                         CommandType.Text);
-                    metrics.AddToMetrics(sql, entity);
+                    metrics.AddToMetrics(Sql, entity);
                 }
             }
 
@@ -57,12 +57,12 @@ namespace Vulcan.DapperExtensions.ORMapping
             long ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    var sql = entity.GetInsertSQL(_dbFactory.SQLBuilder);
-                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(entity.GetInsertSQL(_dbFactory.SQLBuilder), entity,
+                    var Sql = entity.GetInsertSql(_dbFactory.SqlBuilder);
+                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(entity.GetInsertSql(_dbFactory.SqlBuilder), entity,
                         mgr.Transaction, null, CommandType.Text);
-                    metrics.AddToMetrics(sql, entity);
+                    metrics.AddToMetrics(Sql, entity);
                 }
             }
 
@@ -80,8 +80,8 @@ namespace Vulcan.DapperExtensions.ORMapping
         {
             if (list == null || list.Count == 0) return -1;
 
-            var sql = list[0].GetInsertSQL(_dbFactory.SQLBuilder);
-            return Execute(sql, list);
+            var Sql = list[0].GetInsertSql(_dbFactory.SqlBuilder);
+            return Execute(Sql, list);
         }
 
         /// <summary>
@@ -95,8 +95,8 @@ namespace Vulcan.DapperExtensions.ORMapping
         {
             if (list == null || list.Count <= 0) return Task.FromResult(-1);
 
-            var sql = list[0].GetInsertSQL(_dbFactory.SQLBuilder);
-            return ExecuteAsync(sql, list);
+            var Sql = list[0].GetInsertSql(_dbFactory.SqlBuilder);
+            return ExecuteAsync(Sql, list);
         }
 
         /// <summary>
@@ -106,7 +106,7 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <returns></returns>
         public int Update(BaseEntity model)
         {
-            return Execute(model.GetUpdateSQL(_dbFactory.SQLBuilder), model);
+            return Execute(model.GetUpdateSql(_dbFactory.SqlBuilder), model);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <returns></returns>
         public Task<int> UpdateAsync(BaseEntity model)
         {
-            return ExecuteAsync(model.GetUpdateSQL(_dbFactory.SQLBuilder), model);
+            return ExecuteAsync(model.GetUpdateSql(_dbFactory.SqlBuilder), model);
         }
 
         /// <summary>
@@ -130,8 +130,8 @@ namespace Vulcan.DapperExtensions.ORMapping
         {
             if (list == null || list.Count == 0) return -1;
 
-            var sql = list[0].GetUpdateSQL(_dbFactory.SQLBuilder);
-            return Execute(sql, list);
+            var Sql = list[0].GetUpdateSql(_dbFactory.SqlBuilder);
+            return Execute(Sql, list);
         }
 
         /// <summary>
@@ -145,8 +145,8 @@ namespace Vulcan.DapperExtensions.ORMapping
         {
             if (list == null || list.Count == 0) return -1;
 
-            var sql = list[0].GetUpdateSQL(_dbFactory.SQLBuilder);
-            return await ExecuteAsync(sql, list);
+            var Sql = list[0].GetUpdateSql(_dbFactory.SqlBuilder);
+            return await ExecuteAsync(Sql, list);
         }
 
         /// <summary>
@@ -169,20 +169,20 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        ///     execute sql whit parameters
+        ///     execute Sql whit parameters
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="paras"></param>
         /// <returns></returns>
-        protected int Execute(string sql, object paras)
+        protected int Execute(string Sql, object paras)
         {
             int ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    ret = mgr.Connection.Execute(sql, paras, mgr.Transaction, null, CommandType.Text);
-                    metrics.AddToMetrics(sql, paras);
+                    ret = mgr.Connection.Execute(Sql, paras, mgr.Transaction, null, CommandType.Text);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -190,21 +190,21 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        ///     Execute parameterized SQL
+        ///     Execute parameterized Sql
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="timeOut">number of timeout seconds</param>
         /// <param name="paras"></param>
         /// <returns></returns>
-        protected int Execute(string sql, int timeOut, object paras)
+        protected int Execute(string Sql, int timeOut, object paras)
         {
             int ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    ret = mgr.Connection.Execute(sql, paras, mgr.Transaction, timeOut, CommandType.Text);
-                    metrics.AddToMetrics(sql, paras);
+                    ret = mgr.Connection.Execute(Sql, paras, mgr.Transaction, timeOut, CommandType.Text);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -212,20 +212,20 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        /// Execute parameterized SQL Asynchronous
+        /// Execute parameterized Sql Asynchronous
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="paras"></param>
         /// <returns></returns>
-        protected async Task<int> ExecuteAsync(string sql, object paras)
+        protected async Task<int> ExecuteAsync(string Sql, object paras)
         {
             int ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    ret = await mgr.Connection.ExecuteAsync(sql, paras, mgr.Transaction, null, CommandType.Text);
-                    metrics.AddToMetrics(sql, paras);
+                    ret = await mgr.Connection.ExecuteAsync(Sql, paras, mgr.Transaction, null, CommandType.Text);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -233,21 +233,21 @@ namespace Vulcan.DapperExtensions.ORMapping
         }
 
         /// <summary>
-        /// Execute parameterized SQL Asynchronous
+        /// Execute parameterized Sql Asynchronous
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="timeOut">number of timeout seconds</param>
         /// <param name="paras"></param>
         /// <returns></returns>
-        protected async Task<int> ExecuteAsync(string sql, int timeOut, object paras)
+        protected async Task<int> ExecuteAsync(string Sql, int timeOut, object paras)
         {
             int ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    ret = await mgr.Connection.ExecuteAsync(sql, paras, mgr.Transaction, timeOut, CommandType.Text);
-                    metrics.AddToMetrics(sql, paras);
+                    ret = await mgr.Connection.ExecuteAsync(Sql, paras, mgr.Transaction, timeOut, CommandType.Text);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -257,32 +257,32 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <summary>
         ///  get first or default result
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="paras"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected T Get<T>(string sql, object paras)
+        protected T Get<T>(string Sql, object paras)
         {
-            return Query<T>(sql, paras).FirstOrDefault();
+            return Query<T>(Sql, paras).FirstOrDefault();
         }
 
         /// <summary>
         /// get first or default result
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="paras"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected async Task<T> GetAsync<T>(string sql, object paras)
+        protected async Task<T> GetAsync<T>(string Sql, object paras)
         {
             T ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<T>(sql, paras, mgr.Transaction, null,
+                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<T>(Sql, paras, mgr.Transaction, null,
                         CommandType.Text);
-                    metrics.AddToMetrics(sql, paras);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -292,19 +292,19 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <summary>
         ///     Executes a query, returning the data typed as T
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="paras"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected List<T> Query<T>(string sql, object paras)
+        protected List<T> Query<T>(string Sql, object paras)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    list = mgr.Connection.Query<T>(sql, paras, mgr.Transaction, false, null, CommandType.Text).ToList();
-                    metrics.AddToMetrics(sql, paras);
+                    list = mgr.Connection.Query<T>(Sql, paras, mgr.Transaction, false, null, CommandType.Text).ToList();
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -314,21 +314,21 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <summary>
         ///     Executes a query, returning the data typed as T
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="paras"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected async Task<List<T>> QueryAsync<T>(string sql, object paras)
+        protected async Task<List<T>> QueryAsync<T>(string Sql, object paras)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    var qList = await mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, null, CommandType.Text);
+                    var qList = await mgr.Connection.QueryAsync<T>(Sql, paras, mgr.Transaction, null, CommandType.Text);
                     list = qList.ToList();
 
-                    metrics.AddToMetrics(sql, paras);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -338,21 +338,21 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <summary>
         ///     Executes a query, returning the data typed as T
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="timeOut"></param>
         /// <param name="paras"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected List<T> Query<T>(string sql, int timeOut, object paras)
+        protected List<T> Query<T>(string Sql, int timeOut, object paras)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    list = mgr.Connection.Query<T>(sql, paras, mgr.Transaction, false, timeOut, CommandType.Text)
+                    list = mgr.Connection.Query<T>(Sql, paras, mgr.Transaction, false, timeOut, CommandType.Text)
                         .ToList();
-                    metrics.AddToMetrics(sql, paras);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -362,22 +362,22 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <summary>
         ///     Executes a query, returning the data typed as T
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="timeOut"></param>
         /// <param name="paras"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        protected async Task<List<T>> QueryAsync<T>(string sql, int timeOut, object paras)
+        protected async Task<List<T>> QueryAsync<T>(string Sql, int timeOut, object paras)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    var qList = await mgr.Connection.QueryAsync<T>(sql, paras, mgr.Transaction, timeOut,
+                    var qList = await mgr.Connection.QueryAsync<T>(Sql, paras, mgr.Transaction, timeOut,
                         CommandType.Text);
                     list = qList.ToList();
-                    metrics.AddToMetrics(sql, paras);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -387,108 +387,108 @@ namespace Vulcan.DapperExtensions.ORMapping
         /// <summary>
         ///     Executes a query, returning the data typed as T
         /// </summary>
-        /// <param name="sql"></param>
+        /// <param name="Sql"></param>
         /// <param name="paras"></param>
         /// <param name="parse"></param>
         /// <param name="splitOn"></param>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="T1"></typeparam>
         /// <returns></returns>
-        protected List<T> Query<T, T1>(string sql, object paras, Func<T, T1, T> parse, string splitOn)
+        protected List<T> Query<T, T1>(string Sql, object paras, Func<T, T1, T> parse, string splitOn)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     list = mgr.Connection
-                        .Query(sql, parse, paras, mgr.Transaction, false, splitOn, 360, CommandType.Text).ToList();
-                    metrics.AddToMetrics(sql, paras);
+                        .Query(Sql, parse, paras, mgr.Transaction, false, splitOn, 360, CommandType.Text).ToList();
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
             return list;
         }
 
-        protected List<T> Query<T, T1, T2>(string sql, object paras, Func<T, T1, T2, T> parse, string splitOn)
+        protected List<T> Query<T, T1, T2>(string Sql, object paras, Func<T, T1, T2, T> parse, string splitOn)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     list = mgr.Connection
-                        .Query(sql, parse, paras, mgr.Transaction, false, splitOn, 360, CommandType.Text).ToList();
-                    metrics.AddToMetrics(sql, paras);
+                        .Query(Sql, parse, paras, mgr.Transaction, false, splitOn, 360, CommandType.Text).ToList();
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
             return list;
         }
 
-        protected List<T> Query<T, T1, T2, T3>(string sql, object paras, Func<T, T1, T2, T3, T> parse, string splitOn)
+        protected List<T> Query<T, T1, T2, T3>(string Sql, object paras, Func<T, T1, T2, T3, T> parse, string splitOn)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     list = mgr.Connection
-                        .Query(sql, parse, paras, mgr.Transaction, false, splitOn, 360, CommandType.Text).ToList();
-                    metrics.AddToMetrics(sql, paras);
+                        .Query(Sql, parse, paras, mgr.Transaction, false, splitOn, 360, CommandType.Text).ToList();
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
             return list;
         }
 
-        protected async Task<List<T>> QueryAsync<T, T1>(string sql, object paras, Func<T, T1, T> parse, string splitOn)
+        protected async Task<List<T>> QueryAsync<T, T1>(string Sql, object paras, Func<T, T1, T> parse, string splitOn)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    var qList = await mgr.Connection.QueryAsync(sql, parse, paras, mgr.Transaction, false, splitOn, 360,
+                    var qList = await mgr.Connection.QueryAsync(Sql, parse, paras, mgr.Transaction, false, splitOn, 360,
                         CommandType.Text);
                     list = qList.ToList();
-                    metrics.AddToMetrics(sql, paras);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
             return list;
         }
 
-        protected async Task<List<T>> QueryAsync<T, T1, T2>(string sql, object paras, Func<T, T1, T2, T> parse,
+        protected async Task<List<T>> QueryAsync<T, T1, T2>(string Sql, object paras, Func<T, T1, T2, T> parse,
             string splitOn)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    var qList = await mgr.Connection.QueryAsync(sql, parse, paras, mgr.Transaction, false, splitOn, 360,
+                    var qList = await mgr.Connection.QueryAsync(Sql, parse, paras, mgr.Transaction, false, splitOn, 360,
                         CommandType.Text);
                     list = qList.ToList();
-                    metrics.AddToMetrics(sql, paras);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
             return list;
         }
 
-        protected async Task<List<T>> QueryAsync<T, T1, T2, T3>(string sql, object paras, Func<T, T1, T2, T3, T> parse,
+        protected async Task<List<T>> QueryAsync<T, T1, T2, T3>(string Sql, object paras, Func<T, T1, T2, T3, T> parse,
             string splitOn)
         {
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
-                    var qList = await mgr.Connection.QueryAsync(sql, parse, paras, mgr.Transaction, false, splitOn, 360,
+                    var qList = await mgr.Connection.QueryAsync(Sql, parse, paras, mgr.Transaction, false, splitOn, 360,
                         CommandType.Text);
                     list = qList.ToList();
-                    metrics.AddToMetrics(sql, paras);
+                    metrics.AddToMetrics(Sql, paras);
                 }
             }
 
@@ -500,7 +500,7 @@ namespace Vulcan.DapperExtensions.ORMapping
             int ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     ret = mgr.Connection.Execute(spName, paras, mgr.Transaction, null, CommandType.StoredProcedure);
                     metrics.AddToMetrics(spName, paras);
@@ -515,7 +515,7 @@ namespace Vulcan.DapperExtensions.ORMapping
             int ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     ret = await mgr.Connection.ExecuteAsync(spName, paras, mgr.Transaction, null,
                         CommandType.StoredProcedure);
@@ -536,7 +536,7 @@ namespace Vulcan.DapperExtensions.ORMapping
             T ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     ret = await mgr.Connection.QueryFirstOrDefaultAsync<T>(spName, paras, mgr.Transaction, null,
                         CommandType.StoredProcedure);
@@ -552,7 +552,7 @@ namespace Vulcan.DapperExtensions.ORMapping
             List<T> list;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     list = mgr.Connection
                         .Query<T>(spName, paras, mgr.Transaction, false, null, CommandType.StoredProcedure).ToList();
@@ -568,7 +568,7 @@ namespace Vulcan.DapperExtensions.ORMapping
             List<T> ret;
             using (var mgr = GetConnection())
             {
-                using (var metrics = CreateSQLMetrics())
+                using (var metrics = CreateSqlMetrics())
                 {
                     var list = await mgr.Connection.QueryAsync<T>(spName, paras, mgr.Transaction, null,
                         CommandType.StoredProcedure);
@@ -585,9 +585,9 @@ namespace Vulcan.DapperExtensions.ORMapping
             return _mgr.GetConnectionManager(_conStr, _dbFactory);
         }
 
-        protected virtual ISQLMetrics CreateSQLMetrics()
+        protected virtual ISqlMetrics CreateSqlMetrics()
         {
-            return new NoopSQLMetrics();
+            return new NoopSqlMetrics();
         }
     }
 }

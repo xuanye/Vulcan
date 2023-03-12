@@ -12,8 +12,8 @@ namespace Vulcan.DapperExtensions.ORMapping
         private static readonly ConcurrentDictionary<Type, string> _UpdateSqlCache =
             new ConcurrentDictionary<Type, string>();
 
-        private static readonly object _LockObject = new object();
-        private readonly List<string> _PropertyChangedList = new List<string>();
+        private static readonly object _lockObject = new object();
+        private readonly List<string> _propertyChangedList = new List<string>();
 
         #region Properties
 
@@ -24,37 +24,37 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         protected void Clear()
         {
-            lock (_LockObject)
+            lock (_lockObject)
             {
-                _PropertyChangedList.Clear();
+                _propertyChangedList.Clear();
             }
         }
 
         protected void OnPropertyChanged(string pName)
         {
-            lock (_LockObject)
+            lock (_lockObject)
             {
-                if (!_PropertyChangedList.Contains(pName)) _PropertyChangedList.Add(pName);
+                if (!_propertyChangedList.Contains(pName)) _propertyChangedList.Add(pName);
             }
         }
 
         #region Public Methods
 
-        public string GetInsertSQL(ISQLBuilder sqlBuilder)
+        public string GetInsertSql(ISqlBuilder SqlBuilder)
         {
-            return FullUpdate ? GetInsertFullSql(sqlBuilder) : GetInsertChangeColumnsSql(sqlBuilder);
+            return FullUpdate ? GetInsertFullSql(SqlBuilder) : GetInsertChangeColumnsSql(SqlBuilder);
         }
 
-        public string GetUpdateSQL(ISQLBuilder sqlBuilder)
+        public string GetUpdateSql(ISqlBuilder SqlBuilder)
         {
-            return FullUpdate ? GetUpdateFullSql(sqlBuilder) : GetUpdateChangeColumnsSql(sqlBuilder);
+            return FullUpdate ? GetUpdateFullSql(SqlBuilder) : GetUpdateChangeColumnsSql(SqlBuilder);
         }
 
         public void RemoveUpdateColumn(string ColumnName)
         {
-            lock (_LockObject)
+            lock (_lockObject)
             {
-                if (_PropertyChangedList.Contains(ColumnName)) _PropertyChangedList.Remove(ColumnName);
+                if (_propertyChangedList.Contains(ColumnName)) _propertyChangedList.Remove(ColumnName);
             }
         }
 
@@ -62,44 +62,44 @@ namespace Vulcan.DapperExtensions.ORMapping
 
         #region Private Methods
 
-        private string GetInsertFullSql(ISQLBuilder sqlBuilder)
+        private string GetInsertFullSql(ISqlBuilder SqlBuilder)
         {
             var t = GetType();
-            if (_InsertSqlCache.TryGetValue(t, out var sql)) return sql;
+            if (_InsertSqlCache.TryGetValue(t, out var Sql)) return Sql;
             var metaData = EntityReflect.GetDefineInfoFromType(t);
-            sql = sqlBuilder.BuildInsertSql(metaData);
+            Sql = SqlBuilder.BuildInsertSql(metaData);
 
-            _InsertSqlCache.TryAdd(t, sql);
+            _InsertSqlCache.TryAdd(t, Sql);
 
             return _InsertSqlCache[t];
         }
 
-        private string GetUpdateFullSql(ISQLBuilder sqlBuilder)
+        private string GetUpdateFullSql(ISqlBuilder SqlBuilder)
         {
             var t = GetType();
-            if (_UpdateSqlCache.TryGetValue(t, out var sql)) return sql;
+            if (_UpdateSqlCache.TryGetValue(t, out var Sql)) return Sql;
 
             var metaData = EntityReflect.GetDefineInfoFromType(t);
-            sql = sqlBuilder.BuildUpdateSql(metaData);
-            _UpdateSqlCache.TryAdd(t, sql);
+            Sql = SqlBuilder.BuildUpdateSql(metaData);
+            _UpdateSqlCache.TryAdd(t, Sql);
             return _UpdateSqlCache[t];
         }
 
-        private string GetInsertChangeColumnsSql(ISQLBuilder sqlBuilder)
+        private string GetInsertChangeColumnsSql(ISqlBuilder SqlBuilder)
         {
             var metaData = EntityReflect.GetDefineInfoFromType(GetType());
-            lock (_LockObject)
+            lock (_lockObject)
             {
-                return sqlBuilder.BuildInsertSql(metaData, _PropertyChangedList);
+                return SqlBuilder.BuildInsertSql(metaData, _propertyChangedList);
             }
         }
 
-        private string GetUpdateChangeColumnsSql(ISQLBuilder sqlBuilder)
+        private string GetUpdateChangeColumnsSql(ISqlBuilder SqlBuilder)
         {
             var metaData = EntityReflect.GetDefineInfoFromType(GetType());
-            lock (_LockObject)
+            lock (_lockObject)
             {
-                return sqlBuilder.BuildUpdateSql(metaData, _PropertyChangedList);
+                return SqlBuilder.BuildUpdateSql(metaData, _propertyChangedList);
             }
         }
 
