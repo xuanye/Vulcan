@@ -12,7 +12,6 @@ namespace Vulcan.DapperExtensions.ORMapping
     public abstract class BaseRepository
     {
         private readonly string _conStr;
-
         private readonly IConnectionFactory _dbFactory;
         private readonly IConnectionManagerFactory _mgr;
 

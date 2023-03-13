@@ -8,8 +8,6 @@ namespace Vulcan.DapperExtensions
 {
     public class AsyncLocalStorage : IRuntimeContextStorage
     {
-
-
         public static Dictionary<string, object> LocalValue
         {
             get => Local.Value;
@@ -42,7 +40,5 @@ namespace Vulcan.DapperExtensions
             else
                 LocalValue.Add(key, item);
         }
-
     }
-
 }
