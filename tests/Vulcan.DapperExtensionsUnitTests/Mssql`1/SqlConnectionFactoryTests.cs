@@ -3,7 +3,7 @@ using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 using Xunit;
 
-namespace Vulcan.DapperExtensionsUnitTests.MSSql
+namespace Vulcan.DapperExtensionsUnitTests.Mssql
 {
     public class SqlConnectionFactoryTests
     {

@@ -1,16 +1,16 @@
 using Vulcan.DapperExtensions.Contract;
 using Vulcan.DapperExtensionsUnitTests.Internal;
 
-namespace Vulcan.DapperExtensionsUnitTests.MSSql
+namespace Vulcan.DapperExtensionsUnitTests.Mssql
 {
-    public class MSSqlUnitTestRepository : TestRepository
+    public class MssqlUnitTestRepository : TestRepository
     {
-        public MSSqlUnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
+        public MssqlUnitTestRepository(IConnectionManagerFactory mgr, string constr, IConnectionFactory factory = null)
             : base(mgr, constr, factory)
         {
         }
 
-        protected override string GetInitialSql(int type =1)
+        protected override string GetInitialSql(int type = 1)
         {
             var tableName = type == 1 ? "test_item" : "async_test_item";
             return @$"
@@ -41,7 +41,7 @@ EXEC sp_addextendedproperty 'MS_Description', 'test fo bool', 'user', dbo, 'tabl
 EXEC sp_addextendedproperty 'MS_Description', 'test for enum 0= initial status 99=deleted', 'user', dbo, 'table', {tableName}, 'column', [status];";
         }
 
-       
+
 
     }
 }

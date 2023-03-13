@@ -11,7 +11,7 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
 #if MySqlDebug
         public static DataBaseType DataBaseType = DataBaseType.Mysql;
 #else
-        public static DataBaseType DataBaseType = DataBaseType.MSSql;
+        public static DataBaseType DataBaseType = DataBaseType.Mssql;
 #endif
 
     }
