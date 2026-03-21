@@ -2,16 +2,8 @@
 <Project> 
   <PropertyGroup> 
     <DapperPackageNotes>
-- fix: 修复线程安全和代码质量问题
-- docs: 添加 Attribute 到 Fluent API 迁移指南
-- feat: add GitHub Actions workflow for automatic NuGet publishing
-- fix: use AsyncTestItem in async tests instead of TestItem
-- fix: add test data reset to fix CI test isolation issue
-- chore: improve .gitignore with comprehensive rules
-- feat: add GitHub Actions CI workflow for automated testing
-- add open code prompt
-- 📝 docs: add DI usage guide and test infrastructure
-- ✨ feat: add dependency injection integration
+- update vervsion to 2.2.0
+- Update DapperPackageVersion to 2.2.0
     </DapperPackageNotes>  
   </PropertyGroup> 
 </Project>

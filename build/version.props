@@ -1,5 +1,5 @@
 <Project>
 	<PropertyGroup>
-		<DapperPackageVersion>2.2.0</DapperPackageVersion>	
+		<DapperPackageVersion>2.2.1</DapperPackageVersion>	
 	</PropertyGroup>
 </Project>
