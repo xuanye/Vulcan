@@ -1,0 +1,69 @@
+name: CI Build and Test
+
+on:
+  # 任意分支推送时触发
+  push:
+    branches:
+      - '**'
+  # 允许手动触发
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  build-and-test:
+    name: Build and Test (MySQL)
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: rootpassword
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: develop
+          MYSQL_PASSWORD: M3YvLTd8iUni
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -prootpassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: |
+            ${{ runner.os }}-nuget-
+
+      - name: Restore dependencies
+        run: dotnet restore ./Vulcan.sln
+
+      - name: Build solution
+        run: dotnet build ./Vulcan.sln -c MySQLDebug --no-restore
+
+      - name: Run unit tests
+        run: dotnet test ./tests/Vulcan.DapperExtensionsUnitTests/Vulcan.DapperExtensionsUnitTests.csproj -c MySQLDebug --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx"
+        env:
+          CI_MYSQL_CONNECTION_STRING: "server=127.0.0.1;port=3306;database=testdb;uid=develop;pwd=M3YvLTd8iUni;charset=utf8;Connection Timeout=30;SslMode=None;AllowPublicKeyRetrieval=True;"
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: tests/Vulcan.DapperExtensionsUnitTests/TestResults/
+          retention-days: 7

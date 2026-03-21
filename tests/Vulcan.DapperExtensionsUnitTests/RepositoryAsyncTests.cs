@@ -226,7 +226,7 @@ namespace Vulcan.DapperExtensionsUnitTests
         public async Task BatchInsert_ShouldReturnNegativeOne_PassEmptyList()
         {
             //arrange
-            var list = new List<TestItem>();
+            var list = new List<AsyncTestItem>();
             var repository = SharedDatabaseFixture.Repository;
             //act
 
@@ -240,7 +240,7 @@ namespace Vulcan.DapperExtensionsUnitTests
         public async Task BatchInsert_ShouldReturnGreaterThanZero_PassList()
         {
             //arrange
-            var list = AutoFixture.CreateMany<TestItem>().ToList();
+            var list = AutoFixture.CreateMany<AsyncTestItem>().ToList();
             var repository = SharedDatabaseFixture.Repository;
             //act
 
@@ -255,7 +255,7 @@ namespace Vulcan.DapperExtensionsUnitTests
         public async Task BatchUpdate_ShouldReturnNegativeOne_PassEmptyList()
         {
             //arrange
-            var list = new List<TestItem>();
+            var list = new List<AsyncTestItem>();
             var repository = SharedDatabaseFixture.Repository;
             //act
 
@@ -269,10 +269,10 @@ namespace Vulcan.DapperExtensionsUnitTests
         public async Task BatchUpdate_ShouldReturnGreaterThanZero_PassList()
         {
             //arrange
-            var list = AutoFixture.CreateMany<TestItem>().ToList();
+            var list = AutoFixture.CreateMany<AsyncTestItem>().ToList();
             var repository = SharedDatabaseFixture.Repository;
             //act
-            repository.BatchInsert(list);
+            await repository.BatchInsertAsync(list);
             var newList = await repository.QueryTestItemListAsync();
 
             newList.ForEach(item =>
