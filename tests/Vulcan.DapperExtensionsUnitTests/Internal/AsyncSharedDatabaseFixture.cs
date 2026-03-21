@@ -5,7 +5,7 @@ using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensions.Contract;
 using Vulcan.DapperExtensionsUnitTests.MSSQL;
 using Vulcan.DapperExtensionsUnitTests.MySQL;
-using Vulcan.DataAccess.Helper;
+
 
 namespace Vulcan.DapperExtensionsUnitTests.Internal
 {

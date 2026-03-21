@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
+using Vulcan.DapperExtensions;
 using Vulcan.DapperExtensionsUnitTests.Internal;
-using Vulcan.DataAccess.Helper;
+
 using Xunit;
 
 namespace Vulcan.DapperExtensionsUnitTests
