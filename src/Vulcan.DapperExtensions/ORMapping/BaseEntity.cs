@@ -12,7 +12,7 @@ namespace Vulcan.DapperExtensions.ORMapping
         private static readonly ConcurrentDictionary<Type, string> _UpdateSqlCache =
             new ConcurrentDictionary<Type, string>();
 
-        private static readonly object _LockObject = new object();
+        private readonly object _LockObject = new object();
         private readonly List<string> _PropertyChangedList = new List<string>();
 
         #region Properties
