@@ -1,0 +1,127 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  NUGET_SOURCE: 'https://api.nuget.org/v3/index.json'
+
+jobs:
+  check-changes:
+    name: Check for source changes
+    runs-on: ubuntu-latest
+    outputs:
+      has_changes: ${{ steps.check.outputs.has_changes }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Check for src/ changes
+        id: check
+        run: |
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          if echo "$CHANGED_FILES" | grep -q "^src/"; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "src/ directory has changes - will publish"
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No src/ changes - skipping publish"
+          fi
+
+  publish:
+    name: Build, Pack and Publish
+    needs: check-changes
+    if: needs.check-changes.outputs.has_changes == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Read and increment version
+        id: version
+        run: |
+          VERSION_FILE="build/version.props"
+          CURRENT_VERSION=$(grep -oP '<DapperPackageVersion>\K[^<]+' "$VERSION_FILE")
+          echo "Current version: $CURRENT_VERSION"
+          
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+          NEW_PATCH=$((PATCH + 1))
+          NEW_VERSION="${MAJOR}.${MINOR}.${NEW_PATCH}"
+          echo "New version: $NEW_VERSION"
+          
+          sed -i "s/<DapperPackageVersion>${CURRENT_VERSION}<\/DapperPackageVersion>/<DapperPackageVersion>${NEW_VERSION}<\/DapperPackageVersion>/" "$VERSION_FILE"
+          
+          echo "new_version=${NEW_VERSION}" >> $GITHUB_OUTPUT
+          echo "current_version=${CURRENT_VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Generate release notes from commits
+        run: |
+          NOTES_FILE="build/releasenotes.props"
+          
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -n "$LAST_TAG" ]; then
+            COMMIT_LOG=$(git log ${LAST_TAG}..HEAD --pretty=format:"- %s" --no-merges)
+          else
+            COMMIT_LOG=$(git log -10 --pretty=format:"- %s" --no-merges)
+          fi
+          
+          echo "Generated release notes:"
+          echo "$COMMIT_LOG"
+          
+          cat > "$NOTES_FILE" << 'NOTES_START'
+          <?xml version="1.0" encoding="utf-8"?>
+          <Project> 
+            <PropertyGroup> 
+              <DapperPackageNotes>
+          NOTES_START
+          echo "$COMMIT_LOG" >> "$NOTES_FILE"
+          cat >> "$NOTES_FILE" << 'NOTES_END'
+              </DapperPackageNotes>  
+            </PropertyGroup> 
+          </Project>
+          NOTES_END
+          
+          echo "releasenotes updated"
+
+      - name: Build solution
+        run: dotnet build ./Vulcan.sln -c Release
+
+      - name: Pack NuGet package
+        run: dotnet pack ./src/Vulcan.DapperExtensions/Vulcan.DapperExtensions.csproj -c Release -o ./artifacts
+
+      - name: Push to NuGet
+        run: dotnet nuget push ./artifacts/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE }} --skip-duplicate
+
+      - name: Commit version update
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add build/version.props build/releasenotes.props
+          git commit -m "chore: bump version to ${{ steps.version.outputs.new_version }}" || echo "No changes to commit"
+          git push
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          NEW_VERSION="${{ steps.version.outputs.new_version }}"
+          
+          gh release create "v${NEW_VERSION}" \
+            --title "v${NEW_VERSION}" \
+            --generate-notes \
+            --target master
