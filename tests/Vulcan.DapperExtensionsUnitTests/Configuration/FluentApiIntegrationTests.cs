@@ -246,19 +246,22 @@ namespace Vulcan.DapperExtensionsUnitTests.Configuration
 
     /// <summary>
     /// Integration tests for Fluent API configuration flow and SQL generation.
+    /// Uses FluentApiFixture to ensure tests share the same configuration store
+    /// and run serially to avoid static state conflicts.
     /// </summary>
+    [Collection("FluentApi Collection")]
     public class FluentApiIntegrationTests
     {
         private readonly EntityConfigurationStore _store;
         private readonly MySQLSQLBuilder _sqlBuilder;
 
-        public FluentApiIntegrationTests()
+        public FluentApiIntegrationTests(FluentApiFixture fixture)
         {
-            _store = new EntityConfigurationStore();
-            _sqlBuilder = MySQLSQLBuilder.Instance;
+            _store = fixture.Store;
+            _sqlBuilder = fixture.SqlBuilder;
 
-            // Set the configuration store for EntityReflect
-            EntityReflect.SetConfigurationStore(_store);
+            // Clear both cache and store before each test to ensure isolation
+            fixture.ClearAll();
         }
 
         [Fact]

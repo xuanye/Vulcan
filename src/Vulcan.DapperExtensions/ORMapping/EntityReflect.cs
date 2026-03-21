@@ -23,6 +23,16 @@ namespace Vulcan.DapperExtensions.ORMapping
             _configurationStore = store;
         }
 
+        /// <summary>
+        /// Clears the entity metadata cache.
+        /// This method is primarily intended for unit testing scenarios
+        /// where test isolation is required.
+        /// </summary>
+        internal static void ClearCache()
+        {
+            Cache.Clear();
+        }
+
         public static EntityMeta GetDefineInfoFromType(Type type)
         {
             if (Cache.TryGetValue(type, out var entityMeta)) return entityMeta;

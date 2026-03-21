@@ -31,7 +31,7 @@ namespace Vulcan.DapperExtensions
 
         #region Fields
 
-        private static readonly object LockObject = new object();
+        private readonly object _lockObject = new object();
         private readonly string _dbConnectionString;
 
         private readonly IRuntimeContextStorage _ctxStorage;
@@ -68,12 +68,15 @@ namespace Vulcan.DapperExtensions
 
         internal void AddRef()
         {
-            RefCount += 1;
+            lock (_lockObject)
+            {
+                RefCount += 1;
+            }
         }
 
         private void DeRef()
         {
-            lock (LockObject)
+            lock (_lockObject)
             {
                 RefCount -= 1;
                 if (RefCount != 0) return;

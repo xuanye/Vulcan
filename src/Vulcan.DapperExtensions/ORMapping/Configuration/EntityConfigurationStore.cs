@@ -55,6 +55,16 @@ namespace Vulcan.DapperExtensions.ORMapping.Configuration
         }
 
         /// <summary>
+        /// Clears all registered entity configurations.
+        /// This method is primarily intended for unit testing scenarios
+        /// where test isolation is required.
+        /// </summary>
+        internal void Clear()
+        {
+            _cache.Clear();
+        }
+
+        /// <summary>
         /// Converts an EntityTypeBuilder configuration to EntityMeta.
         /// </summary>
         /// <typeparam name="T">The entity type.</typeparam>

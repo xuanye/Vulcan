@@ -64,7 +64,7 @@ namespace Vulcan.DapperExtensions.ORMapping
                 using (var metrics = CreateSQLMetrics())
                 {
                     var sql = entity.GetInsertSQL(_dbFactory.SQLBuilder);
-                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(entity.GetInsertSQL(_dbFactory.SQLBuilder), entity,
+                    ret = await mgr.Connection.QueryFirstOrDefaultAsync<long>(sql, entity,
                         mgr.Transaction, null, CommandType.Text);
                     metrics.AddToMetrics(sql, entity);
                 }
