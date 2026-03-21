@@ -4,7 +4,7 @@ using Vulcan.DapperExtensions.Contract;
 namespace Vulcan.DapperExtensions
 {
     /// <summary>
-    ///     Transaction Management
+    ///  Transaction Management
     /// </summary>
     public class TransScope : IScope
     {
