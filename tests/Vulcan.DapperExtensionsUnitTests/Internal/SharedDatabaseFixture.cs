@@ -72,5 +72,17 @@ namespace Vulcan.DapperExtensionsUnitTests.Internal
                 _databaseInitialized = true;
             }
         }
+
+        /// <summary>
+        /// Reset test data - clears and reinitializes the test_item table.
+        /// Call this before tests that require a clean database state.
+        /// </summary>
+        public void ResetTestData()
+        {
+            lock (LockObject)
+            {
+                Repository.InitialTestDb();
+            }
+        }
     }
 }

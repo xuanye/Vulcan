@@ -119,16 +119,17 @@ namespace Vulcan.DapperExtensionsUnitTests
         public void Query_ShouldReturnList_WithCondition()
         {
             //arrange
+            SharedDatabaseFixture.ResetTestData(); // Reset database to clean state
             var testItemList = AutoFixture.CreateMany<TestItem>().ToList();
             var repository = SharedDatabaseFixture.Repository;
             //act
             var newId = repository.Insert(testItemList[0]);
-            var  list1 = repository.QueryTestItemListByGreaterThanId((int) newId);
+            var list1 = repository.QueryTestItemListByGreaterThanId((int) newId);
             for (var i = 1; i < testItemList.Count; i++)
             {
                 repository.Insert(testItemList[i]);
             }
-            var  list2 = repository.QueryTestItemListByGreaterThanId((int) newId);
+            var list2 = repository.QueryTestItemListByGreaterThanId((int) newId);
             //assert
             Assert.NotNull(list1);
             Assert.Empty(list1);
