@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <Project> 
   <PropertyGroup> 
     <DapperPackageNotes>
-    1. 将实体中的ISQLBuilder转移到IConnectionFactory中，方便多数据库版本的开发
+- fix: 修复线程安全和代码质量问题
+- docs: 添加 Attribute 到 Fluent API 迁移指南
+- feat: add GitHub Actions workflow for automatic NuGet publishing
+- fix: use AsyncTestItem in async tests instead of TestItem
+- fix: add test data reset to fix CI test isolation issue
+- chore: improve .gitignore with comprehensive rules
+- feat: add GitHub Actions CI workflow for automated testing
+- add open code prompt
+- 📝 docs: add DI usage guide and test infrastructure
+- ✨ feat: add dependency injection integration
     </DapperPackageNotes>  
   </PropertyGroup> 
 </Project>
